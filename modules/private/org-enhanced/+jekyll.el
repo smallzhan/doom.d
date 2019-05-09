@@ -69,4 +69,3 @@
 (add-to-list 'org-publish-project-alist
              '("blog" :components ("smallzhan-github-io")))
 
-(provide 'org-jekyll)

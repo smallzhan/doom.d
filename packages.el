@@ -7,7 +7,8 @@
                    flycheck-irony
                    irony
                    irony-eldoc
-                   ivy-rtags rtags)
+                   ivy-rtags
+                   rtags)
 
 (package! visual-regexp)
 (package! visual-regexp-steroids)

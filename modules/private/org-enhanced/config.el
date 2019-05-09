@@ -1,4 +1,3 @@
-
 (def-package! ox-gfm
   :defer t
   )
@@ -7,11 +6,10 @@
   :defer t
   :hook (org-mode . turn-on-org-cdlatex))
 
-(def-package! ob-ipython
+(def-package! org-pomodoro
   :defer t
-  :config
-  (setq org-confirm-babel-evaluate nil)
-  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append))
+  :init (when IS-MAC
+          (setq org-pomodoro-audio-player "/usr/bin/afplay")))
 
 (def-package! deft
   :config
@@ -21,11 +19,6 @@
         deft-file-naming-rules '((nospace . "-")
                                  (case-fn . downcase))))
 
-(def-package! org-jekyll
-  :load-path +my-ext-dir
-  :after org
-  :commands my-pages-start-post
-  )
 
 (after! org
   (setq org-directory +my-org-dir
@@ -299,55 +292,55 @@ Callers of this function already widen the buffer view."
         (goto-char parent-task)
         parent-task)))
 
-  (defun bh/punch-in (arg)
-    "Start continuous clocking and set the default task to the
-selected task.  If no task is selected set the Organization task
-as the default task."
-    (interactive "p")
-    (setq bh/keep-clock-running t)
-    (if (equal major-mode 'org-agenda-mode)
-        ;;
-        ;; We're in the agenda
-        ;;
-        (let* ((marker (org-get-at-bol 'org-hd-marker))
-               (tags (org-with-point-at marker (org-get-tags-at))))
-          (if (and (eq arg 4) tags)
-              (org-agenda-clock-in '(16)))))
-    ;;
-    ;; We are not in the agenda
-    ;;
-    (save-restriction
-      (widen)
-      ;; Find the tags on the current task
-      (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
-          (org-clock-in '(16)))))
+  ;;   (defun bh/punch-in (arg)
+  ;;     "Start continuous clocking and set the default task to the
+  ;; selected task.  If no task is selected set the Organization task
+  ;; as the default task."
+  ;;     (interactive "p")
+  ;;     (setq bh/keep-clock-running t)
+  ;;     (if (equal major-mode 'org-agenda-mode)
+  ;;         ;;
+  ;;         ;; We're in the agenda
+  ;;         ;;
+  ;;         (let* ((marker (org-get-at-bol 'org-hd-marker))
+  ;;                (tags (org-with-point-at marker (org-get-tags-at))))
+  ;;           (if (and (eq arg 4) tags)
+  ;;               (org-agenda-clock-in '(16)))))
+  ;;     ;;
+  ;;     ;; We are not in the agenda
+  ;;     ;;
+  ;;     (save-restriction
+  ;;       (widen)
+  ;;       ;; Find the tags on the current task
+  ;;       (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
+  ;;           (org-clock-in '(16)))))
 
-  (defun bh/punch-out ()
-    (interactive)
-    (setq bh/keep-clock-running nil)
-    (when (org-clock-is-active)
-      (org-clock-out))
-    (org-agenda-remove-restriction-lock))
+  ;;   (defun bh/punch-out ()
+  ;;     (interactive)
+  ;;     (setq bh/keep-clock-running nil)
+  ;;     (when (org-clock-is-active)
+  ;;       (org-clock-out))
+  ;;     (org-agenda-remove-restriction-lock))
 
-  (defun bh/clock-in-default-task ()
-    (save-excursion
-      (org-with-point-at org-clock-default-task
-        (org-clock-in))))
+  ;;   (defun bh/clock-in-default-task ()
+  ;;     (save-excursion
+  ;;       (org-with-point-at org-clock-default-task
+  ;;         (org-clock-in))))
 
-  (defun bh/clock-in-parent-task ()
-    "Move point to the parent (project) task if any and clock in"
-    (let ((parent-task))
-      (save-excursion
-        (save-restriction
-          (widen)
-          (while (and (not parent-task) (org-up-heading-safe))
-            (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-              (setq parent-task (point))))
-          (if parent-task
-              (org-with-point-at parent-task
-                (org-clock-in))
-            (when bh/keep-clock-running
-              (bh/clock-in-default-task)))))))
+  ;;   (defun bh/clock-in-parent-task ()
+  ;;     "Move point to the parent (project) task if any and clock in"
+  ;;     (let ((parent-task))
+  ;;       (save-excursion
+  ;;         (save-restriction
+  ;;           (widen)
+  ;;           (while (and (not parent-task) (org-up-heading-safe))
+  ;;             (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+  ;;               (setq parent-task (point))))
+  ;;           (if parent-task
+  ;;               (org-with-point-at parent-task
+  ;;                 (org-clock-in))
+  ;;             (when bh/keep-clock-running
+  ;;              (bh/clock-in-default-task)))))))
 
   ;; (defvar bh/organization-task-id "eb155a82-92b2-4f25-a3c6-0304591af2f9")
 
@@ -402,99 +395,12 @@ as the default task."
 
   (require 'org-tempo)
 
-  (setq org-latex-listings t)
-  (setq org-latex-compiler "xelatex")
-  (setq org-preview-latex-default-process 'dvisvgm)
-  (setq org-highlight-latex-and-related '(latex))
-  (require 'ox-latex)
-  (add-to-list 'org-latex-classes
-               `("my-beamer"
-                 ,(concat
-                   "\\documentclass[presentation]{beamer}"
-                   "\n\\usepackage[UTF8]{ctex}"
-                   "\n\\mode<presentation> {"
-                   "\n\\setbeamercovered{transparent}"
-                   "\n\\setbeamertemplate{theorems}[numbered]"
-                   "\n\\usefonttheme[onlymath]{serif}"
-                   "\n}"
-                   "\n\\usepackage{amsmath, amssymb}"
-                   "\n\\usepackage{hyperref}"
-                   "\n\\usepackage[english]{babel}"
-                   "\n\\usepackage{tikz}"
-                   "\n\\setbeamerfont{smallfont}{size=\\small}"
-                   "\n[NO-DEFAULT-PACKAGES]"
-                   "\n[NO-PACKAGES]"
-                   "\n[EXTRA]")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ))
-
-  (add-to-list 'org-latex-classes
-               `("my-article"
-                 ,(concat
-                   "\\documentclass{ctexart}"
-                   "\n\\usepackage{hyperref}"
-                   "\n[NO-DEFAULT-PACKAGES]"
-                   "\n[PACKAGES]"
-                   "\n[EXTRA]")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-
 
   (setq org-agenda-exporter-settings
         '((ps-number-of-columns 1)
           (ps-landscape-mode t)
           (htmlize-output-type 'css)))
 
-  (setq org-html-head-include-default-style nil)
-  (setq org-html-postamble t)
-  (setq org-html-postamble-format
-        '(("en" "<hr /> <p class=\"postamble\">[<b>Last Updated:</b> %T | <b>Created by</b> %c]</p>")))
-  (setq org-html-footnote-format " [%s]")
-
-  (setq org-publish-project-alist
-        `(("orgfiles" ;; see the backquote ` not ' and the comma before the variable
-           ;;:base-directory "~/Notes/org/" ; FIXME: can't be a variable.
-           :base-directory , org-directory
-           :base-extension "org"
-           :publishing-directory , (concat org-directory "../public_html")
-           :publishing-function org-html-publish-to-html
-           :exclude "PrivatePage.org" ;; regexp
-           :language: utf-8
-           :headline-levels 3
-           :section-numbers nil
-           :table-of-contents nil
-           :html-head: "<link rel=\"stylesheet\" href=\"org.css\" type=\"text/css\">"
-           :footnotes t
-           :language "utf-8"
-           ;;:html-postamble: '(("en" "<hr />[<p class=\"author\">Author: %a (%e)</p> | <p class=\"date\">Last Update: %T</p> | <p class=\"creator\">%c</p> | <p class=\"xhtml-validation\">%v</p>]"))
-           :auto-index t)
-
-          ("homepage"
-           :base-directory , (expand-file-name (concat org-directory "../homepage"))
-           :base-extension "org"
-           :publishing-directory , (expand-file-name (concat org-directory "../public_html"))
-           :publishing-function org-html-publish-to-html
-           :headline-levels 3
-           :section-numbers nil
-           :table-of-contents nil
-           :footnotes t
-           :style-include-default nil
-           :language "utf-8"
-           :html-head "<link rel=\"stylesheet\" href=\"theme/style.css\"  type=\"text/css\" />
-<link rel=\"stylesheet\" href=\"theme/facebox.css\"  type=\"text/css\" />"
-                                        ;:style "<link rel=\"stylesheet\" href=\"org.css\" type=\"text/css\">"
-           :auto-preamble t
-           :auto-postamble nil
-           :auto-index nil)
-
-          ("notes" :components ("orgfiles"))
-          ("webpage" :components ("homepage"))))
 
 
   (defun myorg-update-parent-cookie ()
@@ -554,21 +460,6 @@ as the default task."
         (insert output-string))
       output-string))
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (shell . t)
-     (R . t)
-     (perl . t)
-     (ruby . t)
-     (python . t)
-     (haskell . t)
-     (dot . t)
-     (ditaa . t)
-     (C . nil)
-     (latex . t)
-     (ipython . t)
-     ))
 
   (defun my-org-archive-done-tasks ()
     (interactive)
@@ -601,4 +492,10 @@ as the default task."
                      ",han:Noto Sans Mono CJK SC"
                      ",cjk-misc:Noto Sans Mono CJK SC"))
    :family "Inconsolata" :height (if IS-WINDOWS 1.0 1.1))
+
+  (setq org-publish-project-alist '())
+  
+  (if (featurep! +jekyll) (load! "+jekyll"))
+  (if (featurep! +latex) (load! "+latex"))
+  (if (featurep! +html) (load! "+html"))
   )

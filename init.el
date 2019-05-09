@@ -96,8 +96,9 @@
  latex            ; writing papers in Emacs has never been so fun
  (org              ; organize your plain life in plain text
   +attach          ; custom attachment system
-  +babel           ; running code in org
-  +capture         ; org-capture in and outside of Emacs
+  +babel
+  +ipython                                      ; running code in org
+  ;;+capture         ; org-capture in and outside of Emacs
   +export          ; Exporting org to whatever you want
   +present)         ; Emacs for presentations
  (python            ; beautiful is better than ugly
@@ -119,5 +120,7 @@
 
  :private
  ;; my-cc
- org-enhanced
+ (org-enhanced
+  +latex
+  +jekyll)
  edit-enhanced)

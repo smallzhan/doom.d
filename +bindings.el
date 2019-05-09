@@ -15,6 +15,11 @@
  "s-<left>"  'windmove-left
  "s-<down>"  'windmove-down
 
+ "C-x k"     'ido-kill-buffer
+ "C-x K"     'doom/kill-this-buffer-in-all-windows
+ "C-x b"     'switch-to-buffer
+ "C-x B"     'persp-switch-to-buffer      
+
  ;; ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Doom
  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

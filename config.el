@@ -2,15 +2,10 @@
 
 (load! "+bindings")
 (load! "+ui")
-;;(load! "+org")
 
 ;; remove doom advice, I don't need deal with comments when newline
 (advice-remove #'newline-and-indent #'doom*newline-indent-and-continue-comments)
 
-
-;; Reconfigure packages
-(after! evil-escape
-  (setq evil-escape-key-sequence "jk"))
 
 (after! projectile
   (setq projectile-require-project-root t))
@@ -28,18 +23,6 @@
   (add-to-list 'yas-snippet-dirs +my-yas-snipper-dir))
 
 
-(after! format
-  (set-formatter!
-    'clang-format
-    '("clang-format"
-      ("-assume-filename=%S" (or (buffer-file-name) ""))
-      "-style=Google"))
-  :modes
-  '((c-mode ".c")
-    (c++-mode ".cpp")
-    (java-mode ".java")
-    (objc-mode ".m")
-    ))
 
 (after! ws-butler
   (setq ws-butler-global-exempt-modes
@@ -68,7 +51,6 @@
 
 (def-package! company-english-helper
   :commands (toggle-company-english-helper))
-
 
 (def-package! pyim
   :defer 2

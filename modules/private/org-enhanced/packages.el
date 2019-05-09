@@ -4,4 +4,6 @@
 (package! ox-gfm)
 (package! ob-ipython)
 (package! cdlatex)
-(package! org-jekyll :ignore t)
+;;(package! org-jekyll :ignore t)
+(package! org-pomodoro)
+
