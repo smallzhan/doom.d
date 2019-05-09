@@ -96,3 +96,9 @@
   (("M-l" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
    ("C-;" . pyim-delete-word-from-personal-buffer)))
 
+(def-package! yapfify
+  :after python
+  :hook
+  (python-mode . yapf-mode)
+  (before-save . yapfify-buffer))
+

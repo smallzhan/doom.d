@@ -94,7 +94,9 @@
      :desc "Make divider"         "d" #'make-divider
      :desc "Make revision"        "r" #'make-revision
      :desc "Update file header"   "g" #'update-file-header
-     :desc "Duplicate line"       "l" #'+private/duplicate-line)
+     :desc "Yapfify buffer"       "y" #'yapfify-buffer
+     :desc "Yapfify region"       "p" #'yapfify-region
+     )
 
    (:prefix ("o". "org")
      :desc "Do what I mean"           "o"   #'+org/dwim-at-point
