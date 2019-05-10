@@ -22,25 +22,22 @@
 
   (setq doom-font (font-spec :family "Fira Code" :size 13))
   )
-(defun font-exist-p(font)
-    (if (null (x-list-fonts font))
-        nil
-      t))
 
-  (defun find-fonts(fontlist)
-    (let ((font (car fontlist))
-          (other (cdr fontlist)))
-      (if (null font)
-          nil
-        (if (font-exist-p font)
-            font
-          (find-fonts other)))))
+(defun find-fonts (fontlist)
+  (let ((font (car fontlist))
+        (other (cdr fontlist)))
+    (if (null font)
+     nil
+     (if (find-font (font-spec :name font))
+         font
+       (find-fonts other)))))
 
-  (defvar chinese-fonts '("PingFang SC" "Microsoft YaHei"))
+(defvar chinese-fonts '("PingFang SC" "Microsoft YaHei"))
 
-  (let ((font (find-fonts chinese-fonts)))
-    (dolist (charset '(kana han cjk-misc bopomofo))
-      (set-fontset-font "fontset-default" charset font)))
+(let ((font (find-fonts chinese-fonts)))
+  (dolist (charset '(kana han cjk-misc bopomofo))
+    (set-fontset-font "fontset-default" charset font)))
+
 
 ;;
 ;;

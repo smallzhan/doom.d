@@ -7,8 +7,7 @@
 
 ;; 扩展
 (defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
-;; 代码片段
-(defvar +my-yas-snipper-dir (expand-file-name "~/.doom.d/snippets"))
+
 ;; Org文件
 (defvar +my-org-dir (expand-file-name "~/Dropbox/Notes/org/"))
 (when IS-MAC
@@ -60,14 +59,14 @@
   +defaults)
  vc-gutter
  workspaces
- pretty-code
+ 
  :editor
  ;;;evil
  ;;;(evil +everywhere)
  format            ; automated prettiness
  multiple-cursors  ; editing in many places at once
  fold
- snippets
+ ;;snippets
 
  :emacs
  (dired             ; making dired pretty [functional]

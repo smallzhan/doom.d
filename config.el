@@ -36,7 +36,10 @@
 
   (setq TeX-save-query nil))
 
- 
+(after! lsp
+  (setq lsp-enable-snippet nil))
+
+
 (after! eshell
   (setq eshell-directory-name (expand-file-name "eshell" doom-etc-dir)))
 
@@ -98,6 +101,6 @@
 
 (def-package! yapfify
   :after python
-  :hook
-  (python-mode . yapf-mode))
+  :defer t
+  )
 
