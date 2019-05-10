@@ -99,9 +99,12 @@
      )
 
    (:prefix ("o". "org")
-     :desc "Do what I mean"           "o"   #'+org/dwim-at-point
+     :desc "Do what I mean"           "w"   #'+org/dwim-at-point
      :desc "Blog of github"           "B"   #'my-pages-start-post
      :desc "Deft"                     "d"   #'deft
+     :desc "Clock in"                 "i"   #'org-clock-in
+     :desc "Clock out"                "o"   #'org-clock-out
+     :desc "Org pomodoro"             "m"   #'org-pomodoro
      (:prefix ("e" . "org export")
        :desc "Export beamer to latex" "l b" #'org-beamer-export-to-latex
        :desc "Export beamer as latex" "l B" #'org-beamer-export-as-latex

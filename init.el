@@ -106,6 +106,8 @@
 
 
  :app
+ (rss
+  +org)
 
  :collab
 
