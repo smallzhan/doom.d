@@ -10,17 +10,37 @@
 (after! projectile
   (setq projectile-require-project-root t))
 
+
 (after! company
-  (setq company-minimum-prefix-length 1
-        company-idle-delay 0
-        company-tooltip-limit 10
-        company-show-numbers t
-        company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)
-        ))
+  (setq company-tooltip-limit 12)
+   (defun my-company-box--make-line (candidate)
+        (-let* (((candidate annotation len-c len-a backend) candidate)
+                (color (company-box--get-color backend))
+                ((c-color a-color i-color s-color) (company-box--resolve-colors color))
+                (icon-string (and company-box--with-icons-p (company-box--add-icon candidate)))
+                (candidate-string (concat (propertize company-common 'face 'company-tooltip-common)
+                                          (substring (propertize candidate 'face 'company-box-candidate) (length company-common) nil)))
+                (align-string (when annotation
+                                (concat " " (and company-tooltip-align-annotations
+                                                 (propertize " " 'display `(space :align-to (- right-fringe ,(or len-a 0) 1)))))))
+                (space company-box--space)
+                (icon-p company-box-enable-icon)
+                (annotation-string (and annotation (propertize annotation 'face 'company-box-annotation)))
+                (line (concat (unless (or (and (= space 2) icon-p) (= space 0))
+                                (propertize " " 'display `(space :width ,(if (or (= space 1) (not icon-p)) 1 0.75))))
+                              (company-box--apply-color icon-string i-color)
+                              (company-box--apply-color candidate-string c-color)
+                              align-string
+                              (company-box--apply-color annotation-string a-color)))
+                (len (length line)))
+          (add-text-properties 0 len (list 'company-box--len (+ len-c len-a)
+                                           'company-box--color s-color)
+                               line)
+          line))
+      (advice-add #'company-box--make-line :override #'my-company-box--make-line)
 
+  )
 
-(after! emacs-snippets
-  (add-to-list 'yas-snippet-dirs +my-yas-snipper-dir))
 
 
 
@@ -49,30 +69,13 @@
 (def-package! visual-regexp
   :commands (vr/query-replace vr/replace))
 
-(def-package! package-lint
-  :commands (package-lint-current-buffer))
-
 (def-package! company-english-helper
   :commands (toggle-company-english-helper))
 
-(def-package! pyim
-  :defer 2
-  :config
-  (setq pyim-dcache-directory (expand-file-name "pyim" doom-cache-dir))
+(after! pyim
   (setq pyim-dicts
         '((:name "greatdict" :file "~/.doom.d/pyim/pyim-greatdict.pyim.gz")))         
 
-  (setq default-input-method "pyim")
-
-  
-  ;; 我使用全拼 
-  (setq pyim-default-scheme 'quanpin)
-
-  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-  ;; 我自己使用的中英文动态切换规则是：
-  ;; 1. 光标只有在注释里面时，才可以输入中文。
-  ;; 2. 光标前是汉字字符时，才能输入中文。
-  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
   (setq-default pyim-english-input-switch-functions
                 '(
                   pyim-probe-dynamic-english
@@ -84,23 +87,11 @@
                 '(pyim-probe-punctuation-line-beginning
                   pyim-probe-punctuation-after-punctuation))
 
-  ;; 开启拼音搜索功能
-  ;; (pyim-isearch-mode 1)
-
-  ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;; 手动安装 posframe 包。
   (setq pyim-page-tooltip 'posframe)
 
-  ;; 选词框显示5个候选词
-  (setq pyim-page-length 5)
-
-  :bind
-  (("M-l" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-   ("C-;" . pyim-delete-word-from-personal-buffer)))
+  (setq pyim-page-length 5))
 
 (def-package! yapfify
   :after python
   :defer t
   )
-

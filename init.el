@@ -34,11 +34,13 @@
       user-mail-address "ustczhan@gmail.com")
 
 (doom!
+ :input
+ chinese
+ 
  :completion
  (company           ; the ultimate code completion backend
-  +childframe
-  +auto
-  )
+  +childframe)
+  
  (ivy               ; a search engine for love and life
   +fuzzy
   +childframe)
@@ -87,8 +89,9 @@
   +docsets)
  editorconfig
  lsp
+ pdf
 
- :lang
+:lang
  (cc
   +lsp)                ; C/C++/Obj-C madness
  data              ; config/data formats
@@ -104,11 +107,10 @@
  (python            ; beautiful is better than ugly
   +lsp)
 
-
  :app
  (rss
   +org)
-
+ 
  :collab
 
  :config
@@ -126,3 +128,6 @@
   +latex
   +jekyll)
  edit-enhanced)
+
+
+(remove-hook 'compilation-filter-hook #'doom|apply-ansi-color-to-compilation-buffer)

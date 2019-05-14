@@ -18,7 +18,10 @@
  "C-x k"     'ido-kill-buffer
  "C-x K"     'doom/kill-this-buffer-in-all-windows
  "C-x b"     'switch-to-buffer
- "C-x B"     'persp-switch-to-buffer      
+ "C-x B"     'persp-switch-to-buffer
+
+ "M-l"       #'pyim-convert-string-at-point
+ "C-;"       #'pyim-delete-word-from-personal-buffer
 
  ;; ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Doom
@@ -37,7 +40,6 @@
      :desc "Delete trailing whitespace"  "w"   #'delete-trailing-whitespace
      :desc "Delete trailing newlines"    "W"   #'doom/delete-trailing-newlines
      :desc "List errors"                 "x"   #'flycheck-list-errors
-
      (:prefix ("g" . "Go to")
        :desc "Implementation"            "i" #'lsp-goto-implementation
        :desc "Definition"                "d" #'lsp-goto-type-definition
@@ -53,7 +55,7 @@
      (:prefix ("m" . "menu")
        :desc "Show"                      "m" #'lsp-ui-imenu
        :desc "Hide"                      "q" #'lsp-ui-imenu--kill)
-     )
+   )
 
    (:prefix ("d" . "doom")
      :desc "Dashboard"                   "d" #'+doom-dashboard/open
@@ -146,7 +148,17 @@
      :desc "Lazy search"                   "z" #'lazy-search)
    )
  
- 
- )
-
-
+ (:after smartparens
+   :map smartparens-mode-map
+   "M-("   #'sp-wrap-round
+   "M-["   #'sp-wrap-square
+   "M-{"   #'sp-wrap-curly              
+   "M-)"   #'sp-unwrap-sexp
+   "C-<"   #'sp-backward-slurp-sexp
+   "C->"   #'sp-forward-slurp-sexp
+   "M-p"   #'sp-backward-up-sexp
+   "M-n"   #'sp-up-sexp
+   "C-,"   #'sp-backward-barf-sexp
+   "C-."   #'sp-forward-barf-sexp
+   )
+)
