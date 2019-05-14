@@ -20,7 +20,7 @@
 
 (def-package! thing-edit)
 
-(use-package awesome-pair
+(def-package! awesome-pair
   :bind (:map awesome-pair-mode-map
           ("(" . awesome-pair-open-round)
           ("[" . awesome-pair-open-bracket)
