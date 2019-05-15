@@ -7,18 +7,20 @@
  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- "M-s-<right>" 'other-frame
- "M-s-<left>"  'other-frame
+ "M-s-<right>" #'other-frame
+ "M-s-<left>"  #'other-frame
 
- "s-<up>"    'windmove-up
- "s-<right>" 'windmove-right
- "s-<left>"  'windmove-left
- "s-<down>"  'windmove-down
+ "s-<up>"    #'windmove-up
+ "s-<right>" #'windmove-right
+ "s-<left>"  #'windmove-left
+ "s-<down>"  #'windmove-down
 
- "C-x k"     'ido-kill-buffer
- "C-x K"     'doom/kill-this-buffer-in-all-windows
- "C-x b"     'switch-to-buffer
- "C-x B"     'persp-switch-to-buffer
+ "C-s"       #'counsel-grep-or-swiper
+ "C-S-s"       #'isearch-forward
+ "C-x k"     #'ido-kill-buffer
+ "C-x K"     #'doom/kill-this-buffer-in-all-windows
+ "C-x b"     #'switch-to-buffer
+ "C-x B"     #'persp-switch-to-buffer
 
  "M-l"       #'pyim-convert-string-at-point
  "C-;"       #'pyim-delete-word-from-personal-buffer
@@ -99,7 +101,8 @@
      :desc "Yapfify buffer"       "y" #'yapfify-buffer
      :desc "Yapfify region"       "p" #'yapfify-region
      )
-
+   (:prefix ("f" . "file")
+     :desc "Find git file"        "g" #'counsel-git)
    (:prefix ("o". "org")
      :desc "Do what I mean"           "w"   #'+org/dwim-at-point
      :desc "Blog of github"           "B"   #'my-pages-start-post
@@ -130,10 +133,14 @@
      :desc "Line numbers"                 "l" #'doom/toggle-line-numbers
      :desc "Frame fullscreen"             "F" #'toggle-frame-fullscreen
      :desc "Indent guides"                "i" #'highlight-indent-guides-mode
-     :desc "Impatient mode"               "h" #'+impatient-mode/toggle
+     :desc "Impatient mode"               "m" #'+impatient-mode/toggle
      :desc "Big mode"                     "b" #'doom-big-font-mode
      :desc "org-tree-slide mode"          "p" #'+org-present/start
-     :desc "cycle-themes"                 "t" #'+my/toggle-cycle-theme)
+     :desc "company-english-helper"       "e" #'toggle-company-english-helper
+     :desc "Visual Lines"                 "v" #'visual-line-mode
+     :desc "Highlights Lines"             "h" #'hl-line-mode
+     :desc "Truncate Lines"               "c" #'toggle-truncate-lines
+     :desc "Theme"                        "t" #'counsel-load-theme)
    
    (:prefix ("/" . "search")
      :desc "Search buffer"                 "b" #'swiper
@@ -142,11 +149,14 @@
      :desc "Jump to symbol across buffers" "I" #'imenu-anywhere
      :desc "Jump to link"                  "l" #'ace-link
      :desc "Look up online"                "o" #'+lookup/online-select
-     :desc "search with color-rg"          "r" #'color-rg-search-input-in-project
-     :desc "search symbol with color-rg"   "s" #'color-rg-search-symbol-in-project
+     :desc "Search with color-rg"          "r" #'color-rg-search-input-in-project
+     :desc "Search symbol with color-rg"   "s" #'color-rg-search-symbol-in-project
      :desc "Search project"                "p" #'+default/search-project
+     :desc "Search in git"                 "g" #'counsel-git-grep
+     :desc "Search with counsel-rg"        "c" #'counsel-rg
+     :desc "Search with dash"              "a" #'counsel-dash
      :desc "Lazy search"                   "z" #'lazy-search)
-   )
+ )
  
  (:after smartparens
    :map smartparens-mode-map

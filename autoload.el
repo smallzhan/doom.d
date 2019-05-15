@@ -14,17 +14,6 @@
                             charset
                             (font-spec :family "WenQuanYi Micro Hei Mono" :size 20)))))) ;; 14 16 20 22 28
 
-;;;###autoload
-(defun +my/toggle-cycle-theme ()
-  "Cycle through themes defined in `+my-themes.'"
-  (interactive)
-  (when doom-theme
-    ;; if current theme isn't in cycleable themes, start over
-    (setq +my--cycle-themes
-          (or (cdr (memq doom-theme +my-themes))
-              +my-themes)))
-  (setq doom-theme (pop +my--cycle-themes))
-  (doom/reload-theme))
 
 ;;;###autoload
 (defun +my--support-format-p()
@@ -36,33 +25,6 @@
   "Indent the currently visited buffer."
   (interactive)
   (indent-region (point-min) (point-max)))
-
-
-
-
-;;;###autoload
-(defun +my/toggle-transparency ()
-  (interactive)
-  (let ((alpha (frame-parameter nil 'alpha)))
-    (set-frame-parameter
-     nil 'alpha
-     (if (eql (cond ((numberp alpha) alpha)
-                    ((numberp (cdr alpha)) (cdr alpha))
-                    ;; Also handle undocumented (<active> <inactive>) form.
-                    ((numberp (cadr alpha)) (cadr alpha)))
-              100)
-         '(85 . 50) '(100 . 100)))))
-
-;;;###autoload
-(defun +my/toggle-auto-save()
-  (interactive)
-  (if +my-auto-save-timer
-      (progn
-        (cancel-timer +my-auto-save-timer)
-        (setq +my-auto-save-timer nil)
-        (message "auto save disabled."))
-    (progn (setq +my-auto-save-timer (auto-save-enable))
-           (message "auto save enabled."))))
 
 ;;;###autoload
 (defun +my/rename-this-file-and-buffer (new-name)

@@ -27,6 +27,7 @@
 ;;                    (toggle-frame-fullscreen))))
 ;;   )
 
+
 (when IS-WINDOWS
   (setq system-time-locale "C"))
 
@@ -129,5 +130,6 @@
   +jekyll)
  edit-enhanced)
 
-
+;; solve the issue that color-rg buffer color is messed
+;; see https://github.com/manateelazycat/color-rg/issues/33
 (remove-hook 'compilation-filter-hook #'doom|apply-ansi-color-to-compilation-buffer)
