@@ -118,13 +118,13 @@
        :desc "Publish current file"    "f" #'org-publish-current-file
        :desc "Publish current project" "p" #'org-publish-current-project))
 
-   "&" nil
+   ;;"&" nil
 
-   (:prefix ("s" . "snippets")
-     :desc "New snippet"           "n" #'yas-new-snippet
-     :desc "Insert snippet"        "i" #'yas-insert-snippet
-     :desc "Find global snippet"   "v" #'yas-visit-snippet-file
-     :desc "Reload snippets"       "r" #'yas-reload-all)
+   ;; (:prefix ("s" . "snippets")
+   ;;   :desc "New snippet"           "n" #'yas-new-snippet
+   ;;   :desc "Insert snippet"        "i" #'yas-insert-snippet
+   ;;   :desc "Find global snippet"   "v" #'yas-visit-snippet-file
+   ;;   :desc "Reload snippets"       "r" #'yas-reload-all)
    
    
    (:prefix ("t" . "toggle")
@@ -142,7 +142,7 @@
      :desc "Truncate Lines"               "c" #'toggle-truncate-lines
      :desc "Theme"                        "t" #'counsel-load-theme)
    
-   (:prefix ("/" . "search")
+   (:prefix ("s" . "search")
      :desc "Search buffer"                 "b" #'swiper
      :desc "Search current directory"      "d" #'+default/search-from-cwd
      :desc "Jump to symbol"                "i" #'imenu
@@ -151,10 +151,12 @@
      :desc "Look up online"                "o" #'+lookup/online-select
      :desc "Search with color-rg"          "r" #'color-rg-search-input-in-project
      :desc "Search symbol with color-rg"   "s" #'color-rg-search-symbol-in-project
+     :desc "Search input in current file"  "f" #'color-rg-search-input-in-current-file
+     :desc "Search symbol in current file" "e" #'color-rg-search-symbol-in-current-file
      :desc "Search project"                "p" #'+default/search-project
      :desc "Search in git"                 "g" #'counsel-git-grep
      :desc "Search with counsel-rg"        "c" #'counsel-rg
-     :desc "Search with dash"              "a" #'counsel-dash
+     :desc "Search with dash"              "t" #'counsel-dash
      :desc "Lazy search"                   "z" #'lazy-search)
  )
  
