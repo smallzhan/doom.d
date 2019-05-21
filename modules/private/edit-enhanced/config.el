@@ -1,6 +1,9 @@
 
 (def-package! color-rg
-  :commands (color-rg-search-symbol-in-project color-rg-search-input-in-project))
+  :commands (color-rg-search-symbol-in-project
+             color-rg-search-input-in-project
+             color-rg-search-input-in-current-file
+             color-rg-search-symbol-in-current-file))
 
 
 ;(def-package! aweshell
@@ -15,7 +18,6 @@
 
 (def-package! lazy-search
   :commands lazy-search)
- 
 
 
 (def-package! thing-edit)

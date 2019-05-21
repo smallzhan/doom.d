@@ -125,8 +125,7 @@
    ;;   :desc "Insert snippet"        "i" #'yas-insert-snippet
    ;;   :desc "Find global snippet"   "v" #'yas-visit-snippet-file
    ;;   :desc "Reload snippets"       "r" #'yas-reload-all)
-   
-   
+
    (:prefix ("t" . "toggle")
      :desc "Flyspell"                     "s" #'flyspell-mode
      :desc "Flycheck"                     "f" #'flycheck-mode
@@ -141,7 +140,7 @@
      :desc "Highlights Lines"             "h" #'hl-line-mode
      :desc "Truncate Lines"               "c" #'toggle-truncate-lines
      :desc "Theme"                        "t" #'counsel-load-theme)
-   
+
    (:prefix ("s" . "search")
      :desc "Search buffer"                 "b" #'swiper
      :desc "Search current directory"      "d" #'+default/search-from-cwd
@@ -159,12 +158,12 @@
      :desc "Search with dash"              "t" #'counsel-dash
      :desc "Lazy search"                   "z" #'lazy-search)
  )
- 
+
  (:after smartparens
    :map smartparens-mode-map
    "M-("   #'sp-wrap-round
    "M-["   #'sp-wrap-square
-   "M-{"   #'sp-wrap-curly              
+   "M-{"   #'sp-wrap-curly
    "M-)"   #'sp-unwrap-sexp
    "C-<"   #'sp-backward-slurp-sexp
    "C->"   #'sp-forward-slurp-sexp
@@ -173,4 +172,5 @@
    "C-,"   #'sp-backward-barf-sexp
    "C-."   #'sp-forward-barf-sexp
    )
-)
+
+ )

@@ -18,7 +18,7 @@
         (if (pyim-string-match-p "\\cc" string)
             nil
           (funcall orig-fun))))
-    
+
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix)
     ))
@@ -27,7 +27,7 @@
 ;; see https://github.com/sebastiencs/company-box/issues/44 , it is not resolved, now i hack the
 ;; company-box.el and remove the scrollbar display
 (after! company-box
-  ;; Support `company-common'
+  ;; Support `company-common' in company-box
   ;; stolen from centaur emacs config
   (defun my-company-box--make-line (candidate)
     (-let* (((candidate annotation len-c len-a backend) candidate)
@@ -87,7 +87,7 @@
 
 (after! pyim
   (setq pyim-dicts
-        '((:name "greatdict" :file "~/.doom.d/pyim/pyim-bigdict.pyim.gz")))         
+        '((:name "greatdict" :file "~/.doom.d/pyim/pyim-bigdict.pyim.gz")))
 
   (setq-default pyim-english-input-switch-functions
                 '(
@@ -107,6 +107,13 @@
 (def-package! yapfify
   :after python
   :defer t
+  )
+
+(def-package! aweshell)
+
+(def-package! company-posframe
+  :after company
+  :config (company-posframe-mode 1)
   )
 
 (when IS-MAC

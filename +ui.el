@@ -20,7 +20,7 @@
 (if IS-WINDOWS
     (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14))
 
-  (setq doom-font (font-spec :family "Fira Code" :size 13))
+  (setq doom-font (font-spec :family "Fira Code":size 13))
   )
 
 ;(set-default-font "Sarasa Mono SC 14")

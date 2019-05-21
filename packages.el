@@ -7,5 +7,7 @@
 (package! org-edit-latex)
 
 (package! company-english-helper :recipe (:fetcher github :repo "manateelazycat/company-english-helper"))
-
+(package! aweshell :recipe (:fetcher github :repo "manateelazycat/aweshell"))
 (package! yapfify)
+
+(package! company-posframe :disable t)
