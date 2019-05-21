@@ -485,13 +485,15 @@ Callers of this function already widen the buffer view."
   ;;            (lambda ()
   ;;              (set (make-local-variable 'system-time-locale) "C")))
   
-  (set-face-attribute
-   'org-table nil
-   :fontset (create-fontset-from-fontset-spec
-             (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
-                     ",han:Noto Sans Mono CJK SC"
-                     ",cjk-misc:Noto Sans Mono CJK SC"))
-   :family "Inconsolata" :height (if IS-WINDOWS 1.0 1.1))
+  ;; (set-face-attribute
+  ;;  'org-table nil
+  ;;  :fontset (create-fontset-from-fontset-spec
+  ;;            (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
+  ;;                    ",han:Sarasa Mono SC"
+  ;;                    ",cjk-misc:Sarasa Mono SC"))
+  ;;  :family "Sarasa Mono SC")
+
+  (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
 
   (setq org-publish-project-alist '())
   

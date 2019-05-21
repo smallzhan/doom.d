@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; config/private/packages.el
 
-(disable-packages! glsl-mode cuda-mode opencl-mode)
+(disable-packages! glsl-mode cuda-mode opencl-mode emacs-snippets)
 (package! visual-regexp)
 (package! visual-regexp-steroids)
 (package! org-edit-latex)

@@ -6,14 +6,9 @@
 ;; remove doom advice, I don't need deal with comments when newline
 (advice-remove #'newline-and-indent #'doom*newline-indent-and-continue-comments)
 
-
 (after! projectile
   (setq projectile-require-project-root t))
 
-
-;; there is a wired bug in company-box, the scroll bar is very huge and cover the candicate list
-;; see https://github.com/sebastiencs/company-box/issues/44 , it is not resolved, now i hack the
-;; company-box.el and remove the scrollbar display
 (after! company
   (setq company-tooltip-limit 12)
   (after! pyim
@@ -26,7 +21,12 @@
     
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix)
-    )
+    ))
+
+;; there is a wired bug in company-box, the scroll bar is very huge and cover the candicate list
+;; see https://github.com/sebastiencs/company-box/issues/44 , it is not resolved, now i hack the
+;; company-box.el and remove the scrollbar display
+(after! company-box
   ;; Support `company-common'
   ;; stolen from centaur emacs config
   (defun my-company-box--make-line (candidate)
@@ -53,9 +53,7 @@
                                        'company-box--color s-color)
                            line)
       line))
-  (advice-add #'company-box--make-line :override #'my-company-box--make-line)
-  
-  )
+  (advice-add #'company-box--make-line :override #'my-company-box--make-line))
 
 (after! ws-butler
   (setq ws-butler-global-exempt-modes
@@ -68,15 +66,18 @@
 
   (setq TeX-save-query nil))
 
-(after! lsp
-  (setq lsp-enable-snippet nil))
+;; (after! lsp
+;;   (setq lsp-enable-snippet nil))
 
+(after! color-rg
+  ;; solve the issue that color-rg buffer color is messed
+  ;; see https://github.com/manateelazycat/color-rg/issues/33
+  (remove-hook 'compilation-filter-hook #'doom|apply-ansi-color-to-compilation-buffer))
 
 (after! eshell
   (setq eshell-directory-name (expand-file-name "eshell" doom-etc-dir)))
 
 (global-auto-revert-mode 0)
-
 
 (def-package! visual-regexp
   :commands (vr/query-replace vr/replace))
