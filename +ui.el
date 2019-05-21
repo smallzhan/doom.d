@@ -16,12 +16,17 @@
 ;; disable line-number
 (setq display-line-numbers-type nil)
 
-;; font
+;;font
 (if IS-WINDOWS
     (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14))
 
   (setq doom-font (font-spec :family "Fira Code" :size 13))
   )
+
+;(set-default-font "Sarasa Mono SC 14")
+(set-face-attribute 'fixed-pitch nil
+                    :family "Sarasa Mono SC"
+                    :inherit '(default))
 
 (defun find-fonts (fontlist)
   (let ((font (car fontlist))

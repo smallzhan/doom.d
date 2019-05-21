@@ -60,11 +60,11 @@
         (append ws-butler-global-exempt-modes
                 '(prog-mode org-mode))))
 
-(after! tex
-  (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex --synctex=1%(mode)%' %t" TeX-run-TeX nil t))
-  (setq-hook! LaTeX-mode TeX-command-default "XeLaTex")
+;; (after! tex
+;;   (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex --synctex=1%(mode)%' %t" TeX-run-TeX nil t))
+;;   (setq-hook! LaTeX-mode TeX-command-default "XeLaTex")
 
-  (setq TeX-save-query nil))
+;;   (setq TeX-save-query nil))
 
 ;; (after! lsp
 ;;   (setq lsp-enable-snippet nil))

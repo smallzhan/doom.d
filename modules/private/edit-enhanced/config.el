@@ -48,3 +48,6 @@
           ("M-:" . awesome-pair-jump-out-pair-and-newline)
           )
   :hook ((prog-mode ielm-mode minibuffer-inactive-mode sh-mode) . awesome-pair-mode))
+
+
+(load! "+latex")
