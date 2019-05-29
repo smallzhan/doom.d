@@ -124,3 +124,15 @@
 
 
 
+;; (after! format-all
+  
+;;   (defun format-dos-2-unix (formatter status)
+;;     (message "hookkkkkkk")
+;;     (when IS-WINDOWS
+;;       (save-excursion
+;;         (+my/dos2unix))
+;;       )
+;;     )
+;;   (add-hook 'format-all-after-format-functions #'format-dos-2-unix)
+;;   )
+

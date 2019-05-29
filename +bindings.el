@@ -16,7 +16,7 @@
  "s-<down>"  #'windmove-down
 
  "C-s"       #'counsel-grep-or-swiper
- "C-S-s"       #'isearch-forward
+ "C-S-s"     #'isearch-forward
  "C-x k"     #'ido-kill-buffer
  "C-x K"     #'doom/kill-this-buffer-in-all-windows
  "C-x b"     #'switch-to-buffer
@@ -57,9 +57,10 @@
      (:prefix ("m" . "menu")
        :desc "Show"                      "m" #'lsp-ui-imenu
        :desc "Hide"                      "q" #'lsp-ui-imenu--kill)
-     (:prefix ("y" . "Yapf")
-       :desc "Yapfify buffer"       "b" #'yapfify-buffer
-       :desc "Yapfify region"       "r" #'yapfify-region)
+     (:after yapfify
+       (:prefix ("y" . "Yapf")
+         :desc "Yapfify buffer"          "b" #'yapfify-buffer
+         :desc "Yapfify region"          "r" #'yapfify-region))
      )
 
    (:prefix ("d" . "doom")

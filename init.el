@@ -69,6 +69,7 @@
  :editor
  ;;;evil
  ;;;(evil +everywhere)
+ file-templates
  format            ; automated prettiness
  multiple-cursors  ; editing in many places at once
  fold
@@ -79,8 +80,7 @@
   +icons
   +ranger)
  ;;eshell            ; a consistent, cross-platform shell (WIP)
- imenu             ; an imenu sidebar and searchable code index
- vc                ; version-control and Emacs, sitting in a tree
+  vc                ; version-control and Emacs, sitting in a tree
  electric
 
  :tools
