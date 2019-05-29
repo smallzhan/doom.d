@@ -30,7 +30,7 @@
                            ,(concat org-directory "notes.org")))
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
-  
+
   (setq org-log-done 'time
         org-log-into-drawer "LOGBOOK"
         org-deadline-warning-days 2
@@ -416,6 +416,13 @@ Callers of this function already widen the buffer view."
   (defadvice kill-whole-line (after fix-cookies activate)
     (myorg-update-parent-cookie))
 
+  (defun org-time-today ()
+  "Time in seconds today at 0:00.
+Returns the float number of seconds since the beginning of the
+epoch to the beginning of today (00:00)."
+  (float-time (apply 'encode-time
+                     (append '(0 0 0) (nthcdr 3 (decode-time))))))
+
   (defun filter-by-tags ()
     (let ((head-tags (org-get-tags-at)))
       (member current-tag head-tags)))
@@ -484,19 +491,19 @@ Callers of this function already widen the buffer view."
   ;; (add-hook 'org-mode-hook
   ;;            (lambda ()
   ;;              (set (make-local-variable 'system-time-locale) "C")))
-  
-  ;; (set-face-attribute
-  ;;  'org-table nil
-  ;;  :fontset (create-fontset-from-fontset-spec
-  ;;            (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
-  ;;                    ",han:Sarasa Mono SC"
-  ;;                    ",cjk-misc:Sarasa Mono SC"))
-  ;;  :family "Sarasa Mono SC")
 
-  (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
+  (set-face-attribute
+   'org-table nil
+   :fontset (create-fontset-from-fontset-spec
+             (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
+                     ",han:Sarasa Mono SC"
+                     ",cjk-misc:Sarasa Mono SC"))
+   :family "Sarasa Mono SC")
+
+  ;;(set-face-attribute 'org-table nil :family "Sarasa Mono SC")
 
   (setq org-publish-project-alist '())
-  
+
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))

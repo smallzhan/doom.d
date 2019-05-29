@@ -90,7 +90,7 @@
   +childframe)
  (lookup
   +docsets)
- editorconfig
+ ;;editorconfig
  lsp
  pdf
 

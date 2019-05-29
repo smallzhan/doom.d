@@ -27,7 +27,7 @@
 (set-face-attribute 'fixed-pitch nil
                     :family "Sarasa Mono SC"
                     :inherit '(default))
-
+ 
 (defun find-fonts (fontlist)
   (let ((font (car fontlist))
         (other (cdr fontlist)))
@@ -37,20 +37,8 @@
          font
        (find-fonts other)))))
 
-(defvar chinese-fonts '("PingFang SC" "Microsoft YaHei"))
+(defvar chinese-fonts '("Sarasa Mono SC" "PingFang SC" "Microsoft YaHei"))
 
 (let ((font (find-fonts chinese-fonts)))
   (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font "fontset-default" charset font)))
-
-
-;;
-;;
-;; (defun +my|init-font(frame)
-;;   (with-selected-frame frame
-;;     (if (display-graphic-p)
-;;         (+my/better-font))))
-
-;; (if (and (fboundp 'daemonp) (daemonp))
-;;     (add-hook 'after-make-frame-functions #'+my|init-font)
-;;   (+my/better-font))
+    (set-fontset-font t charset font)))
