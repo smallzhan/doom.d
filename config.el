@@ -29,6 +29,8 @@
 (after! company-box
   ;; Support `company-common' in company-box
   ;; stolen from centaur emacs config
+  (setq company-box-scrollbar nil)
+
   (defun my-company-box--make-line (candidate)
     (-let* (((candidate annotation len-c len-a backend) candidate)
             (color (company-box--get-color backend))

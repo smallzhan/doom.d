@@ -72,3 +72,23 @@
     (buffer-string)))
 
 
+;;;###autoload
+(defun +my/dos2unix ()
+  "Replace DOS eolns CR LF with Unix eolns CR"
+  (interactive)
+    (goto-char (point-min))
+      (while (search-forward (string ?\C-m) nil t) (replace-match "")))
+
+;;;###autoload
+(defun +my/hide-dos-eol ()
+  "Hide ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
+;;;###autoload
+(defun +my/show-dos-eol ()
+  "Show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M ?\^M))

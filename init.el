@@ -37,14 +37,16 @@
 (doom!
  :input
  chinese
- 
+
  :completion
  (company           ; the ultimate code completion backend
-  +childframe)
-  
+  +childframe
+  )
+
  (ivy               ; a search engine for love and life
   +fuzzy
-  +childframe)
+  +childframe
+  )
 
  :ui
  doom              ; what makes DOOM look the way it does
@@ -63,7 +65,7 @@
   +defaults)
  vc-gutter
  workspaces
- 
+
  :editor
  ;;;evil
  ;;;(evil +everywhere)
@@ -111,7 +113,7 @@
  :app
  (rss
   +org)
- 
+
  :collab
 
  :config

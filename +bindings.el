@@ -57,7 +57,10 @@
      (:prefix ("m" . "menu")
        :desc "Show"                      "m" #'lsp-ui-imenu
        :desc "Hide"                      "q" #'lsp-ui-imenu--kill)
-   )
+     (:prefix ("y" . "Yapf")
+       :desc "Yapfify buffer"       "b" #'yapfify-buffer
+       :desc "Yapfify region"       "r" #'yapfify-region)
+     )
 
    (:prefix ("d" . "doom")
      :desc "Dashboard"                   "d" #'+doom-dashboard/open
@@ -94,12 +97,45 @@
      :desc "iedit"                "e" #'iedit-mode
      :desc "Switch header/source" "s" #'ff-find-other-file
      :desc "Make header"          "m" #'make-header
-     :desc "Make box comment"     "c" #'make-box-comment
+     :desc "Make box comment"     "b" #'make-box-comment
      :desc "Make divider"         "d" #'make-divider
      :desc "Make revision"        "r" #'make-revision
      :desc "Update file header"   "g" #'update-file-header
-     :desc "Yapfify buffer"       "y" #'yapfify-buffer
-     :desc "Yapfify region"       "p" #'yapfify-region
+     (:after thing-edit
+       (:prefix ("c" . "Thing Edit Copy")
+         :desc "thing-copy-defun"    "d"  #'thing-copy-defun
+         :desc "thing-copy-line"     "l"  #'thing-copy-line
+         :desc "thing-copy-sexp"     "s"  #'thing-copy-sexp
+         :desc "thing-copy-word"     "w"  #'thing-copy-word
+         :desc "thing-copy-symbol"   "b"  #'thing-copy-symbol
+         :desc "thing-copy-filename" "f"  #'thing-copy-filename
+         :desc "thing-copy-list"     "t"  #'thing-copy-list
+         :desc "thing-copy-sentence" "c"  #'thing-copy-sentence
+         :desc "thing-copy-paragrah" "p"  #'thing-copy-paragraph
+         :desc "thing-copy-page"     "g"  #'thing-copy-page
+         :desc "thing-copy-url"      "u"  #'thing-copy-url
+         :desc "thing-copy-email"    "e"  #'thing-copy-email
+         :desc "thing-copy-comment"  ";"  #'thing-copy-comment
+         :desc "thing-copy-number"   "n"  #'thing-copy-number
+          )
+       (:prefix ("x" . "Thing Edit Cut")
+         :desc "thing-cut-defun"    "d"  #'thing-cut-defun
+         :desc "thing-cut-line"     "l"  #'thing-cut-line
+         :desc "thing-cut-sexp"     "s"  #'thing-cut-sexp
+         :desc "thing-cut-word"     "w"  #'thing-cut-word
+         :desc "thing-cut-symbol"   "b"  #'thing-cut-symbol
+         :desc "thing-cut-filename" "f"  #'thing-cut-filename
+         :desc "thing-cut-list"     "t"  #'thing-cut-list
+         :desc "thing-cut-sentence" "c"  #'thing-cut-sentence
+         :desc "thing-cut-paragrah" "p"  #'thing-cut-paragraph
+         :desc "thing-cut-page"     "g"  #'thing-cut-page
+         :desc "thing-cut-url"      "u"  #'thing-cut-url
+         :desc "thing-cut-email"    "e"  #'thing-cut-email
+         :desc "thing-cut-comment"  ";"  #'thing-cut-comment
+         :desc "thing-cut-number"   "n"  #'thing-cut-number
+         ))
+     ;; :desc "Yapfify buffer"       "y" #'yapfify-buffer
+     ;; :desc "Yapfify region"       "p" #'yapfify-region
      )
    (:prefix ("f" . "file")
      :desc "Find git file"        "g" #'counsel-git)
