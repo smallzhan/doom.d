@@ -11,20 +11,24 @@
 ;; Org文件
 (defvar +my-org-dir (expand-file-name "~/Dropbox/Notes/org/"))
 ;; (when IS-MAC
-;;   (setq ns-use-native-fullscreen nil)
-;;   (setq ns-use-fullscreen-animation nil)
-;;   (run-at-time "5sec" nil
-;;                (lambda ()
-;;                  (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-;;                    ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-;;                    (when (memq fullscreen '(fullscreen fullboth))
-;;                      (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-;;                    ;; Manipulating a frame without waiting for the fullscreen
-;;                    ;; animation to complete can cause a crash, or other unexpected
-;;                    ;; behavior, on macOS (bug#28496).
-;;                    (when (featurep 'cocoa) (sleep-for 0.5))
-;;                    ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
-;;                    (toggle-frame-fullscreen))))
+;;   (setq frame-resize-pixelwise t
+
+;;         ns-use-native-fullscreen nil
+;;         ns-use-fullscreen-animation nil)
+
+  
+;;   ;; (run-at-time "5sec" nil
+;;   ;;              (lambda ()
+;;   ;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
+;;   ;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
+;;   ;;                  (when (memq fullscreen '(fullscreen fullboth))
+;;   ;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
+;;   ;;                  ;; Manipulating a frame without waiting for the fullscreen
+;;   ;;                  ;; animation to complete can cause a crash, or other unexpected
+;;   ;;                  ;; behavior, on macOS (bug#28496).
+;;   ;;                  (when (featurep 'cocoa) (sleep-for 0.5))
+;;   ;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
+;;   ;;                  (toggle-frame-fullscreen))))
 ;;   )
 
 
@@ -83,6 +87,8 @@
   vc                ; version-control and Emacs, sitting in a tree
  electric
 
+ :term
+ vterm
  :tools
  eval
  magit
@@ -99,7 +105,7 @@
   +lsp)                ; C/C++/Obj-C madness
  data              ; config/data formats
  emacs-lisp        ; drown in parentheses
- latex            ; writing papers in Emacs has never been so fun
+ latex
  (org              ; organize your plain life in plain text
   +attach          ; custom attachment system
   +babel

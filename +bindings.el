@@ -32,16 +32,16 @@
  (:leader
 
    (:prefix ("c" . "code")
-     :desc "Compile"                     "c"   #'compile
-     :desc "Jump to definition"          "d"   #'+lookup/definition
-     :desc "Jump to references"          "D"   #'+lookup/references
-     :desc "Evaluate buffer/region"      "e"   #'+eval/buffer-or-region
-     :desc "Evaluate & replace region"   "E"   #'+eval:replace-region
-     :desc "Format buffer/region"        "f"   #'+format/region-or-buffer
-     :desc "Open REPL"                   "r"   #'+eval/open-repl-other-window
-     :desc "Delete trailing whitespace"  "w"   #'delete-trailing-whitespace
-     :desc "Delete trailing newlines"    "W"   #'doom/delete-trailing-newlines
-     :desc "List errors"                 "x"   #'flycheck-list-errors
+     :desc "Compile"                     "c" #'compile
+     :desc "Jump to definition"          "d" #'+lookup/definition
+     :desc "Jump to references"          "D" #'+lookup/references
+     :desc "Evaluate buffer/region"      "e" #'+eval/buffer-or-region
+     :desc "Evaluate & replace region"   "E" #'+eval:replace-region
+     :desc "Format buffer/region"        "f" #'+format/region-or-buffer
+     :desc "Open REPL"                   "r" #'+eval/open-repl-other-window
+     :desc "Delete trailing whitespace"  "w" #'delete-trailing-whitespace
+     :desc "Delete trailing newlines"    "W" #'doom/delete-trailing-newlines
+     :desc "List errors"                 "x" #'flycheck-list-errors
      (:prefix ("g" . "Go to")
        :desc "Implementation"            "i" #'lsp-goto-implementation
        :desc "Definition"                "d" #'lsp-goto-type-definition
@@ -93,7 +93,6 @@
      :desc "Switch compilation database" "b" #'+private/switch-compilation-database)
 
    "e" nil
-
    (:prefix ("e" . "editor")
      :desc "iedit"                "e" #'iedit-mode
      :desc "Switch header/source" "s" #'ff-find-other-file
@@ -104,56 +103,71 @@
      :desc "Update file header"   "g" #'update-file-header
      (:after thing-edit
        (:prefix ("c" . "Thing Edit Copy")
-         :desc "thing-copy-defun"    "d"  #'thing-copy-defun
-         :desc "thing-copy-line"     "l"  #'thing-copy-line
-         :desc "thing-copy-sexp"     "s"  #'thing-copy-sexp
-         :desc "thing-copy-word"     "w"  #'thing-copy-word
-         :desc "thing-copy-symbol"   "b"  #'thing-copy-symbol
-         :desc "thing-copy-filename" "f"  #'thing-copy-filename
-         :desc "thing-copy-list"     "t"  #'thing-copy-list
-         :desc "thing-copy-sentence" "c"  #'thing-copy-sentence
-         :desc "thing-copy-paragrah" "p"  #'thing-copy-paragraph
-         :desc "thing-copy-page"     "g"  #'thing-copy-page
-         :desc "thing-copy-url"      "u"  #'thing-copy-url
-         :desc "thing-copy-email"    "e"  #'thing-copy-email
-         :desc "thing-copy-comment"  ";"  #'thing-copy-comment
-         :desc "thing-copy-number"   "n"  #'thing-copy-number
-          )
+         :desc "thing-copy-defun"    "d" #'thing-copy-defun
+         :desc "thing-copy-line"     "l" #'thing-copy-line
+         :desc "thing-copy-sexp"     "s" #'thing-copy-sexp
+         :desc "thing-copy-word"     "w" #'thing-copy-word
+         :desc "thing-copy-symbol"   "b" #'thing-copy-symbol
+         :desc "thing-copy-filename" "f" #'thing-copy-filename
+         :desc "thing-copy-list"     "t" #'thing-copy-list
+         :desc "thing-copy-sentence" "c" #'thing-copy-sentence
+         :desc "thing-copy-paragrah" "p" #'thing-copy-paragraph
+         :desc "thing-copy-page"     "g" #'thing-copy-page
+         :desc "thing-copy-url"      "u" #'thing-copy-url
+         :desc "thing-copy-email"    "e" #'thing-copy-email
+         :desc "thing-copy-comment"  ";" #'thing-copy-comment
+         :desc "thing-copy-number"   "n" #'thing-copy-number
+         )
        (:prefix ("x" . "Thing Edit Cut")
-         :desc "thing-cut-defun"    "d"  #'thing-cut-defun
-         :desc "thing-cut-line"     "l"  #'thing-cut-line
-         :desc "thing-cut-sexp"     "s"  #'thing-cut-sexp
-         :desc "thing-cut-word"     "w"  #'thing-cut-word
-         :desc "thing-cut-symbol"   "b"  #'thing-cut-symbol
-         :desc "thing-cut-filename" "f"  #'thing-cut-filename
-         :desc "thing-cut-list"     "t"  #'thing-cut-list
-         :desc "thing-cut-sentence" "c"  #'thing-cut-sentence
-         :desc "thing-cut-paragrah" "p"  #'thing-cut-paragraph
-         :desc "thing-cut-page"     "g"  #'thing-cut-page
-         :desc "thing-cut-url"      "u"  #'thing-cut-url
-         :desc "thing-cut-email"    "e"  #'thing-cut-email
-         :desc "thing-cut-comment"  ";"  #'thing-cut-comment
-         :desc "thing-cut-number"   "n"  #'thing-cut-number
+         :desc "thing-cut-defun"    "d" #'thing-cut-defun
+         :desc "thing-cut-line"     "l" #'thing-cut-line
+         :desc "thing-cut-sexp"     "s" #'thing-cut-sexp
+         :desc "thing-cut-word"     "w" #'thing-cut-word
+         :desc "thing-cut-symbol"   "b" #'thing-cut-symbol
+         :desc "thing-cut-filename" "f" #'thing-cut-filename
+         :desc "thing-cut-list"     "t" #'thing-cut-list
+         :desc "thing-cut-sentence" "c" #'thing-cut-sentence
+         :desc "thing-cut-paragrah" "p" #'thing-cut-paragraph
+         :desc "thing-cut-page"     "g" #'thing-cut-page
+         :desc "thing-cut-url"      "u" #'thing-cut-url
+         :desc "thing-cut-email"    "e" #'thing-cut-email
+         :desc "thing-cut-comment"  ";" #'thing-cut-comment
+         :desc "thing-cut-number"   "n" #'thing-cut-number
          ))
      ;; :desc "Yapfify buffer"       "y" #'yapfify-buffer
      ;; :desc "Yapfify region"       "p" #'yapfify-region
      )
    (:prefix ("f" . "file")
      :desc "Find git file"        "g" #'counsel-git)
+
+   "o" nil ;; default keybinding for org agenda is too complicated
    (:prefix ("o". "org")
-     :desc "Do what I mean"           "w"   #'+org/dwim-at-point
-     :desc "Blog of github"           "B"   #'my-pages-start-post
-     :desc "Deft"                     "d"   #'deft
-     :desc "Clock in"                 "i"   #'org-clock-in
-     :desc "Clock out"                "o"   #'org-clock-out
-     :desc "Org pomodoro"             "m"   #'org-pomodoro
+     :desc "Search notes for symbol"  "." #'+default/search-notes-for-symbol-at-point
+     :desc "Do what I mean"           "w" #'+org/dwim-at-point
+     :desc "Blog of github"           "B" #'my-pages-start-post
+     :desc "Deft"                     "d" #'deft
+     :desc "Clock in"                 "i" #'org-clock-in
+     :desc "Clock out"                "o" #'org-clock-out
+     :desc "Pomodoro"                 "m" #'org-pomodoro
+     :desc "Agenda"                   "a" #'org-agenda
+     :desc "Todo List"                "t" #'org-todo-list
+     :desc "Tags view"                "g" #'org-tags-view
+     :desc "View Search"              "v" #'org-search-view
+     :desc "Browse notes"             "f" #'+default/browse-notes
+     :desc "Search org-directory"     "s" #'+default/org-notes-search
+     :desc "Switch org buffers"       "b" #'org-switchb
+     :desc "Capture"                  "c" #'org-capture
+     :desc "Goto capture"             "C" #'org-capture-goto-target
+     :desc "Link store"               "l" #'org-store-link
+     :desc "Sync org caldav"          "S" #'org-caldav-sync
+
      (:prefix ("e" . "org export")
        :desc "Export beamer to latex" "l b" #'org-beamer-export-to-latex
        :desc "Export beamer as latex" "l B" #'org-beamer-export-as-latex
        :desc "Export beamer as pdf"   "l P" #'org-beamer-export-to-pdf)
      (:prefix ("p" . "publish")
-       :desc "Publish current file"    "f" #'org-publish-current-file
-       :desc "Publish current project" "p" #'org-publish-current-project))
+       :desc "Publish current file"     "f" #'org-publish-current-file
+       :desc "Publish current project"  "p" #'org-publish-current-project))
 
    ;;"&" nil
 
@@ -164,19 +178,19 @@
    ;;   :desc "Reload snippets"       "r" #'yas-reload-all)
 
    (:prefix ("t" . "toggle")
-     :desc "Flyspell"                     "s" #'flyspell-mode
-     :desc "Flycheck"                     "f" #'flycheck-mode
-     :desc "Line numbers"                 "l" #'doom/toggle-line-numbers
-     :desc "Frame fullscreen"             "F" #'toggle-frame-fullscreen
-     :desc "Indent guides"                "i" #'highlight-indent-guides-mode
-     :desc "Impatient mode"               "m" #'+impatient-mode/toggle
-     :desc "Big mode"                     "b" #'doom-big-font-mode
-     :desc "org-tree-slide mode"          "p" #'+org-present/start
-     :desc "company-english-helper"       "e" #'toggle-company-english-helper
-     :desc "Visual Lines"                 "v" #'visual-line-mode
-     :desc "Highlights Lines"             "h" #'hl-line-mode
-     :desc "Truncate Lines"               "c" #'toggle-truncate-lines
-     :desc "Theme"                        "t" #'counsel-load-theme)
+     :desc "Flyspell"                      "s" #'flyspell-mode
+     :desc "Flycheck"                      "f" #'flycheck-mode
+     :desc "Line numbers"                  "l" #'doom/toggle-line-numbers
+     :desc "Frame fullscreen"              "F" #'toggle-frame-fullscreen
+     :desc "Indent guides"                 "i" #'highlight-indent-guides-mode
+     :desc "Impatient mode"                "m" #'+impatient-mode/toggle
+     :desc "Big mode"                      "b" #'doom-big-font-mode
+     :desc "org-tree-slide mode"           "p" #'+org-present/start
+     :desc "company-english-helper"        "e" #'toggle-company-english-helper
+     :desc "Visual Lines"                  "v" #'visual-line-mode
+     :desc "Highlights Lines"              "h" #'hl-line-mode
+     :desc "Truncate Lines"                "c" #'toggle-truncate-lines
+     :desc "Theme"                         "t" #'counsel-load-theme)
 
    (:prefix ("s" . "search")
      :desc "Search buffer"                 "b" #'swiper
@@ -194,7 +208,7 @@
      :desc "Search with counsel-rg"        "c" #'counsel-rg
      :desc "Search with dash"              "t" #'counsel-dash
      :desc "Lazy search"                   "z" #'lazy-search)
- )
+   )
 
  (:after smartparens
    :map smartparens-mode-map
@@ -208,6 +222,8 @@
    "M-n"   #'sp-up-sexp
    "C-,"   #'sp-backward-barf-sexp
    "C-."   #'sp-forward-barf-sexp
-   )
-
+   "C-<right>" nil
+   "M-<right>" nil
+   "C-<left>"  nil
+   "M-<left>"  nil)
  )

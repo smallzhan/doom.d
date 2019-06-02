@@ -1,6 +1,5 @@
 (def-package! ox-gfm
-  :defer t
-  )
+  :defer t)
 
 (def-package! cdlatex
   :defer t
@@ -27,11 +26,14 @@
         ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
         ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
         org-agenda-files `(,(concat org-directory "planning.org")
-                           ,(concat org-directory "notes.org")))
+                           ,(concat org-directory "notes.org")
+                           ,(concat org-directory "work.org")))
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
 
-  (setq org-log-done 'time
+  (setq org-log-done 'note
+        org-log-redeadline 'note
+        org-log-reschedule 'note
         org-log-into-drawer "LOGBOOK"
         org-deadline-warning-days 2
         org-agenda-start-on-weekday nil
@@ -107,6 +109,21 @@
   (setq org-startup-truncated nil)
 
   ;; org-capture
+  (defun org-capture-template-goto-link ()
+  (org-capture-put :target (list 'file+headline
+                                 (nth 1 (org-capture-get :target))
+                                 (org-capture-get :annotation)))
+  (org-capture-put-target-region-and-position)
+  (widen)
+  (let ((hd (nth 2 (org-capture-get :target))))
+    (goto-char (point-min))
+    (if (re-search-forward
+         (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
+        (org-end-of-subtree)
+      (goto-char (point-max))
+      (or (bolp) (insert "\n"))
+      (insert "* " hd "\n"))))
+
   (setq org-capture-templates
         '(("t" "todo" entry (file  "refile.org")
            "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
@@ -116,8 +133,12 @@
            "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
           ("j" "Journal" entry (file+olp+datetree  "diary.org")
            "* %?\n%U\n" :clock-in t :clock-resume t)
-          ("w" "org-protocol" entry (file "refile.org")
-           "* TODO Review %c\n%U\n" :immediate-finish t)
+          ("l" "org-protocol" plain ;;(file+function "notes.org" org-capture-template-goto-link)
+           ;;"%?\n%i\n%U\n %:initial" :immediate-finish t)
+           (file+function "notes.org" org-capture-template-goto-link)
+           " %:initial\n%U\n" :empty-lines 1)
+          ("w" "Link" entry (file+headline "notes.org" "Web Clip")
+            "* %:annotation\n%i\n%U\n" :immediate-finish t :kill-buffer t)
           ("p" "Phone call" entry (file  "refile.org")
            "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
           ("h" "Habit" entry (file  "refile.org")
@@ -468,13 +489,23 @@ epoch to the beginning of today (00:00)."
       output-string))
 
 
-  (defun my-org-archive-done-tasks ()
+  (defun bh-archive-done-tasks ()
     (interactive)
     (dolist (tag (list
                   "/DONE"
                   "/CANCELLED"))
       (org-map-entries 'org-archive-subtree tag 'file))
     )
+
+ (defun my-archive-done-tasks ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward
+            (concat "\\* " (regexp-opt org-done-keywords) " ") nil t)
+      (goto-char (line-beginning-position))
+      (org-archive-subtree))))
+ 
   (setq org-agenda-text-search-extra-files '(agenda-archives))
 
   (defun zin/org-tag-match-context (&optional todo-only match)
@@ -492,6 +523,7 @@ epoch to the beginning of today (00:00)."
   ;;            (lambda ()
   ;;              (set (make-local-variable 'system-time-locale) "C")))
 
+  ;;(add-hook 'org-mode-hook 'turn-off-smartparens-mode)
   (set-face-attribute
    'org-table nil
    :fontset (create-fontset-from-fontset-spec
