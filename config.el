@@ -159,14 +159,16 @@
 ;;   )
 
 (after! ivy
-  (setq ivy-use-virtual-buffers t))
+  (setq ivy-use-virtual-buffers t)
+   (setq ivy-display-functions-alist
+         '((counsel-irony . ivy-display-function-overlay)
+           (ivy-completion-in-region . ivy-display-function-overlay)))
+  )
 
 (after! ivy-posframe
    ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
    ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
 
-   (setq ivy-display-functions-alist
-         '((t . +ivy-display-at-frame-center-near-bottom)
-           (counsel-irony . ivy-display-function-overlay)
-           (ivy-completion-in-region . ivy-display-function-overlay)))
+  (setq ivy-posframe-display-functions-alist
+        '((t . +ivy-display-at-frame-center-near-bottom)))
   )
