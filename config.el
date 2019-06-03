@@ -162,9 +162,11 @@
   (setq ivy-use-virtual-buffers t))
 
 (after! ivy-posframe
-   (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
-     (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
+   ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
+   ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
 
-   ;; now find-file with posframe fails create new file normally #bug??
-   ;;(setq confirm-nonexistent-file-or-buffer 'after-completion)
+   (setq ivy-display-functions-alist
+         '((t . +ivy-display-at-frame-center-near-bottom)
+           (counsel-irony . ivy-display-function-overlay)
+           (ivy-completion-in-region . ivy-display-function-overlay)))
   )
