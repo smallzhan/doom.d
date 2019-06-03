@@ -35,9 +35,14 @@
         org-log-redeadline 'note
         org-log-reschedule 'note
         org-log-into-drawer "LOGBOOK"
-        org-deadline-warning-days 2
+        org-deadline-warning-days 14 ;; two weeks enough
+        org-agenda-compact-blocks t
         org-agenda-start-on-weekday nil
-        org-agenda-insert-diary-extract-time t)
+        org-agenda-insert-diary-extract-time t
+        ;;org-agenda-entry-types '(:deadline :scheduled :sexp)
+        org-agenda-skip-timestamp-if-deadline-is-shown t
+        org-agenda-skip-deadline-prewarning-if-scheduled t
+        org-agenda-skip-scheduled-if-deadline-is-shown t)
 
   (setq org-todo-keywords
         '((sequence "TODO(t)" "ACTIVE(a)" "|" "DONE(d!/!)")
@@ -61,22 +66,20 @@
                         ("@Work" . ?w)
                         ("@Funny" . ?f)
                         ("@Self" . ?e)
+                        ("@Ideas" . ?i)
                         (:endgroup)
-                        ("PHONE" . ?m)
                         ("PERSONAL" . ?P)
+                        ("READING" . ?r)
                         ("PROG" . ?p)
                         ("SOFT" . ?s)
-                        ("IDEA" . ?I)
                         ("EXP" . ?E)
-                        ("ROBOT" . ?R)
-                        ("OTHER" . ?O)
+                        ("OTHER" . ?o)
                         ("NOTE" . ?N)
-                        ("TIPS" . ?T)
-                        ("WAITING" . ?W)
-                        ("MARK" . ?M)
-                        ("HOLD" . ?H)
-                        ("CANCELLED" . ?c)
-                        ("READING" . ?a)
+                        ("TIPS" . ?t)
+                        ("MARK" . ?m)
+                        ("TEAM" . ?T)
+                        ("OUTER" .?O)
+                        ("LEARN" .?l)
                         ))
   (setq org-emphasis-regexp-components
         '(
@@ -391,7 +394,7 @@ Callers of this function already widen the buffer view."
       (bh/insert-inactive-timestamp)))
 
   (setq org-enforce-todo-dependencies t)
-  (setq org-deadline-warning-days 30)
+  ;;(setq org-deadline-warning-days 30)
 
   ;; Erase all reminders and rebuilt reminders for today from the agenda
   (defun bh/org-agenda-to-appt ()
@@ -524,16 +527,16 @@ epoch to the beginning of today (00:00)."
   ;;              (set (make-local-variable 'system-time-locale) "C")))
 
   ;;(add-hook 'org-mode-hook 'turn-off-smartparens-mode)
-  (set-face-attribute
-   'org-table nil
-   :fontset (create-fontset-from-fontset-spec
-             (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
-                     ",han:Sarasa Mono SC"
-                     ",cjk-misc:Sarasa Mono SC"))
-   :family "Sarasa Mono SC")
+  ;; (set-face-attribute
+  ;;  'org-table nil
+  ;;  :fontset (create-fontset-from-fontset-spec
+  ;;            (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
+  ;;                    ",han:Sarasa Mono SC"
+  ;;                    ",cjk-misc:Sarasa Mono SC"))
+  ;;  :family "Sarasa Mono SC")
 
-  ;;(set-face-attribute 'org-table nil :family "Sarasa Mono SC")
-
+  (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
+  
   (setq org-publish-project-alist '())
 
   (if (featurep! +jekyll) (load! "+jekyll"))
