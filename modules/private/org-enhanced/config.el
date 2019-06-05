@@ -18,6 +18,34 @@
         deft-file-naming-rules '((nospace . "-")
                                  (case-fn . downcase))))
 
+(def-package! org-noter
+  :after org
+  :config
+  (setq org-noter-default-notes-file-names '("notes.org")
+                  org-noter-notes-search-path `(,(concat org-directory "research"))
+                  org-noter-separate-notes-from-heading t))
+
+(def-package! org-ref
+  :after org
+  :init
+  (setq org-ref-directory (concat +my-org-dir "bib/"))
+  (setq reftex-default-bibliography `(,(concat org-ref-directory "ref.bib"))
+        org-ref-bibliography-notes (concat org-ref-directory "notes.org")
+        org-ref-default-bibliography `(,(concat org-ref-directory "ref.bib"))
+        org-ref-pdf-directory (concat org-ref-directory "pdfs")))
+
+(def-package! ivy-bibtex
+  :after org-ref
+  :config
+  (setq bibtex-completion-bibliography
+        `(,(concat org-ref-directory "ref.bib")))
+  (setq bibtex-completion-library-path
+        `(,(concat org-ref-directory "pdfs")))
+
+  ;; using bibtex path reference to pdf file
+  (setq bibtex-completion-pdf-field "File")
+
+  (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
 
 (after! org
   (setq org-directory +my-org-dir
@@ -39,7 +67,10 @@
         org-agenda-compact-blocks t
         org-agenda-start-on-weekday nil
         org-agenda-insert-diary-extract-time t
-        ;;org-agenda-entry-types '(:deadline :scheduled :sexp)
+
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-skip-deadline-if-done t
+        org-agenda-skip-timestamp-if-done t
         org-agenda-skip-timestamp-if-deadline-is-shown t
         org-agenda-skip-deadline-prewarning-if-scheduled t
         org-agenda-skip-scheduled-if-deadline-is-shown t)
@@ -72,7 +103,7 @@
                         ("READING" . ?r)
                         ("PROG" . ?p)
                         ("SOFT" . ?s)
-                        ("EXP" . ?E)
+                        ("MEETING" . ?M)
                         ("OTHER" . ?o)
                         ("NOTE" . ?N)
                         ("TIPS" . ?t)
@@ -508,7 +539,7 @@ epoch to the beginning of today (00:00)."
             (concat "\\* " (regexp-opt org-done-keywords) " ") nil t)
       (goto-char (line-beginning-position))
       (org-archive-subtree))))
- 
+
   (setq org-agenda-text-search-extra-files '(agenda-archives))
 
   (defun zin/org-tag-match-context (&optional todo-only match)
@@ -536,7 +567,7 @@ epoch to the beginning of today (00:00)."
   ;;  :family "Sarasa Mono SC")
 
   (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
-  
+
   (setq org-publish-project-alist '())
 
   (if (featurep! +jekyll) (load! "+jekyll"))

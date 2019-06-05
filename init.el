@@ -112,7 +112,7 @@
   +ipython                                      ; running code in org
   ;;+capture         ; org-capture in and outside of Emacs
   +export          ; Exporting org to whatever you want
-  +present)         ; Emacs for presentations
+  +protocol)         ; Emacs for presentations
  (python            ; beautiful is better than ugly
   +lsp)
 
