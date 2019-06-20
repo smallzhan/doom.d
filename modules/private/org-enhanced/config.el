@@ -486,7 +486,7 @@ epoch to the beginning of today (00:00)."
     (interactive "P")
     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
            (files (org-add-archive-files (org-agenda-files)))
-           (include-tags '("PROG" "READING" "NOTE" "OTHER" "IDEA" "@Work" "@Self"))
+           (include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING"))
            ;;                         "LEARNING" "OUTPUT" "OTHER"))
            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
            (output-string "")

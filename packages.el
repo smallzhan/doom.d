@@ -13,3 +13,5 @@
 (package! company-posframe :disable t)
 
 (package! company-box :recipe (:fetcher github :repo "andersjohansson/company-box" :branch "customize-scrollbar"))
+
+(package! lsp-python-ms)

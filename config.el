@@ -21,6 +21,7 @@
 
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix)
+    (setq company-lsp-cache-candidates 'auto)
     ))
 
 ;; there is a wired bug in company-box, the scroll bar is very huge and cover the candicate list
@@ -31,31 +32,32 @@
   ;; stolen from centaur emacs config
   (setq company-box-scrollbar nil)
 
-  (defun my-company-box--make-line (candidate)
-    (-let* (((candidate annotation len-c len-a backend) candidate)
-            (color (company-box--get-color backend))
-            ((c-color a-color i-color s-color) (company-box--resolve-colors color))
-            (icon-string (and company-box--with-icons-p (company-box--add-icon candidate)))
-            (candidate-string (concat (propertize company-common 'face 'company-tooltip-common)
-                                      (substring (propertize candidate 'face 'company-box-candidate) (length company-common) nil)))
-            (align-string (when annotation
-                            (concat " " (and company-tooltip-align-annotations
-                                             (propertize " " 'display `(space :align-to (- right-fringe ,(or len-a 0) 1)))))))
-            (space company-box--space)
-            (icon-p company-box-enable-icon)
-            (annotation-string (and annotation (propertize annotation 'face 'company-box-annotation)))
-            (line (concat (unless (or (and (= space 2) icon-p) (= space 0))
-                            (propertize " " 'display `(space :width ,(if (or (= space 1) (not icon-p)) 1 0.75))))
-                          (company-box--apply-color icon-string i-color)
-                          (company-box--apply-color candidate-string c-color)
-                          align-string
-                          (company-box--apply-color annotation-string a-color)))
-            (len (length line)))
-      (add-text-properties 0 len (list 'company-box--len (+ len-c len-a)
-                                       'company-box--color s-color)
-                           line)
-      line))
-  (advice-add #'company-box--make-line :override #'my-company-box--make-line))
+;;   (defun my-company-box--make-line (candidate)
+;;     (-let* (((candidate annotation len-c len-a backend) candidate)
+;;             (color (company-box--get-color backend))
+;;             ((c-color a-color i-color s-color) (company-box--resolve-colors color))
+;;             (icon-string (and company-box--with-icons-p (company-box--add-icon candidate)))
+;;             (candidate-string (concat (propertize company-common 'face 'company-tooltip-common)
+;;                                       (substring (propertize candidate 'face 'company-box-candidate) (length company-common) nil)))
+;;             (align-string (when annotation
+;;                             (concat " " (and company-tooltip-align-annotations
+;;                                              (propertize " " 'display `(space :align-to (- right-fringe ,(or len-a 0) 1)))))))
+;;             (space company-box--space)
+;;             (icon-p company-box-enable-icon)
+;;             (annotation-string (and annotation (propertize annotation 'face 'company-box-annotation)))
+;;             (line (concat (unless (or (and (= space 2) icon-p) (= space 0))
+;;                             (propertize " " 'display `(space :width ,(if (or (= space 1) (not icon-p)) 1 0.75))))
+;;                           (company-box--apply-color icon-string i-color)
+;;                           (company-box--apply-color candidate-string c-color)
+;;                           align-string
+;;                           (company-box--apply-color annotation-string a-color)))
+;;             (len (length line)))
+;;       (add-text-properties 0 len (list 'company-box--len (+ len-c len-a)
+;;                                        'company-box--color s-color)
+;;                            line)
+;;       line))
+;;   (advice-add #'company-box--make-line :override #'my-company-box--make-line)
+  )
 
 (after! ws-butler
   (setq ws-butler-global-exempt-modes
@@ -172,3 +174,19 @@
   (setq ivy-posframe-display-functions-alist
         '((t . +ivy-display-at-frame-center-near-bottom)))
   )
+
+
+(def-package! lsp-python-ms
+  :demand nil
+  :config
+  (remhash 'pyls lsp-clients)
+
+  (setq fd_lsp_cmd
+        (if IS-WINDOWS
+            "fd -a ^Microsoft.Python.LanguageServer.exe$ C:\\Users\\smallqiang\\.vscode\\extensions"
+          "fd -a ^Microsoft.Python.LanguageServer$ $HOME/.vscode/extensions"))
+  (setq lsp-python-ms-executable
+        (string-trim (shell-command-to-string fd_lsp_cmd)))
+  (setq lsp-python-ms-dir
+        (file-name-directory lsp-python-ms-executable)))
+

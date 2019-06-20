@@ -16,7 +16,7 @@
 ;;         ns-use-native-fullscreen nil
 ;;         ns-use-fullscreen-animation nil)
 
-  
+
 ;;   ;; (run-at-time "5sec" nil
 ;;   ;;              (lambda ()
 ;;   ;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
@@ -44,8 +44,8 @@
 
  :completion
  (company           ; the ultimate code completion backend
-  +childframe
-  )
+  +childframe)
+
 
  (ivy               ; a search engine for love and life
   +fuzzy
