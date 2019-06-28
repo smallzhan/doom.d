@@ -179,14 +179,13 @@
 (def-package! lsp-python-ms
   :demand nil
   :config
-  (remhash 'pyls lsp-clients)
-
+  ;;(remhash 'pyls lsp-clients)
+  (setq lsp-python-executable-cmd "python3")
   (setq fd_lsp_cmd
         (if IS-WINDOWS
-            "fd -a ^Microsoft.Python.LanguageServer.exe$ C:\\Users\\smallqiang\\.vscode\\extensions"
-          "fd -a ^Microsoft.Python.LanguageServer$ $HOME/.vscode/extensions"))
+            "fd -a ^Microsoft.Python.LanguageServer.exe$ C:\\Users\\smallqiang\\.vscode\\extensions|tail -1"
+          "fd -a ^Microsoft.Python.LanguageServer$ $HOME/.vscode/extensions|tail -1"))
   (setq lsp-python-ms-executable
         (string-trim (shell-command-to-string fd_lsp_cmd)))
   (setq lsp-python-ms-dir
         (file-name-directory lsp-python-ms-executable)))
-
