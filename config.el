@@ -181,11 +181,19 @@
   :config
   ;;(remhash 'pyls lsp-clients)
   (setq lsp-python-executable-cmd "python3")
-  (setq fd_lsp_cmd
-        (if IS-WINDOWS
-            "fd -a ^Microsoft.Python.LanguageServer.exe$ C:\\Users\\smallqiang\\.vscode\\extensions|tail -1"
-          "fd -a ^Microsoft.Python.LanguageServer$ $HOME/.vscode/extensions|tail -1"))
+  (defun find-vscode-mspyls-executable ()
+    (let* ((wildcards ".vscode/extensions/ms-python.python-*/languageServer*/Microsoft.Python.LanguageServer")
+           (dir-and-ext (if IS-WINDOWS
+                            (cons (getenv "USERPROFILE") ".exe")
+                          (cons (getenv "HOME") nil)))
+           (cmd (concat (file-name-as-directory (car dir-and-ext))
+                        wildcards (cdr dir-and-ext))))
+      (file-expand-wildcards cmd t)))
+
   (setq lsp-python-ms-executable
-        (string-trim (shell-command-to-string fd_lsp_cmd)))
+        (car (find-vscode-mspyls-executable)))
   (setq lsp-python-ms-dir
         (file-name-directory lsp-python-ms-executable)))
+
+(after! python
+  (setq python-shell-interpreter "python3"))
