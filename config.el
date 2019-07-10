@@ -197,3 +197,6 @@
 
 (after! python
   (setq python-shell-interpreter "python3"))
+
+(after! smartparens
+  (add-hook 'prog-mode-hook #'turn-on-smartparens-strict-mode))
