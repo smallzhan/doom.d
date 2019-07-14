@@ -32,11 +32,10 @@
 ;;   )
 
 
-(when IS-WINDOWS
-  (setq system-time-locale "C"))
-
 (setq user-full-name "Guoqiang Jin"
       user-mail-address "ustczhan@gmail.com")
+
+(setq custom-file (concat user-emacs-directory ".local/custom.el"))
 
 (doom!
  :input
@@ -105,6 +104,7 @@
   +lsp)                ; C/C++/Obj-C madness
  data              ; config/data formats
  emacs-lisp        ; drown in parentheses
+ common-lisp
  latex
  (org              ; organize your plain life in plain text
   +attach          ; custom attachment system
@@ -137,6 +137,3 @@
   +latex
   +jekyll)
  edit-enhanced)
-
-
-

@@ -570,7 +570,10 @@ epoch to the beginning of today (00:00)."
 
   (setq org-publish-project-alist '())
 
+  (setq-default system-time-locale "C")
+
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
+  (load! "next-spec-day")
   )
