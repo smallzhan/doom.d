@@ -1,29 +1,42 @@
-;; How to use:
+;;This file is from https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
+;;All credits to [[FengYuan Chen][https://github.com/chenfengyuan]]
+;;
+;;; How to use:
 ;; 1. add `(load "/path/to/next-spec-day")` to your dot emacs file.
-;; 2. set `NEXT-SPEC-DEADLINE` and/or `NEXT-SPEC-SCHEDULED` property of a TODO task,like this:
-;;         * TODO test
-;;           SCHEDULED: <2013-06-16 Sun> DEADLINE: <2012-12-31 Mon -3d>
-;;           :PROPERTIES:
-;;           :NEXT-SPEC-DEADLINE: (= (calendar-extract-day date) (calendar-last-day-of-month (calendar-extract-month date) (calendar-extract-year date)))
-;;           :NEXT-SPEC-SCHEDULED: (org-float 6 0 3)
-;;           :END:
-;;     The value of NEXT-SPEC-DEADLINE will return `non-nil` if `date` is last day of month,and the value of NEXT-SPEC-SCHEDULED will return `non-nil` if `date` is the fathers' day(the third Sunday of June).
-;; 3. Then,when you change the TODO state of that tasks,the timestamp will be changed automatically(include lead time of warnings settings).
-;; Notes:
-;; 1. Execute `(setq next-spec-day-runningp nil)' after your sexp signal some erros,
-;; 2. You can also use some useful sexp from next-spec-day-alist,like:
-;; * TODO test
-;;   SCHEDULED: <2013-03-29 Fri>
-;;   :PROPERTIES:
-;;   :NEXT-SPEC-SCHEDULED: last-workday-of-month
-;;   :END:
-;; 3. If you encounter some errors like 'org-insert-time-stamp: Wrong type argument: listp, "<2013-03-29 星期五>"' when change the TODO state,please try a new version of org mode.To use the new version:
-;; (1). download the new version of org mode from orgmode.org,then uncompress it.
-;; (2). add (add-to-list 'load-path "/path/to/org-*.*.*/lisp") to your .emacs file,make sure it's before any (require 'org).If you are not sure,just insert it to the first line of your dot emacs file.
-;; (3). restart your emacs,everything should be fine.
+;; 2. set `NEXT_SPEC_DEADLINE` and/or `NEXT_SPEC_SCHEDULED` property of a
+;;    TODO task, with its value is an sexp for next-day, or a symbol in
+;;    `next-spec-day-alist'. i.e.
+;;    * TODO TEST1
+;;      SCHEDULED: <2019-07-22 Mon 15:00-16:00>
+;;      :PROPERTIES:
+;;      :LAST_REPEAT: [2019-07-15 Mon 21:51]
+;;      :NEXT_SPEC_SCHEDULED: (memq (calendar-day-of-week date) '(1 3 5))
+;;      :END:
+;;
+;;    * TODO TEST2
+;;      SCHEDULED: <2019-07-22 Mon 15:00-16:00>
+;;      :PROPERTIES:
+;;      :LAST_REPEAT: [2019-07-15 Mon 21:51]
+;;      :NEXT_SPEC_SCHEDULED: workday
+;;      :END:
+;;
+;;
+;;; Change log:
+;;
+;; 2019/07/15
+;;      * Tidy the code. Add support to timestamp such as <2019-07-15 Mon 15:00-16:00>
+;;
+;; 2019/07/14
+;;      * First edition. Just copy the file from the url.
+;;        https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
+
 (eval-when-compile (require 'cl))
-(defvar next-spec-day-runningp)
-(setq next-spec-day-runningp nil)
+
+(unless (fboundp 'read-from-whole-string) (require 'thingatpt))
+
+(defvar next-spec-day-search-days 365
+  "how many days seach forward to satisfy the requirement.")
+
 (defvar next-spec-day-alist
   '((last-workday-of-month
      .
@@ -39,58 +52,55 @@
          (calendar-last-day-of-month
           (calendar-extract-month date)
           (calendar-extract-year date)))))
-    (fathers-day
+    (workday
      .
-     ((org-float 6 0 3))))
-  "contain some useful sexp")
+     ((memq (calendar-day-of-week date) '(1 2 3 4 5))))
+    (workday-135
+     .
+     ((memq (calendar-day-of-week date) '(1 3 5)))))
+ "Some useful sexp used for NEXT_SPEC_{DEADLINE, SCHEDULED}.")
 
 (defun next-spec-day ()
-  (unless next-spec-day-runningp
-    (setq next-spec-day-runningp t)
+  "Next spec day satisfy the sexp from `NEXT_SPEC_{DEADLINE, SCHEDULED}'"
+  (when (string= org-state "DONE")
     (catch 'exit
-      (dolist (type '("NEXT-SPEC-DEADLINE" "NEXT-SPEC-SCHEDULED"))
+      (dolist (type '("NEXT_SPEC_DEADLINE" "NEXT_SPEC_SCHEDULED"))
         (when (stringp (org-entry-get nil type))
-          (let* ((time (org-entry-get nil (substring type (length "NEXT-SPEC-"))))
+          (let* ((time (org-entry-get nil (substring type (length "NEXT_SPEC_"))))
                  (pt (if time (org-parse-time-string time) (decode-time (current-time))))
                  (func (ignore-errors (read-from-whole-string (org-entry-get nil type)))))
             (unless func (message "Sexp is wrong") (throw 'exit nil))
             (when (symbolp func)
               (setq func (cadr (assoc func next-spec-day-alist))))
             (incf (nth 3 pt))
-            (setf pt (decode-time (apply 'encode-time pt)))
             (do ((i 0 (1+ i)))
                 ((or
-                  (> i 1000)
+                  (> i next-spec-day-search-days)
                   (let* ((d (nth 3 pt))
                          (m (nth 4 pt))
                          (y (nth 5 pt))
-                         (date (list m d y))
-                         entry)
+                         (date (list m d y)))
                     (eval func)))
-                 (if (> i 1000)
-                     (message "No satisfied in 1000 days")
-                   (funcall
-                    (if (string= "NEXT-SPEC-DEADLINE" type)
-                        'org-deadline
-                      'org-schedule)
-                    nil
-                    (format-time-string
-                     (if (and
-                          time
-                          (string-match
-                           "[[:digit:]]\\{2\\}:[[:digit:]]\\{2\\}"
-                           time))
-                         (cdr org-time-stamp-formats)
-                       (car org-time-stamp-formats))
-                     (apply 'encode-time pt)))))
-              (incf (nth 3 pt))
-              (setf pt (decode-time (apply 'encode-time pt)))))))
-      (if (or
-           (org-entry-get nil "NEXT-SPEC-SCHEDULED")
-           (org-entry-get nil "NEXT-SPEC-DEADLINE"))
-          (org-entry-put nil "TODO" (car org-todo-heads))))
-    (setq next-spec-day-runningp nil)))
+                 (when (> i next-spec-day-search-days)
+                   (setf pt nil)))
+              (incf (nth 3 pt)))
+            (if pt
+                (funcall
+                 (if (string= "NEXT_SPEC_DEADLINE" type)
+                     'org-deadline
+                   'org-schedule)
+                 nil
+                 (concat
+                  (format-time-string "<%Y-%m-%d %a " (apply 'encode-time pt))
+                  (substring time 16 nil)))
+              (error "Not satisfied in 1000 days.")))))
+      (when (or
+             (org-entry-get nil "NEXT_SPEC_SCHEDULED")
+             (org-entry-get nil "NEXT_SPEC_DEADLINE"))
+        (org-entry-put nil "TODO" (car org-todo-heads))
+        (org-entry-put nil "LAST_REPEAT"
+                       (format-time-string (org-time-stamp-format t t)))))))
 
 (add-hook 'org-after-todo-state-change-hook 'next-spec-day)
-(unless (fboundp 'read-from-whole-string) (require 'thingatpt))
-(unless (fboundp 'calendar-last-day-of-month) (require 'thingatpt))
+
+
