@@ -90,10 +90,13 @@
                      'org-deadline
                    'org-schedule)
                  nil
-                 (concat
-                  (format-time-string "<%Y-%m-%d %a " (apply 'encode-time pt))
-                  (substring time 16 nil)))
-              (error "Not satisfied in 1000 days.")))))
+                 (let ((time-string (format-time-string
+                                     (org-time-stamp-format)
+                                     (apply 'encode-time pt))))
+                   (concat
+                    (substring time-string 0 -1)
+                    (substring time (1- (length time-string)) nil))))
+              (error (format "Not satisfied in next %d days." next-spec-day-search-days))))))
       (when (or
              (org-entry-get nil "NEXT_SPEC_SCHEDULED")
              (org-entry-get nil "NEXT_SPEC_DEADLINE"))
