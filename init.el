@@ -137,3 +137,5 @@
   +latex
   +jekyll)
  edit-enhanced)
+
+(load custom-file t t t)
