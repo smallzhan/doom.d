@@ -16,3 +16,6 @@
 
 (package! lsp-python-ms)
 
+(package! company-tabnine)
+
+(package! snails :recipe (:fetcher github :repo "manateelazycat/snails"))

@@ -42,8 +42,9 @@
  chinese
 
  :completion
- (company           ; the ultimate code completion backend
-  +childframe)
+;; (
+company           ; the ultimate code completion backend
+ ;; +childframe)
 
 
  (ivy               ; a search engine for love and life

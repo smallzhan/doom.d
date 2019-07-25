@@ -106,7 +106,14 @@
 
   (setq pyim-page-tooltip 'posframe)
 
-  (setq pyim-page-length 5))
+  (setq pyim-page-length 9)
+  (when IS-MAC
+    (add-to-list 'load-path "~/.doom.d/extensions")
+    (require 'liberime)
+    (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/.emacs.d/.local/pyim/rime/"))
+    (liberime-select-schema "luna_pinyin_simp")
+    (setq pyim-default-scheme 'rime-quanpin)))
+
 
 (def-package! yapfify
   :after python
@@ -203,3 +210,13 @@
 
 (after! pdf-tools
   (setq pdf-view-use-scaling t))
+
+
+(def-package! company-tabnine
+  :after company
+  :config
+  (add-to-list 'company-backends #'company-tabnine)
+  )
+
+(def-package! snails
+  :config (require 'snails))
