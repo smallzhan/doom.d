@@ -1,0 +1,6 @@
+[submodule "extensions/org-pdftools"]
+	path = extensions/org-pdftools
+	url = https://github.com/fuxialexander/org-pdftools
+[submodule "extensions/snails"]
+	path = extensions/snails
+	url = https://github.com/manateelazycat/snails.git

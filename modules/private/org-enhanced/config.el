@@ -22,8 +22,11 @@
   :after org
   :config
   (setq org-noter-default-notes-file-names '("notes.org")
-                  org-noter-notes-search-path `(,(concat org-directory "research"))
-                  org-noter-separate-notes-from-heading t))
+        org-noter-notes-search-path `(,(concat +my-org-dir "research"))
+        org-noter-separate-notes-from-heading t))
+
+(def-package! org-pdftools
+  :load-path "~/.doom.d/extensions/org-pdftools")
 
 (def-package! org-ref
   :after org
@@ -577,3 +580,4 @@ epoch to the beginning of today (00:00)."
   (if (featurep! +html) (load! "+html"))
   (load! "next-spec-day")
   )
+

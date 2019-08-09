@@ -219,4 +219,5 @@
   )
 
 (def-package! snails
-  :config (require 'snails))
+  :load-path "~/.doom.d/extensions/snails"
+  :commands snails)

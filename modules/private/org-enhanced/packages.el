@@ -8,6 +8,7 @@
 (package! org-pomodoro)
 (package! org-protocol-capture-html :disable t
   :recipe (:fetcher github :repo "alphapapa/org-protocol-capture-html"))
-(package! org-noter)
+(package! org-noter :recipe (:fetcher github :repo "fuxialexander/org-noter" :branch "pdf-notes-booster"))
 (package! org-ref)
 (package! ivy-bibtex)
+

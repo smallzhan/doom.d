@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; config/private/packages.el
 
-(disable-packages! glsl-mode cuda-mode opencl-mode emacs-snippets latex-preview-pane)
+(disable-packages! glsl-mode cuda-mode opencl-mode emacs-snippets latex-preview-pane org-ref)
 (package! visual-regexp)
 (package! visual-regexp-steroids)
 (package! org-edit-latex)
@@ -18,4 +18,4 @@
 
 (package! company-tabnine)
 
-(package! snails :recipe (:fetcher github :repo "manateelazycat/snails"))
+;;(package! snails)
