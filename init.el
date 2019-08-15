@@ -107,13 +107,14 @@ company           ; the ultimate code completion backend
  emacs-lisp        ; drown in parentheses
  common-lisp
  latex
- (org              ; organize your plain life in plain text
-  +attach          ; custom attachment system
-  +babel
-  +ipython                                      ; running code in org
-  ;;+capture         ; org-capture in and outside of Emacs
-  +export          ; Exporting org to whatever you want
-  +protocol)         ; Emacs for presentations
+  (org              ; organize your plain life in plain text
+    +attach          ; custom attachment system
+    +babel
+    +ipython                                      ; running code in org
+    ;;+capture         ; org-capture in and outside of Emacs
+    +export          ; Exporting org to whatever you want
+   +protocol)
+                                        ; Emacs for presentations
  (python            ; beautiful is better than ugly
   +lsp)
 
@@ -134,9 +135,9 @@ company           ; the ultimate code completion backend
 
  :private
  ;; my-cc
- (org-enhanced
-  +latex
-  +jekyll)
+  (org-enhanced
+   +latex
+   +jekyll)
  edit-enhanced)
 
 (load custom-file t t t)

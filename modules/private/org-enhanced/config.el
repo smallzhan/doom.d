@@ -26,6 +26,7 @@
         org-noter-separate-notes-from-heading t))
 
 (def-package! org-pdftools
+  :defer t
   :load-path "~/.doom.d/extensions/org-pdftools")
 
 (def-package! org-ref

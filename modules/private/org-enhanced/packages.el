@@ -12,3 +12,4 @@
 (package! org-ref)
 (package! ivy-bibtex)
 
+;;(package! org-pdftools :recipe (:fetcher github :repo "fuxialexander/org-pdftools"))

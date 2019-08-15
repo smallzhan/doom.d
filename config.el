@@ -32,31 +32,31 @@
   ;; stolen from centaur emacs config
   (setq company-box-scrollbar nil)
 
-;;   (defun my-company-box--make-line (candidate)
-;;     (-let* (((candidate annotation len-c len-a backend) candidate)
-;;             (color (company-box--get-color backend))
-;;             ((c-color a-color i-color s-color) (company-box--resolve-colors color))
-;;             (icon-string (and company-box--with-icons-p (company-box--add-icon candidate)))
-;;             (candidate-string (concat (propertize company-common 'face 'company-tooltip-common)
-;;                                       (substring (propertize candidate 'face 'company-box-candidate) (length company-common) nil)))
-;;             (align-string (when annotation
-;;                             (concat " " (and company-tooltip-align-annotations
-;;                                              (propertize " " 'display `(space :align-to (- right-fringe ,(or len-a 0) 1)))))))
-;;             (space company-box--space)
-;;             (icon-p company-box-enable-icon)
-;;             (annotation-string (and annotation (propertize annotation 'face 'company-box-annotation)))
-;;             (line (concat (unless (or (and (= space 2) icon-p) (= space 0))
-;;                             (propertize " " 'display `(space :width ,(if (or (= space 1) (not icon-p)) 1 0.75))))
-;;                           (company-box--apply-color icon-string i-color)
-;;                           (company-box--apply-color candidate-string c-color)
-;;                           align-string
-;;                           (company-box--apply-color annotation-string a-color)))
-;;             (len (length line)))
-;;       (add-text-properties 0 len (list 'company-box--len (+ len-c len-a)
-;;                                        'company-box--color s-color)
-;;                            line)
-;;       line))
-;;   (advice-add #'company-box--make-line :override #'my-company-box--make-line)
+  ;;   (defun my-company-box--make-line (candidate)
+  ;;     (-let* (((candidate annotation len-c len-a backend) candidate)
+  ;;             (color (company-box--get-color backend))
+  ;;             ((c-color a-color i-color s-color) (company-box--resolve-colors color))
+  ;;             (icon-string (and company-box--with-icons-p (company-box--add-icon candidate)))
+  ;;             (candidate-string (concat (propertize company-common 'face 'company-tooltip-common)
+  ;;                                       (substring (propertize candidate 'face 'company-box-candidate) (length company-common) nil)))
+  ;;             (align-string (when annotation
+  ;;                             (concat " " (and company-tooltip-align-annotations
+  ;;                                              (propertize " " 'display `(space :align-to (- right-fringe ,(or len-a 0) 1)))))))
+  ;;             (space company-box--space)
+  ;;             (icon-p company-box-enable-icon)
+  ;;             (annotation-string (and annotation (propertize annotation 'face 'company-box-annotation)))
+  ;;             (line (concat (unless (or (and (= space 2) icon-p) (= space 0))
+  ;;                             (propertize " " 'display `(space :width ,(if (or (= space 1) (not icon-p)) 1 0.75))))
+  ;;                           (company-box--apply-color icon-string i-color)
+  ;;                           (company-box--apply-color candidate-string c-color)
+  ;;                           align-string
+  ;;                           (company-box--apply-color annotation-string a-color)))
+  ;;             (len (length line)))
+  ;;       (add-text-properties 0 len (list 'company-box--len (+ len-c len-a)
+  ;;                                        'company-box--color s-color)
+  ;;                            line)
+  ;;       line))
+  ;;   (advice-add #'company-box--make-line :override #'my-company-box--make-line)
   )
 
 (after! ws-butler
@@ -169,18 +169,18 @@
 
 (after! ivy
   (setq ivy-use-virtual-buffers t)
-   (setq ivy-display-functions-alist
-         '((counsel-irony . ivy-display-function-overlay)
-           (ivy-completion-in-region . ivy-display-function-overlay)))
+  (setq ivy-display-functions-alist
+        '((counsel-irony . ivy-display-function-overlay)
+          (ivy-completion-in-region . ivy-display-function-overlay)))
   )
 
-(after! ivy-posframe
-   ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
-   ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
+;;(after! ivy-posframe
+;;  ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
+;;  ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
 
-  (setq ivy-posframe-display-functions-alist
-        '((t . +ivy-display-at-frame-center-near-bottom)))
-  )
+;;  (setq ivy-posframe-display-functions-alist
+;;        '((t . +ivy-display-at-frame-center-near-bottom)))
+;;  )
 
 
 (def-package! lsp-python-ms
@@ -209,7 +209,127 @@
   (add-hook 'prog-mode-hook #'turn-on-smartparens-strict-mode))
 
 (after! pdf-tools
-  (setq pdf-view-use-scaling t))
+  (setq pdf-view-use-scaling t)
+  (defun pdf-view-use-scaling-p ()
+    "Return t if scaling should be used."
+    (and (or (and (eq (framep-on-display) 'ns) (string-equal emacs-version "27.0.50"))
+             (memq (pdf-view-image-type)
+                   '(imagemagick image-io)))
+         pdf-view-use-scaling))
+  (defun pdf-annot-show-annotation (a &optional highlight-p window)
+    "Make annotation A visible.
+
+Turn to A's page in WINDOW, and scroll it if necessary.
+
+If HIGHLIGHT-P is non-nil, visually distinguish annotation A from
+other annotations."
+
+    (save-selected-window
+      (when window (select-window window))
+      (pdf-util-assert-pdf-window)
+      (let* ((page (pdf-annot-get a 'page))
+             (size (pdf-view-image-size))
+             (width (car size))
+             (unless (= page (pdf-view-current-page))
+               (pdf-view-goto-page page))
+             (let ((edges (pdf-annot-get-display-edges a)))
+               (when highlight-p
+                 (pdf-view-display-image
+                  (pdf-view-create-image
+                      (pdf-cache-renderpage-highlight
+                       page width
+                       `("white" "steel blue" 0.35 ,@edges))
+                    :map (pdf-view-apply-hotspot-functions
+                          window page size)
+                    :width width)))
+               (pdf-util-scroll-to-edges
+                (pdf-util-scale-relative-to-pixel (car edges))))))))
+  (defun pdf-isearch-hl-matches (current matches &optional occur-hack-p)
+    "Highlighting edges CURRENT and MATCHES."
+    (cl-check-type current pdf-isearch-match)
+    (cl-check-type matches (list-of pdf-isearch-match))
+    (cl-destructuring-bind (fg1 bg1 fg2 bg2)
+        (pdf-isearch-current-colors)
+      (let* ((width (car (pdf-view-image-size)))
+             (page (pdf-view-current-page))
+             (window (selected-window))
+             (buffer (current-buffer))
+             (tick (cl-incf pdf-isearch--hl-matches-tick))
+             (pdf-info-asynchronous
+              (lambda (status data)
+                (when (and (null status)
+                           (eq tick pdf-isearch--hl-matches-tick)
+                           (buffer-live-p buffer)
+                           (window-live-p window)
+                           (eq (window-buffer window)
+                               buffer))
+                  (with-selected-window window
+                    (when (and (derived-mode-p 'pdf-view-mode)
+                               (or isearch-mode
+                                   occur-hack-p)
+                               (eq page (pdf-view-current-page)))
+                      (pdf-view-display-image
+                       (pdf-view-create-image data
+                         :width width))))))))
+        (pdf-info-renderpage-text-regions
+         page width t nil
+         `(,fg1 ,bg1 ,@(pdf-util-scale-pixel-to-relative
+                        current))
+         `(,fg2 ,bg2 ,@(pdf-util-scale-pixel-to-relative
+                        (apply 'append
+                               (remove current matches))))))))
+  (defun pdf-util-frame-scale-factor ()
+    "Return the frame scale factor depending on the image type used for display.
+When `pdf-view-use-scaling' is non-nil and imagemagick or
+image-io are used as the image type for display, return the
+backing-scale-factor of the frame if available. If a
+backing-scale-factor attribute isn't available, return 2 if the
+frame's PPI is larger than 180. Otherwise, return 1."
+    (if (and pdf-view-use-scaling
+             (memq (pdf-view-image-type) '(imagemagick image-io))
+             (fboundp 'frame-monitor-attributes))
+        (or (cdr (assq 'backing-scale-factor (frame-monitor-attributes)))
+            (if (>= (pdf-util-frame-ppi) 180)
+                2
+              1))
+      (if (and (eq (framep-on-display) 'ns) (string-equal emacs-version "27.0.50"))
+          2
+        1)))
+  (defun pdf-view-display-region (&optional region rectangle-p)
+    ;; TODO: write documentation!
+    (unless region
+      (pdf-view-assert-active-region)
+      (setq region pdf-view-active-region))
+    (let ((colors (pdf-util-face-colors
+                   (if rectangle-p 'pdf-view-rectangle 'pdf-view-region)
+                   (bound-and-true-p pdf-view-dark-minor-mode)))
+          (page (pdf-view-current-page))
+          (width (car (pdf-view-image-size))))
+      (pdf-view-display-image
+       (pdf-view-create-image
+           (if rectangle-p
+               (pdf-info-renderpage-highlight
+                page width nil
+                `(,(car colors) ,(cdr colors) 0.35 ,@region))
+             (pdf-info-renderpage-text-regions
+              page width nil nil
+              `(,(car colors) ,(cdr colors) ,@region)))
+         :width width))))
+
+  (defun pdf-view-create-page (page &optional window)
+    "Create an image of PAGE for display on WINDOW."
+    (let* ((size (pdf-view-desired-image-size page window))
+           (width (car size))
+           (data (pdf-cache-renderpage
+                  page width (if (not (pdf-view-use-scaling-p))
+                                 width
+                               (* 2 width))))
+           (hotspots (pdf-view-apply-hotspot-functions
+                      window page size)))
+      (pdf-view-create-image data
+        :width width
+        :map hotspots
+        :pointer 'arrow))))
 
 
 (def-package! company-tabnine

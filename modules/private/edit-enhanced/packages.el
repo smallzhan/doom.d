@@ -6,4 +6,3 @@
 (package! thing-edit :recipe (:fetcher github :repo "manateelazycat/thing-edit"))
 (package! color-rg :recipe (:fetcher github :repo "manateelazycat/color-rg"))
 (package! awesome-pair :disable t :recipe (:fetcher github :repo "manateelazycat/awesome-pair"))
-
