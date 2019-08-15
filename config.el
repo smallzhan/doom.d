@@ -127,33 +127,33 @@
   :config (company-posframe-mode 1)
   )
 
-(when IS-MAC
-  (setq ns-use-thin-smoothing t
-        ns-use-fullscreen-animation nil
-        ns-use-native-fullscreen nil
-        frame-resize-pixelwise t)
-  (add-hook 'window-setup-hook #'toggle-frame-maximized)
-  ;; (run-at-time "5sec" nil
+;; (when IS-MAC
+;;   (setq ns-use-thin-smoothing t
+;;         ns-use-fullscreen-animation nil
+;;         ns-use-native-fullscreen nil
+;;         frame-resize-pixelwise t)
+;;   (add-hook 'window-setup-hook #'toggle-frame-maximized)
+;;   ;; (run-at-time "5sec" nil
 
-  ;;              (lambda ()
-  ;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-  ;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-  ;;                  ;;(when (memq fullscreen '(fullscreen fullboth))
-  ;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  ;;                  ;; Manipulating a frame without waiting for the fullscreen
-  ;;                  ;; animation to complete can cause a crash, or other unexpected
-  ;;                  ;; behavior, on macOS (bug#28496).
-  ;;                  (when (featurep 'cocoa)
-  ;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
+;;   ;;              (lambda ()
+;;   ;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
+;;   ;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
+;;   ;;                  ;;(when (memq fullscreen '(fullscreen fullboth))
+;;   ;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;;   ;;                  ;; Manipulating a frame without waiting for the fullscreen
+;;   ;;                  ;; animation to complete can cause a crash, or other unexpected
+;;   ;;                  ;; behavior, on macOS (bug#28496).
+;;   ;;                  (when (featurep 'cocoa)
+;;   ;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
 
-  ;;                  (toggle-frame-fullscreen)))))
+;;   ;;                  (toggle-frame-fullscreen)))))
 
-  ;; (run-at-time "5sec" nil
-  ;;              (lambda ()
-  ;;                (progn
-  ;;                  (setq ns-use-native-fullscreen nil)
-  ;;                  (toggle-frame-fullscreen))))
-  )
+;;   ;; (run-at-time "5sec" nil
+;;   ;;              (lambda ()
+;;   ;;                (progn
+;;   ;;                  (setq ns-use-native-fullscreen nil)
+;;   ;;                  (toggle-frame-fullscreen))))
+;;   )
 
 
 ;; (after! format-all
@@ -174,13 +174,13 @@
           (ivy-completion-in-region . ivy-display-function-overlay)))
   )
 
-;;(after! ivy-posframe
-;;  ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
-;;  ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
+(after! ivy-posframe
+ ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
+ ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
 
-;;  (setq ivy-posframe-display-functions-alist
-;;        '((t . +ivy-display-at-frame-center-near-bottom)))
-;;  )
+ (setq ivy-posframe-display-functions-alist
+       '((t . +ivy-display-at-frame-center-near-bottom)))
+ )
 
 
 (def-package! lsp-python-ms
