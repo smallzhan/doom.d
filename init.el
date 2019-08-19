@@ -42,8 +42,8 @@
  chinese
 
  :completion
-;; (
-company           ; the ultimate code completion backend
+ ;; (
+ company           ; the ultimate code completion backend
  ;; +childframe)
 
 
@@ -84,7 +84,7 @@ company           ; the ultimate code completion backend
   +icons
   +ranger)
  ;;eshell            ; a consistent, cross-platform shell (WIP)
-  vc                ; version-control and Emacs, sitting in a tree
+ vc                ; version-control and Emacs, sitting in a tree
  electric
 
  :term
@@ -100,20 +100,20 @@ company           ; the ultimate code completion backend
  lsp
  pdf
 
-:lang
+ :lang
  (cc
   +lsp)                ; C/C++/Obj-C madness
  data              ; config/data formats
  emacs-lisp        ; drown in parentheses
  common-lisp
  latex
-  (org              ; organize your plain life in plain text
-    +attach          ; custom attachment system
-    +babel
-    +ipython                                      ; running code in org
-    ;;+capture         ; org-capture in and outside of Emacs
-    +export          ; Exporting org to whatever you want
-   +protocol)
+ (org              ; organize your plain life in plain text
+  +attach          ; custom attachment system
+  +babel
+  +ipython                                      ; running code in org
+  ;;+capture         ; org-capture in and outside of Emacs
+  +export          ; Exporting org to whatever you want
+  +protocol)
                                         ; Emacs for presentations
  (python            ; beautiful is better than ugly
   +lsp)
@@ -135,9 +135,9 @@ company           ; the ultimate code completion backend
 
  :private
  ;; my-cc
-  (org-enhanced
-   +latex
-   +jekyll)
+ (org-enhanced
+  +latex
+  +jekyll)
  edit-enhanced)
 
 (load custom-file t t t)

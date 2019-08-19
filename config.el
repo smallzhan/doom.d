@@ -174,13 +174,13 @@
           (ivy-completion-in-region . ivy-display-function-overlay)))
   )
 
-(after! ivy-posframe
- ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
- ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
+;; (after! ivy-posframe
+;;   ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
+;;   ;;   (setf (alist-get fn ivy-display-functions-alist) #'+ivy-display-at-frame-center-near-bottom))
 
- (setq ivy-posframe-display-functions-alist
-       '((t . +ivy-display-at-frame-center-near-bottom)))
- )
+;;   (setq ivy-posframe-display-functions-alist
+;;         '((t . +ivy-display-at-frame-center-near-bottom)))
+;;   )
 
 
 (def-package! lsp-python-ms
@@ -341,3 +341,106 @@ frame's PPI is larger than 180. Otherwise, return 1."
 (def-package! snails
   :load-path "~/.doom.d/extensions/snails"
   :commands snails)
+
+
+
+(defvar my-ivy-fly-commands '(query-replace-regexp
+                              flush-lines
+                              keep-lines
+                              ivy-read
+                              swiper
+                              swiper-backward
+                              swiper-all
+                              swiper-isearch
+                              swiper-isearch-backward
+                              counsel-grep-or-swiper
+                              counsel-grep-or-swiper-backward
+                              counsel-grep
+                              counsel-ack
+                              counsel-ag
+                              counsel-rg
+                              counsel-pt))
+
+(defun my-ivy-fly-back-to-present ()
+  ;; (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)
+  (cond ((and (memq last-command my-ivy-fly-commands)
+              (equal (this-command-keys-vector) (kbd "M-p")))
+         ;; repeat one time to get straight to the first history item
+         (setq unread-command-events
+               (append unread-command-events
+                       (listify-key-sequence (kbd "M-p")))))
+        ((or (memq this-command '(self-insert-command
+                                  yank
+                                  ivy-yank-word
+                                  counsel-yank-pop))
+             (equal (this-command-keys-vector) (kbd "M-n")))
+         (delete-region (point)
+                        (point-max)))))
+
+(defun my-ivy-fly-time-travel ()
+  (when (memq this-command my-ivy-fly-commands)
+    (let* ((kbd (kbd "M-n"))
+           (cmd (key-binding kbd))
+           (future (and cmd
+                        (with-temp-buffer
+                          (when (ignore-errors
+                                  (call-interactively cmd) t)
+                            (buffer-string))))))
+      (when future
+        (save-excursion
+          (insert (propertize (replace-regexp-in-string
+                               "\\\\_<" ""
+                               (replace-regexp-in-string
+                                "\\\\_>" ""
+                                future))
+                              'face 'shadow)))
+        (add-hook 'pre-command-hook 'my-ivy-fly-back-to-present nil t)))))
+
+(add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
+
+;; Improve search experience of `swiper'
+;; @see https://emacs-china.org/t/swiper-swiper-isearch/9007/12
+(defun my-swiper-toggle-counsel-rg ()
+  "Toggle `counsel-rg' with current swiper input."
+  (interactive)
+  (let ((text (replace-regexp-in-string
+               "\n" ""
+               (replace-regexp-in-string
+                "\\\\_<" ""
+                (replace-regexp-in-string
+                 "\\\\_>" ""
+                 (replace-regexp-in-string "^.*Swiper: " ""
+                                           (thing-at-point 'line t)))))))
+    (ivy-quit-and-run
+      (counsel-rg text default-directory))))
+(bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
+
+(def-package! rg
+  :defines projectile-command-map
+  :hook (after-init . rg-enable-default-bindings)
+  :config
+  (setq rg-group-result t
+        rg-show-columns t)
+
+  (cl-pushnew '("tmpl" . "*.tmpl") rg-custom-type-aliases)
+
+  (with-eval-after-load 'projectile
+    (defalias 'projectile-ripgrep 'rg-project)
+    (bind-key "s R" #'rg-project projectile-command-map))
+
+  (with-eval-after-load 'counsel
+    (bind-keys
+     :map rg-global-map
+     ("c r" . counsel-rg)
+     ("c s" . counsel-ag)
+     ("c p" . counsel-pt)
+     ("c f" . counsel-fzf)))
+  
+ (defun my-swiper-toggle-rg-dwim ()
+    "Toggle `rg-dwim' with current swiper input."
+    (interactive)
+    (ivy-quit-and-run (rg-dwim default-directory)))
+ (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
+ (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
+  )
+

@@ -15,7 +15,8 @@
  "s-<left>"  #'windmove-left
  "s-<down>"  #'windmove-down
 
- "C-s"       #'counsel-grep-or-swiper
+ "C-s"       #'swiper-isearch
+ "C-r"       #'swiper-isearch-backward
  "C-S-s"     #'isearch-forward
  "C-x k"     #'ido-kill-buffer
  "C-x K"     #'doom/kill-this-buffer-in-all-windows
@@ -227,4 +228,46 @@
    "M-<right>" nil
    "C-<left>"  nil
    "M-<left>"  nil)
- )
+ 
+
+
+ (:after counsel
+   :map counse-mode-map
+   [remap swiper]  #'counsel-grep-or-swiper
+   [remap dired]  #'counsel-dired
+   ;; "C-x C-r"  #'counsel-recentf
+   ;; "C-x j"  #'counsel-mark-ring
+   ;; "C-h F"  #'counsel-describe-face
+
+   ;; "C-c L"  #'counsel-load-library
+   ;; "C-c P"  #'counsel-package
+   ;; "C-c f"  #'counsel-find-library
+   ;; "C-c g"  #'counsel-grep
+   ;; "C-c h"  #'counsel-command-history
+   ;; "C-c i"  #'counsel-git
+   ;; "C-c j"  #'counsel-git-grep
+   ;; "C-c l"  #'counsel-locate
+   ;; "C-c r"  #'counsel-rg
+   ;; "C-c z"  #'counsel-fzf
+
+   ;; "C-c c F"  #'counsel-faces
+   ;; "C-c c L"  #'counsel-load-library
+   ;; "C-c c P"  #'counsel-package
+   ;; "C-c c a"  #'counsel-apropos
+   ;; "C-c c e"  #'counsel-colors-emacs
+   ;; "C-c c f"  #'counsel-find-library
+   ;; "C-c c g"  #'counsel-grep
+   ;; "C-c c h"  #'counsel-command-history
+   ;; "C-c c i"  #'counsel-git
+   ;; "C-c c j"  #'counsel-git-grep
+   ;; "C-c c l"  #'counsel-locate
+   ;; "C-c c m"  #'counsel-minibuffer-history
+   ;; "C-c c o"  #'counsel-outline
+   ;; "C-c c p"  #'counsel-pt
+   ;; "C-c c r"  #'counsel-rg
+   ;; "C-c c s"  #'counsel-ag
+   ;; "C-c c t"  #'counsel-load-theme
+   ;; "C-c c u"  #'counsel-unicode-char
+   ;; "C-c c w"  #'counsel-colors-web
+   ;; "C-c c z"  #'counsel-fzf
+   ))

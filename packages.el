@@ -10,7 +10,7 @@
 (package! aweshell :recipe (:fetcher github :repo "manateelazycat/aweshell"))
 (package! yapfify :disable t)
 
-(package! company-posframe :disable t)
+(package! company-posframe)
 
 (package! company-box :recipe (:fetcher github :repo "andersjohansson/company-box" :branch "customize-scrollbar"))
 
@@ -18,5 +18,5 @@
 
 (package! company-tabnine)
 
-
+(package! rg)
 ;;(package! snails)
