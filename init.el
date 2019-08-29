@@ -49,7 +49,7 @@
 
  (ivy               ; a search engine for love and life
   +fuzzy
-  +childframe
+  ;;+childframe
   )
 
  :ui

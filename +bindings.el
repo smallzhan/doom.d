@@ -32,6 +32,11 @@
 
  (:leader
 
+   (:prefix ("a" . "application")
+     :desc "Snails"            "s" #'snails
+     :desc "Elfeed Rss Reader" "r" #'elfeed
+     :desc "Org Noter"         "n" #'org-noter)
+   
    (:prefix ("c" . "code")
      :desc "Compile"                     "c" #'compile
      :desc "Jump to definition"          "d" #'+lookup/definition

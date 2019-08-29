@@ -10,7 +10,7 @@
 (package! aweshell :recipe (:host github :repo "manateelazycat/aweshell"))
 (package! yapfify :disable t)
 
-(package! company-posframe)
+;; (package! company-posframe)
 
 (package! company-box :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar"))
 
