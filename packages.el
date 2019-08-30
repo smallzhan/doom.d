@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; config/private/packages.el
 
-(disable-packages! glsl-mode cuda-mode opencl-mode emacs-snippets latex-preview-pane org-ref)
+(disable-packages! glsl-mode cuda-mode opencl-mode emacs-snippets latex-preview-pane org-ref nose)
 (package! visual-regexp)
 (package! visual-regexp-steroids)
 (package! org-edit-latex)
@@ -10,7 +10,7 @@
 (package! aweshell :recipe (:host github :repo "manateelazycat/aweshell"))
 (package! yapfify :disable t)
 
-;; (package! company-posframe)
+(package! company-posframe)
 
 (package! company-box :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar"))
 

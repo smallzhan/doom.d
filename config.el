@@ -122,10 +122,10 @@
 
 (def-package! aweshell)
 
-;; (def-package! company-posframe
-;;   :after company
-;;   :config (company-posframe-mode 1)
-;;   )
+(def-package! company-posframe
+  :after company
+  :config (company-posframe-mode 1)
+  )
 
 ;; (when IS-MAC
 ;;   (setq ns-use-thin-smoothing t
