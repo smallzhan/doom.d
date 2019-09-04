@@ -19,6 +19,5 @@
 (package! company-tabnine)
 
 (package! rg)
-
 (package! pdf-tools :recipe (:host github :repo "fuxialexander/pdf-tools" :branch "add-mac-retina"))
 ;;(package! snails)

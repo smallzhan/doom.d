@@ -317,14 +317,16 @@
      ("c s" . counsel-ag)
      ("c p" . counsel-pt)
      ("c f" . counsel-fzf)))
-  
- (defun my-swiper-toggle-rg-dwim ()
+
+  (defun my-swiper-toggle-rg-dwim ()
     "Toggle `rg-dwim' with current swiper input."
     (interactive)
     (ivy-quit-and-run (rg-dwim default-directory)))
- (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
- (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
+  (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
+  (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
 
- (remove-hook 'compilation-filter-hook #'doom-apply-ansi-color-to-compilation-buffer-h)
+  (remove-hook 'compilation-filter-hook #'doom-apply-ansi-color-to-compilation-buffer-h)
   )
 
+(after! elisp-mode
+  (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
