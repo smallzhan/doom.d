@@ -199,8 +199,9 @@
 
   (setq lsp-python-ms-executable
         (car (find-vscode-mspyls-executable)))
-  (setq lsp-python-ms-dir
-        (file-name-directory lsp-python-ms-executable)))
+  (if lsp-python-ms-executable
+      (setq lsp-python-ms-dir
+            (file-name-directory lsp-python-ms-executable))))
 
 (after! python
   (setq python-shell-interpreter "python3"))
