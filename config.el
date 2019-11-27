@@ -7,7 +7,10 @@
 (advice-remove #'newline-and-indent #'doom*newline-indent-and-continue-comments)
 
 (after! projectile
-  (setq projectile-require-project-root t))
+  (setq projectile-require-project-root t)
+  (if IS-WINDOWS
+      (setq projectile-git-submodule-command
+            "git submodule --quiet foreach \"echo $sm_path\" | tr '\\n' '\\0'")))
 
 (after! company
   (setq company-tooltip-limit 12)
@@ -187,7 +190,7 @@
   :demand nil
   :config
   ;;(remhash 'pyls lsp-clients)
-  (setq lsp-python-executable-cmd "python3")
+  (setq lsp-python-ms-python-executable-cmd "python3")
   (defun find-vscode-mspyls-executable ()
     (let* ((wildcards ".vscode/extensions/ms-python.python-*/languageServer*/Microsoft.Python.LanguageServer")
            (dir-and-ext (if IS-WINDOWS
@@ -199,8 +202,9 @@
 
   (setq lsp-python-ms-executable
         (car (find-vscode-mspyls-executable)))
-  (setq lsp-python-ms-dir
-        (file-name-directory lsp-python-ms-executable)))
+  (if lsp-python-ms-executable
+      (setq lsp-python-ms-dir
+            (file-name-directory lsp-python-ms-executable))))
 
 (after! python
   (setq python-shell-interpreter "python3"))

@@ -1,6 +1,6 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; 插件源
+;; 插件源, skip in straight.
 (setq package-archives '(("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                          ("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
                          ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
@@ -138,6 +138,7 @@
  (org-enhanced
   +latex
   +jekyll)
- edit-enhanced)
+ edit-enhanced
+ )
 
 (load custom-file t t t)

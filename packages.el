@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; config/private/packages.el
 
-(disable-packages! glsl-mode cuda-mode opencl-mode emacs-snippets latex-preview-pane org-ref nose)
+(disable-packages! glsl-mode cuda-mode opencl-mode latex-preview-pane org-ref nose anaconda-mode)
 (package! visual-regexp)
 (package! visual-regexp-steroids)
 (package! org-edit-latex)
@@ -21,3 +21,4 @@
 (package! rg)
 (package! pdf-tools :recipe (:host github :repo "fuxialexander/pdf-tools" :branch "add-mac-retina"))
 ;;(package! snails)
+(package! ggtags)
