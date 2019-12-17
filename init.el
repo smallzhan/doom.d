@@ -73,7 +73,7 @@
  :editor
  ;;;evil
  ;;;(evil +everywhere)
- file-templates
+ ;;;file-templates
  format            ; automated prettiness
  multiple-cursors  ; editing in many places at once
  fold

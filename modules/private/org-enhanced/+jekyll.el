@@ -10,7 +10,7 @@
 (defvar jekyll-post-ext ".org"
   "File extension of Jekyll posts.")
 (defvar jekyll-post-template
-  "#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: %s\ncomments: true\nexcerpt: \ncategories:\n  -  \ntags:\n  -  \n---\n#+END_EXPORT\n\n* "
+  "#+TITLE: %s\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: %s\ncomments: true\nexcerpt: \ncategories:\n  -  \ntags:\n  -  \n---\n#+END_EXPORT\n\n* "
   "Default template for Jekyll posts. %s will be replace by the post title.")
 
 
@@ -48,7 +48,8 @@
     (if (file-exists-p draft-file)
         (find-file draft-file)
       (find-file draft-file)
-      (insert (format jekyll-post-template (jekyll-yaml-escape title))))))
+      (let ((jtitle (jekyll-yaml-escape title)))
+        (insert (format jekyll-post-template jtitle jtitle))))))
 
 
 (add-to-list 'org-publish-project-alist

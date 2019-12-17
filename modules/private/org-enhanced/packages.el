@@ -1,6 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 
-(package! deft)
+;;(package! deft)
+(package! notdeft :recipe (:host github :repo "hasu/notdeft" :branch "xapian"))
 (package! ox-gfm)
 (package! ob-ipython)
 (package! cdlatex)

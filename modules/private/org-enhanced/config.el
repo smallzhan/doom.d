@@ -10,13 +10,35 @@
   :init (when IS-MAC
           (setq org-pomodoro-audio-player "/usr/bin/afplay")))
 
-(def-package! deft
+;; (def-package! deft
+;;   :config
+;;   (setq deft-directory (concat +my-org-dir "deft/")
+;;         deft-recursive t
+;;         deft-auto-save-interval 10.0
+;;         deft-file-naming-rules '((nospace . "-")
+;;                                  (case-fn . downcase))))
+
+(def-package! notdeft
   :config
-  (setq deft-directory (concat +my-org-dir "deft/")
-        deft-recursive t
-        deft-auto-save-interval 10.0
-        deft-file-naming-rules '((nospace . "-")
-                                 (case-fn . downcase))))
+  (setq notdeft-extension "org")
+  ;;(setq notdeft-secondary-extensions '("md" "org" "muse"))
+  (setq notdeft-directories `(,(concat +my-org-dir "research")
+                              ,(concat +my-org-dir "deft")
+                              ,(concat +my-org-dir "notes")
+                              ,(expand-file-name (concat +my-org-dir "../blog/_posts"))
+                              ;;,(expand-file-name (concat +my-org-dir "../source"))
+                              ;; "~/Documents/org-notes/post/traveling"
+                              ;; "~/Documents/org-notes/post/agenda"
+                              ;; "~/project/my-code"
+                              ;; "~/Documents/org-notes/GTD/"
+                              ))
+  (setq notdeft-sparse-directories `(("~" . (,(concat +my-org-dir "webclip.org")))))
+  :bind (:map notdeft-mode-map
+          ("C-q" . notdeft-quit)
+          ("C-r" . notdeft-refresh)
+          )
+  )
+
 
 (def-package! org-noter
   :after org
@@ -53,13 +75,14 @@
 
 (after! org
   (setq org-directory +my-org-dir
+        org-aganda-directory (concat +my-org-dir "agenda/")
         org-agenda-diary-file (concat org-directory "diary.org")
         org-default-notes-file (concat org-directory "refile.org")
         ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
         ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
-        org-agenda-files `(,(concat org-directory "planning.org")
-                           ,(concat org-directory "notes.org")
-                           ,(concat org-directory "work.org")))
+        org-agenda-files `(,(concat org-aganda-directory "planning.org")
+                           ,(concat org-aganda-directory "notes.org")
+                           ,(concat org-aganda-directory "work.org")))
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
 
@@ -175,7 +198,7 @@
            ;;"%?\n%i\n%U\n %:initial" :immediate-finish t)
            (file+function "notes.org" org-capture-template-goto-link)
            " %:initial\n%U\n" :empty-lines 1)
-          ("w" "Link" entry (file+headline "notes.org" "Web Clip")
+          ("w" "Link" entry (file+headline "webclip.org" "Web Clip")
             "* %:annotation\n%i\n%U\n" :immediate-finish t :kill-buffer t)
           ("p" "Phone call" entry (file  "refile.org")
            "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
