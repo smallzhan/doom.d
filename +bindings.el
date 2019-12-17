@@ -26,6 +26,10 @@
  "M-l"       #'pyim-convert-string-at-point
  "C-;"       #'pyim-delete-word-from-personal-buffer
 
+ "C-c C-y"   #'company-yasnippet
+
+ 
+
  ;; ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Doom
  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

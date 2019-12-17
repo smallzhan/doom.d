@@ -20,6 +20,7 @@
 
 (def-package! notdeft
   :config
+
   (setq notdeft-extension "org")
   ;;(setq notdeft-secondary-extensions '("md" "org" "muse"))
   (setq notdeft-directories `(,(concat +my-org-dir "research")
@@ -35,10 +36,7 @@
   (setq notdeft-sparse-directories `(("~" . (,(concat +my-org-dir "webclip.org")))))
   :bind (:map notdeft-mode-map
           ("C-q" . notdeft-quit)
-          ("C-r" . notdeft-refresh)
-          )
-  )
-
+          ("C-r" . notdeft-refresh)))
 
 (def-package! org-noter
   :after org

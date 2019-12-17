@@ -12,7 +12,7 @@
 
 (package! company-posframe)
 
-(package! company-box :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar"))
+(package! company-box :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar") :disable t)
 
 (package! lsp-python-ms)
 
@@ -22,3 +22,5 @@
 (package! pdf-tools :recipe (:host github :repo "fuxialexander/pdf-tools" :branch "add-mac-retina"))
 ;;(package! snails)
 (package! ggtags)
+
+

@@ -43,7 +43,7 @@
 
  :completion
  ;; (
- company           ; the ultimate code completion backend
+ company         ; the ultimate code completion backend
  ;; +childframe)
 
 

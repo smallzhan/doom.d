@@ -10,7 +10,8 @@
   (setq projectile-require-project-root t)
   (if IS-WINDOWS
       (setq projectile-git-submodule-command
-            "git submodule --quiet foreach \"echo $sm_path\" | tr '\\n' '\\0'")))
+            "git submodule --quiet foreach \"echo $sm_path\" | tr '\\n' '\\0'"))
+  (add-to-list 'projectile-project-root-files-bottom-up ".projectile"))
 
 (after! company
   (setq company-tooltip-limit 12)
@@ -25,7 +26,8 @@
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix)
     (setq company-lsp-cache-candidates 'auto)
-    ))
+    )
+  )
 
 ;; there is a wired bug in company-box, the scroll bar is very huge and cover the candicate list
 ;; see https://github.com/sebastiencs/company-box/issues/44 , it is not resolved, now i hack the
@@ -334,3 +336,7 @@
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
+
+
+
+
