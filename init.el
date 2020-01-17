@@ -89,11 +89,12 @@
 
  :term
  vterm
+ :checkers
+ (syntax
+  +childframe)
  :tools
  eval
  magit
- (flycheck
-  +childframe)
  (lookup
   +docsets)
  ;;editorconfig
@@ -107,13 +108,13 @@
  emacs-lisp        ; drown in parentheses
  common-lisp
  latex
- (org              ; organize your plain life in plain text
-  +attach          ; custom attachment system
-  +babel
-  +ipython                                      ; running code in org
-  ;;+capture         ; org-capture in and outside of Emacs
-  +export          ; Exporting org to whatever you want
-  +protocol)
+ ;; (org              ; organize your plain life in plain text
+ ;;  +attach          ; custom attachment system
+ ;;  +babel
+ ;;  +ipython                                      ; running code in org
+ ;;  ;;+capture         ; org-capture in and outside of Emacs
+ ;;  +export          ; Exporting org to whatever you want
+ ;;  +protocol)
                                         ; Emacs for presentations
  (python            ; beautiful is better than ugly
   +lsp)
@@ -135,9 +136,9 @@
 
  :private
  ;; my-cc
- (org-enhanced
-  +latex
-  +jekyll)
+(org-enhanced
+ +latex
+ +jekyll)
  edit-enhanced
  )
 

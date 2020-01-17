@@ -1,16 +1,16 @@
-(def-package! ox-gfm
+(use-package! ox-gfm
   :defer t)
 
-(def-package! cdlatex
+(use-package! cdlatex
   :defer t
   :hook (org-mode . turn-on-org-cdlatex))
 
-(def-package! org-pomodoro
+(use-package! org-pomodoro
   :defer t
   :init (when IS-MAC
           (setq org-pomodoro-audio-player "/usr/bin/afplay")))
 
-;; (def-package! deft
+;; (use-package! deft
 ;;   :config
 ;;   (setq deft-directory (concat +my-org-dir "deft/")
 ;;         deft-recursive t
@@ -18,7 +18,7 @@
 ;;         deft-file-naming-rules '((nospace . "-")
 ;;                                  (case-fn . downcase))))
 
-(def-package! notdeft
+(use-package! notdeft
   :config
 
   (setq notdeft-extension "org")
@@ -34,22 +34,23 @@
                               ;; "~/Documents/org-notes/GTD/"
                               ))
   (setq notdeft-sparse-directories `(("~" . (,(concat +my-org-dir "webclip.org")))))
+  (setq notdeft-xapian-program (executable-find "notdeft-xapian"))
   :bind (:map notdeft-mode-map
           ("C-q" . notdeft-quit)
           ("C-r" . notdeft-refresh)))
 
-(def-package! org-noter
+(use-package! org-pdftools
+  :defer t
+  :load-path "~/.doom.d/extensions/org-pdftools")
+
+(use-package! org-noter
   :after org
   :config
   (setq org-noter-default-notes-file-names '("notes.org")
         org-noter-notes-search-path `(,(concat +my-org-dir "research"))
         org-noter-separate-notes-from-heading t))
 
-(def-package! org-pdftools
-  :defer t
-  :load-path "~/.doom.d/extensions/org-pdftools")
-
-(def-package! org-ref
+(use-package! org-ref
   :after org
   :init
   (setq org-ref-directory (concat +my-org-dir "bib/"))
@@ -58,7 +59,7 @@
         org-ref-default-bibliography `(,(concat org-ref-directory "ref.bib"))
         org-ref-pdf-directory (concat org-ref-directory "pdfs")))
 
-(def-package! ivy-bibtex
+(use-package! ivy-bibtex
   :after org-ref
   :config
   (setq bibtex-completion-bibliography
@@ -75,7 +76,7 @@
   (setq org-directory +my-org-dir
         org-aganda-directory (concat +my-org-dir "agenda/")
         org-agenda-diary-file (concat org-directory "diary.org")
-        org-default-notes-file (concat org-directory "refile.org")
+        org-default-notes-file (concat org-directory "note.org")
         ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
         ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
         org-agenda-files `(,(concat org-aganda-directory "planning.org")
@@ -184,11 +185,11 @@
       (insert "* " hd "\n"))))
 
   (setq org-capture-templates
-        '(("t" "todo" entry (file  "refile.org")
+        '(("t" "todo" entry (file+headline  "agenda/planning.org" "Task List")
            "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-          ("r" "respond" entry (file  "refile.org")
+          ("r" "respond" entry (file  "notes.org")
            "* TODO Respond to %:from on %:subject\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-          ("n" "note" entry (file  "refile.org")
+          ("n" "note" entry (file  "notes.org")
            "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
           ("j" "Journal" entry (file+olp+datetree  "diary.org")
            "* %?\n%U\n" :clock-in t :clock-resume t)
@@ -196,11 +197,11 @@
            ;;"%?\n%i\n%U\n %:initial" :immediate-finish t)
            (file+function "notes.org" org-capture-template-goto-link)
            " %:initial\n%U\n" :empty-lines 1)
-          ("w" "Link" entry (file+headline "webclip.org" "Web Clip")
-            "* %:annotation\n%i\n%U\n" :immediate-finish t :kill-buffer t)
-          ("p" "Phone call" entry (file  "refile.org")
-           "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
-          ("h" "Habit" entry (file  "refile.org")
+          ("w" "Link" entry (file+headline "agenda/planning.org" "Idea List")
+            "* TODO %:annotation :CAPTURE:\n%i\n%U\n" :immediate-finish t :kill-buffer t)
+          ("p" "Phone/Email" entry (file+headline  "agenda/planning.org" "Reminder List")
+           "* TODO %? :PHONE:\n%U" :clock-in t :clock-resume t)
+          ("h" "Habit" entry (file  "inbox.org")
            "* ACTIVE %?\n%U\n%a\nSCHEDULED: %t .+1d/3d\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: ACTIVE\n:END:\n")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -594,6 +595,7 @@ epoch to the beginning of today (00:00)."
   (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
 
   (setq org-publish-project-alist '())
+  
 
   (setq-default system-time-locale "C")
 
@@ -603,3 +605,68 @@ epoch to the beginning of today (00:00)."
   (load! "next-spec-day")
   )
 
+(use-package! org-super-agenda
+  :after org
+  :config
+  (org-super-agenda-mode 1)
+  (setq org-agenda-custom-commands
+      '(("z" "Super agenda view"
+         ((agenda "" ((org-agenda-span 'day)
+                      (org-super-agenda-groups
+                       '((:name "Today"
+                                :time-grid t
+                                :date today
+                                :todo "TODAY"
+                                :scheduled today
+                                :order 1)
+                         ))))
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:name "Next"
+                                 :and (:todo t
+                                       :tag "CAPTURE")
+                                 :order 1
+                                 )
+                          (:name "Important"
+                                 :tag "Important"
+                                 :priority "A"
+                                 :order 6)
+                          (:name "Due Today"
+                                 :deadline today
+                                 :order 2)
+                          (:name "Due Soon"
+                                 :deadline future
+                                 :order 8)
+                          (:name "Overdue"
+                                 :deadline past
+                                 :order 7)
+                          ;; (:name "Assignments"
+                          ;;        :tag "Assignment"
+                          ;;        :order 10)
+                          (:name "Issues"
+                                 :tag "Issue"
+                                 :order 12)
+                          (:name "Projects"
+                                 :tag "Project"
+                                 :order 14)
+                          (:name "Emacs"
+                                 :tag "Emacs"
+                                 :order 13)
+                          (:name "Research"
+                                 :tag "Research"
+                                 :order 15)
+                          (:name "To read"
+                                 :and (:tag "READING"
+                                            :not (:tag ("HOLD" "WAIT"))
+                                            :priority>= "C")
+                                 :order 30)
+                          (:name "Waiting"
+                                 :todo "WAIT"
+                                 :order 20)
+                          (:name "SomeDay"
+                                 :priority<= "C"
+                                 :tag ("WAIT" "HOLD")
+                                 :todo ("SOMEDAY" )
+                                 :order 90)
+                          ;;(:discard (:tag ("Chore" "Routine" "Daily")))
+                          )))))))))

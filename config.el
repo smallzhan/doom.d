@@ -88,10 +88,10 @@
 
 (global-auto-revert-mode 0)
 
-(def-package! visual-regexp
+(use-package! visual-regexp
   :commands (vr/query-replace vr/replace))
 
-(def-package! company-english-helper
+(use-package! company-english-helper
   :commands (toggle-company-english-helper))
 
 (after! pyim
@@ -120,14 +120,14 @@
     (setq pyim-default-scheme 'rime-quanpin)))
 
 
-(def-package! yapfify
+(use-package! yapfify
   :after python
   :defer t
   )
 
-(def-package! aweshell)
+(use-package! aweshell)
 
-(def-package! company-posframe
+(use-package! company-posframe
   :after company
   :config (company-posframe-mode 1)
   )
@@ -188,7 +188,7 @@
 ;;   )
 
 
-(def-package! lsp-python-ms
+(use-package! lsp-python-ms
   :demand nil
   :config
   ;;(remhash 'pyls lsp-clients)
@@ -214,18 +214,18 @@
 (after! smartparens
   (add-hook 'prog-mode-hook #'turn-on-smartparens-strict-mode))
 
-(after! pdf-tools
-  (setq pdf-view-use-scaling t)
-  )
+;; (after! pdf-tools
+;;   (setq pdf-view-use-scaling t)
+;;   ) 
 
 
-(def-package! company-tabnine
+(use-package! company-tabnine
   :after company
   :config
   (add-to-list 'company-backends #'company-tabnine)
   )
 
-(def-package! snails
+(use-package! snails
   :load-path "~/.doom.d/extensions/snails"
   :commands snails)
 
@@ -302,7 +302,7 @@
       (counsel-rg text default-directory))))
 (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
 
-(def-package! rg
+(use-package! rg
   :defines projectile-command-map
   ;;:hook (after-init . rg-enable-default-bindings)
   :config

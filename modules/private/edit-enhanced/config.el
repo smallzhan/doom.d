@@ -1,28 +1,28 @@
 
-(def-package! color-rg
+(use-package! color-rg
   :commands (color-rg-search-symbol-in-project
              color-rg-search-input-in-project
              color-rg-search-input-in-current-file
              color-rg-search-symbol-in-current-file))
 
 
-;(def-package! aweshell
+;(use-package! aweshell
 ;  :init (setq aweshell-use-exec-path-from-shell nil))
 
 
-(def-package! auto-save
+(use-package! auto-save
   :init
   (setq auto-save-silent t)
   :config
   (auto-save-enable))
 
-(def-package! lazy-search
+(use-package! lazy-search
   :commands lazy-search)
 
 
-(def-package! thing-edit)
+(use-package! thing-edit)
 
-(def-package! awesome-pair
+(use-package! awesome-pair
   :bind (:map awesome-pair-mode-map
           ("(" . awesome-pair-open-round)
           ("[" . awesome-pair-open-bracket)
