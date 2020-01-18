@@ -170,36 +170,36 @@
 
   ;; org-capture
   (defun org-capture-template-goto-link ()
-  (org-capture-put :target (list 'file+headline
-                                 (nth 1 (org-capture-get :target))
-                                 (org-capture-get :annotation)))
-  (org-capture-put-target-region-and-position)
-  (widen)
-  (let ((hd (nth 2 (org-capture-get :target))))
-    (goto-char (point-min))
-    (if (re-search-forward
-         (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
-        (org-end-of-subtree)
-      (goto-char (point-max))
-      (or (bolp) (insert "\n"))
-      (insert "* " hd "\n"))))
+    (org-capture-put :target (list 'file+headline
+                                   (nth 1 (org-capture-get :target))
+                                   (org-capture-get :annotation)))
+    (org-capture-put-target-region-and-position)
+    (widen)
+    (let ((hd (nth 2 (org-capture-get :target))))
+      (goto-char (point-min))
+      (if (re-search-forward
+           (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
+          (org-end-of-subtree)
+        (goto-char (point-max))
+        (or (bolp) (insert "\n"))
+        (insert "* " hd "\n"))))
 
   (setq org-capture-templates
-        '(("t" "todo" entry
+        '(("s" "scheduled task" entry
            (file+headline "agenda/planning.org" "Task List")
            "* TODO %?\nSCHEDULD: %^t\n"
            :clock-in nil)
-          ("d" "do task" entry
+          ("t" "todo" entry
            (file+headline  "agenda/planning.org" "Task List")
-           "* TODO %?\n:PROPERTIES:\n:CATEGORY: task\n:END:\n%U\n%a\n"
+           "* TODO %?\n:PROPERTIES:\n:CATEGORY: task\n:END:\n"
            :clock-in t :clock-resume t)
           ("r" "respond" entry
            (file  "notes.org")
-           "* TODO Respond to %:from on %:subject\n:PROPERTIES:\n:CATEGORY: task\n:END:\n%U\n%a\n"
+           "* TODO Respond to %:from on %:subject\n:PROPERTIES:\n:CATEGORY: task\n:END:\n%a\n"
            :clock-in t :clock-resume t :immediate-finish t)
           ("n" "note" entry
-           (file  "notes.org")
-           "* %? :NOTE:\n%U\n%a\n"
+           (file+headline  "agenda/notes.org" "Notes")
+           "* TODO %? :NOTE:\n%a\n"
            :clock-in t :clock-resume t)
           ("j" "Journal" entry
            (file+olp+datetree  "diary.org")
@@ -216,7 +216,7 @@
            :immediate-finish t :kill-buffer t)
           ("p" "Phone/Email" entry
            (file+headline  "agenda/planning.org" "Reminder List")
-           "* TODO %? \n:PROPERTIES:\n:CATEGORY: reminder\n:END:\n%U"
+           "* TODO %? \n:PROPERTIES:\n:CATEGORY: reminder\n:END:\n"
            :clock-in t :clock-resume t)
           ("h" "Habit" entry
            (file+headline  "agenda/notes.org" "Habit")
@@ -252,7 +252,7 @@
     (not (member (nth 2 (org-heading-components)) org-done-keywords)))
   (setq org-refile-target-verify-function 'bh/verify-refile-target)
 
-  ;;(require 'org-expiry)
+  (require 'org-expiry)
   ;; Configure it a bit to my liking
   (setq
    org-expiry-created-property-name "CREATED"
@@ -516,11 +516,11 @@ Callers of this function already widen the buffer view."
     (myorg-update-parent-cookie))
 
   (defun org-time-today ()
-  "Time in seconds today at 0:00.
+    "Time in seconds today at 0:00.
 Returns the float number of seconds since the beginning of the
 epoch to the beginning of today (00:00)."
-  (float-time (apply 'encode-time
-                     (append '(0 0 0) (nthcdr 3 (decode-time))))))
+    (float-time (apply 'encode-time
+                       (append '(0 0 0) (nthcdr 3 (decode-time))))))
 
   (defun filter-by-tags ()
     (let ((head-tags (org-get-tags-at)))
@@ -530,7 +530,7 @@ epoch to the beginning of today (00:00)."
     (interactive "P")
     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
            (files (org-add-archive-files (org-agenda-files)))
-           (include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING"))
+           (include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING" "LEARN"))
            ;;                         "LEARNING" "OUTPUT" "OTHER"))
            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
            (output-string "")
@@ -572,30 +572,29 @@ epoch to the beginning of today (00:00)."
     (dolist (tag (list
                   "/DONE"
                   "/CANCELLED"))
-      (org-map-entries 'org-archive-subtree tag 'file))
-    )
+      (org-map-entries 'org-archive-subtree tag 'file)))
 
- (defun my-archive-done-tasks ()
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward
-            (concat "\\* " (regexp-opt org-done-keywords) " ") nil t)
-      (goto-char (line-beginning-position))
-      (org-archive-subtree))))
+  (defun my-archive-done-tasks ()
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward
+              (concat "\\* " (regexp-opt org-done-keywords) " ") nil t)
+        (goto-char (line-beginning-position))
+        (org-archive-subtree))))
 
   (setq org-agenda-text-search-extra-files '(agenda-archives))
 
-  (defun zin/org-tag-match-context (&optional todo-only match)
-    "Identical search to `org-match-sparse-tree', but shows the content of the matches"
-    (interactive "P")
-    (org-agenda-prepare-buffers (list (current-buffer)))
-    (org-overview)
-    (org-remove-occur-highlights)
-    (org-scan-tags '(progn (org-show-entry)
-                           (org-show-context))
-                   (cdr (org-make-tags-matcher match)) todo-only)
-    )
+  ;; (defun zin/org-tag-match-context (&optional todo-only match)
+  ;;   "Identical search to `org-match-sparse-tree', but shows the content of the matches"
+  ;;   (interactive "P")
+  ;;   (org-agenda-prepare-buffers (list (current-buffer)))
+  ;;   (org-overview)
+  ;;   (org-remove-occur-highlights)
+  ;;   (org-scan-tags '(progn (org-show-entry)
+  ;;                          (org-show-context))
+  ;;                  (cdr (org-make-tags-matcher match)) todo-only)
+  ;;   )
 
   ;; (add-hook 'org-mode-hook
   ;;            (lambda ()
@@ -620,6 +619,7 @@ epoch to the beginning of today (00:00)."
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
+  (load! "+protocol")
   (load! "next-spec-day")
   )
 
@@ -628,66 +628,86 @@ epoch to the beginning of today (00:00)."
   :config
   (org-super-agenda-mode 1)
   (setq org-agenda-custom-commands
-      '(("z" "Super agenda view"
-         ((agenda "" ((org-agenda-span 'day)
-                      (org-super-agenda-groups
-                       '((:name "Today"
-                                :time-grid t
-                                :date today
-                                :todo "TODAY"
-                                :scheduled today
-                                :order 1)
-                         (:name "Planned"
-                                :time-grid t
-                                :todo t
-                                :order 2)
-                         ))))
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '((:name "Next"
-                                 :and (:scheduled nil
-                                       :deadline nil
-                                       :category ("task" "link" "capture"))
-                                 :date today
-                                 :order 1
-                                 )
-                          (:name "Important"
-                                 :tag "Important"
-                                 :priority "A"
-                                 :order 6)
-                          (:name "Due Today"
-                                 :deadline today
-                                 :order 2)
-                          (:name "Due Soon"
-                                 :deadline future
-                                 :order 8)
-                          (:name "Overdue"
-                                 :deadline past
-                                 :order 7)
-                          ;; (:name "Assignments"
-                          ;;        :tag "Assignment"
-                          ;;        :order 10)
-                          (:name "Issues"
-                                 :tag "Issue"
-                                 :order 12)
-                          (:name "Projects"
-                                 :tag "Project"
-                                 :order 14)
-                          (:name "Emacs"
-                                 :tag "Emacs"
-                                 :order 13)
-                          (:name "Research"
-                                 :tag "LEARN"
-                                 :order 15)
-                          (:name "To read"
-                                 :and (:tag "READING"
-                                       :not (:tag ("HOLD" "WAIT")))
-                                 :order 16)
-                          
-                          (:name "SomeDay"
-                                 :priority<= "C"
-                                 :tag ("WAIT" "HOLD")
-                                 :todo ("SOMEDAY" )
-                                 :order 90)
-                          ;;(:discard (:tag ("Chore" "Routine" "Daily")))
-                          )))))))))
+        '(("z" "Super agenda view"
+           ((agenda
+             ""
+             ((org-agenda-span 'day)
+              (org-super-agenda-groups
+               '((:name "Today"
+                        :time-grid t
+                        :date today
+                        :todo "TODAY"
+                        :scheduled today
+                        :order 1)
+                 (:name "Planned"
+                        :time-grid t
+                        :todo t
+                        :order 2)
+                 ))))
+            (alltodo
+             ""
+             ((org-agenda-overriding-header "")
+              (org-super-agenda-groups
+               '((:name "Next"
+                        :and (:scheduled nil
+                              :deadline nil
+                              :category ("task" "link" "capture"))
+                        :date today
+                        :order 1
+                        )
+                 (:name "Important"
+                        :tag "Important"
+                        :priority "A"
+                        :order 6)
+                 (:name "Due Today"
+                        :deadline today
+                        :order 2)
+                 (:name "Due Soon"
+                        :deadline future
+                        :order 8)
+                 (:name "Overdue"
+                        :deadline past
+                        :order 7)
+                 ;; (:name "Assignments"
+                 ;;        :tag "Assignment"
+                 ;;        :order 10)
+                 (:name "Issues"
+                        :tag "Issue"
+                        :order 12)
+                 (:name "Projects"
+                        :tag "Project"
+                        :order 14)
+                 (:name "Emacs"
+                        :tag "Emacs"
+                        :order 13)
+                 (:name "Research"
+                        :tag "LEARN"
+                        :order 15)
+                 (:name "To read"
+                        :and (:tag "READING"
+                              :not (:tag ("HOLD" "WAIT")))
+                        :order 16)
+                 
+                 (:name "SomeDay"
+                        :priority<= "C"
+                        :tag ("WAIT" "HOLD")
+                        :todo ("SOMEDAY" )
+                        :order 90))))))))))
+
+(use-package! org-clock ; built-in
+  :commands org-clock-save
+  :init
+  (setq org-clock-persist-file (concat doom-etc-dir "org-clock-save.el"))
+  (defadvice! +org--clock-load-a (&rest _)
+    "Lazy load org-clock until its commands are used."
+    :before '(org-clock-in
+              org-clock-out
+              org-clock-in-last
+              org-clock-goto
+              org-clock-cancel)
+    (org-clock-load))
+  :config
+  (setq org-clock-persist 'history
+        ;; Resume when clocking into task with open clock
+        org-clock-in-resume t)
+  (add-hook 'kill-emacs-hook #'org-clock-save))
