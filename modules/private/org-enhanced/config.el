@@ -185,23 +185,41 @@
       (insert "* " hd "\n"))))
 
   (setq org-capture-templates
-        '(("t" "todo" entry (file+headline  "agenda/planning.org" "Task List")
-           "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-          ("r" "respond" entry (file  "notes.org")
-           "* TODO Respond to %:from on %:subject\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-          ("n" "note" entry (file  "notes.org")
-           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-          ("j" "Journal" entry (file+olp+datetree  "diary.org")
-           "* %?\n%U\n" :clock-in t :clock-resume t)
+        '(("t" "todo" entry
+           (file+headline "agenda/planning.org" "Task List")
+           "* TODO %?\nSCHEDULD: %^t\n"
+           :clock-in nil)
+          ("d" "do task" entry
+           (file+headline  "agenda/planning.org" "Task List")
+           "* TODO %?\n:PROPERTIES:\n:CATEGORY: task\n:END:\n%U\n%a\n"
+           :clock-in t :clock-resume t)
+          ("r" "respond" entry
+           (file  "notes.org")
+           "* TODO Respond to %:from on %:subject\n:PROPERTIES:\n:CATEGORY: task\n:END:\n%U\n%a\n"
+           :clock-in t :clock-resume t :immediate-finish t)
+          ("n" "note" entry
+           (file  "notes.org")
+           "* %? :NOTE:\n%U\n%a\n"
+           :clock-in t :clock-resume t)
+          ("j" "Journal" entry
+           (file+olp+datetree  "diary.org")
+           "* %?\n%U\n"
+           :clock-in t :clock-resume t)
           ("l" "org-protocol" plain ;;(file+function "notes.org" org-capture-template-goto-link)
            ;;"%?\n%i\n%U\n %:initial" :immediate-finish t)
            (file+function "notes.org" org-capture-template-goto-link)
-           " %:initial\n%U\n" :empty-lines 1)
-          ("w" "Link" entry (file+headline "agenda/planning.org" "Idea List")
-            "* TODO %:annotation :CAPTURE:\n%i\n%U\n" :immediate-finish t :kill-buffer t)
-          ("p" "Phone/Email" entry (file+headline  "agenda/planning.org" "Reminder List")
-           "* TODO %? :PHONE:\n%U" :clock-in t :clock-resume t)
-          ("h" "Habit" entry (file  "inbox.org")
+           " %:initial\n%U\n"
+           :empty-lines 1)
+          ("w" "Link" entry
+           (file+headline "agenda/planning.org" "Idea List")
+           "* TODO %:annotation\n:PROPERTIES:\n:CATEGORY: link\n:END:\n%i\n%U\n"
+           :immediate-finish t :kill-buffer t)
+          ("p" "Phone/Email" entry
+           (file+headline  "agenda/planning.org" "Reminder List")
+           "* TODO %? \n:PROPERTIES:\n:CATEGORY: reminder\n:END:\n%U"
+           :clock-in t :clock-resume t)
+          ("h" "Habit" entry
+           (file+headline  "agenda/notes.org" "Habit")
            "* ACTIVE %?\n%U\n%a\nSCHEDULED: %t .+1d/3d\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: ACTIVE\n:END:\n")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -619,12 +637,18 @@ epoch to the beginning of today (00:00)."
                                 :todo "TODAY"
                                 :scheduled today
                                 :order 1)
+                         (:name "Planned"
+                                :time-grid t
+                                :todo t
+                                :order 2)
                          ))))
           (alltodo "" ((org-agenda-overriding-header "")
                        (org-super-agenda-groups
                         '((:name "Next"
-                                 :and (:todo t
-                                       :tag "CAPTURE")
+                                 :and (:scheduled nil
+                                       :deadline nil
+                                       :category ("task" "link" "capture"))
+                                 :date today
                                  :order 1
                                  )
                           (:name "Important"
@@ -653,16 +677,13 @@ epoch to the beginning of today (00:00)."
                                  :tag "Emacs"
                                  :order 13)
                           (:name "Research"
-                                 :tag "Research"
+                                 :tag "LEARN"
                                  :order 15)
                           (:name "To read"
                                  :and (:tag "READING"
-                                            :not (:tag ("HOLD" "WAIT"))
-                                            :priority>= "C")
-                                 :order 30)
-                          (:name "Waiting"
-                                 :todo "WAIT"
-                                 :order 20)
+                                       :not (:tag ("HOLD" "WAIT")))
+                                 :order 16)
+                          
                           (:name "SomeDay"
                                  :priority<= "C"
                                  :tag ("WAIT" "HOLD")
