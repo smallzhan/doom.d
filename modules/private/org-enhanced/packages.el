@@ -20,6 +20,7 @@
         (insert "(fset 'org-release (lambda () \"9.3\"))\n"
                 "(fset 'org-git-version #'ignore)\n"
                 "(provide 'org-version)\n")))))
+
 (package! org-plus-contrib)
 (package! notdeft :recipe (:host github :repo "hasu/notdeft" :branch "xapian"))
 (package! ox-gfm)
@@ -29,8 +30,8 @@
 (package! org-pomodoro)
 (package! org-protocol-capture-html :disable t
   :recipe (:host github :repo "alphapapa/org-protocol-capture-html"))
-(package! org-noter :recipe (:host github :repo "fuxialexander/org-noter" :branch "pdf-notes-booster"))
-;;(package! org-noter)
+;;(package! org-noter :recipe (:host github :repo "fuxialexander/org-noter" :branch "pdf-notes-booster"))
+(package! org-noter)
 (package! org-ref)
 (package! ivy-bibtex)
 (package! org-super-agenda)

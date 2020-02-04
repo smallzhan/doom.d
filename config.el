@@ -199,8 +199,13 @@
                             (cons (getenv "USERPROFILE") ".exe")
                           (cons (getenv "HOME") nil)))
            (cmd (concat (file-name-as-directory (car dir-and-ext))
-                        wildcards (cdr dir-and-ext))))
-      (file-expand-wildcards cmd t)))
+                        wildcards (cdr dir-and-ext)))
+           ;; need to copy a fallback path.
+           (fallback (concat "~/.doom.d/mspyls/Microsoft.Python.LanguageServer" (cdr dir-and-ext)))
+           (exe (file-expand-wildcards cmd t)))
+      (if exe
+          exe
+        (file-expand-wildcards fallback t))))
 
   (setq lsp-python-ms-executable
         (car (find-vscode-mspyls-executable)))
