@@ -28,10 +28,6 @@
                               ,(concat +my-org-dir "notes")
                               ,(expand-file-name (concat +my-org-dir "../blog/_posts"))
                               ;;,(expand-file-name (concat +my-org-dir "../source"))
-                              ;; "~/Documents/org-notes/post/traveling"
-                              ;; "~/Documents/org-notes/post/agenda"
-                              ;; "~/project/my-code"
-                              ;; "~/Documents/org-notes/GTD/"
                               ))
   (setq notdeft-sparse-directories `(("~" . (,(concat +my-org-dir "webclip.org")))))
   (setq notdeft-xapian-program (executable-find "notdeft-xapian"))
@@ -41,14 +37,22 @@
 
 (use-package! org-pdftools
   :defer t
-  :load-path "~/.doom.d/extensions/org-pdftools")
+  :load-path "~/.doom.d/extensions/org-pdftools"
+  :config (setq org-pdftools-root-dir +my-org-dir)
+  )
 
 (use-package! org-noter
   :after org
   :config
   (setq org-noter-default-notes-file-names '("notes.org")
         org-noter-notes-search-path `(,(concat +my-org-dir "research"))
-        org-noter-separate-notes-from-heading t))
+        org-noter-separate-notes-from-heading t)
+  (load! "~/.emacs.d/.local/straight/repos/org-noter/other/org-noter-integration")
+  )
+
+;;(use-package! org-noter-integration
+;; :after org-noter 
+;; :load-path "~/.doom.d/extensions/org-noter-integration")
 
 (use-package! org-ref
   :after org
