@@ -108,6 +108,7 @@
  emacs-lisp        ; drown in parentheses
  common-lisp
  latex
+ org
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
  ;;  +babel

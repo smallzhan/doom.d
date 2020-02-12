@@ -623,7 +623,7 @@ epoch to the beginning of today (00:00)."
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
-  (load! "+protocol")
+  ;; (load! "+protocol")
   (load! "next-spec-day")
   )
 
@@ -715,3 +715,7 @@ epoch to the beginning of today (00:00)."
         ;; Resume when clocking into task with open clock
         org-clock-in-resume t)
   (add-hook 'kill-emacs-hook #'org-clock-save))
+
+
+;; (use-package! org-bullets ; "prettier" bullets
+;;   :hook (org-mode . org-bullets-mode))
