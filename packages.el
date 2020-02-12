@@ -8,7 +8,7 @@
 
 (package! company-english-helper :recipe (:host github :repo "manateelazycat/company-english-helper"))
 (package! aweshell :recipe (:host github :repo "manateelazycat/aweshell"))
-;;(package! snails :recipe (:host github :repo "manateelazycat/snails"))
+(package! snails :recipe (:host github :repo "manateelazycat/snails" :no-byte-compile t))
 (package! yapfify :disable t)
 
 (package! company-posframe)
@@ -22,6 +22,6 @@
 (package! rg)
 ;;(package! pdf-tools :recipe (:host github :repo "fuxialexander/pdf-tools" :branch "add-mac-retina"))
 (package! pdf-tools)
-(package! ggtags)
+(package! ggtags :disable t)
 
 

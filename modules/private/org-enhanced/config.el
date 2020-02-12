@@ -37,7 +37,7 @@
 
 (use-package! org-pdftools
   :defer t
-  :load-path "~/.doom.d/extensions/org-pdftools"
+  ;; :load-path "~/.doom.d/extensions/org-pdftools"
   :config (setq org-pdftools-root-dir +my-org-dir)
   )
 
@@ -49,10 +49,6 @@
         org-noter-separate-notes-from-heading t)
   (load! "~/.emacs.d/.local/straight/repos/org-noter/other/org-noter-integration")
   )
-
-;;(use-package! org-noter-integration
-;; :after org-noter 
-;; :load-path "~/.doom.d/extensions/org-noter-integration")
 
 (use-package! org-ref
   :after org
@@ -623,7 +619,10 @@ epoch to the beginning of today (00:00)."
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
-  ;; (load! "+protocol")
+  (if (featurep! +dragndrop) (load! "~/.emacs.d/modules/lang/org/contrib/dragndrop"))
+  (if (featurep! +jupyter) (load! "~/.emacs.d/modules/lang/org/contrib/jupyter"))
+
+  (load! "+protocol")
   (load! "next-spec-day")
   )
 
@@ -716,6 +715,15 @@ epoch to the beginning of today (00:00)."
         org-clock-in-resume t)
   (add-hook 'kill-emacs-hook #'org-clock-save))
 
+(use-package! org-crypt ; built-in
+  :commands org-encrypt-entries
+  :hook (org-reveal-start . org-decrypt-entry)
+  :config
+  (add-hook! 'org-mode-hook
+    (add-hook 'before-save-hook 'org-encrypt-entries nil t))
+  (add-to-list 'org-tags-exclude-from-inheritance "crypt")
+  (setq org-crypt-key user-mail-address))
 
-;; (use-package! org-bullets ; "prettier" bullets
-;;   :hook (org-mode . org-bullets-mode))
+
+(use-package! org-bullets ; "prettier" bullets
+  :hook (org-mode . org-bullets-mode))

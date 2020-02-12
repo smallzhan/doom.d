@@ -231,7 +231,7 @@
   )
 
 (use-package! snails
-  :load-path "~/.doom.d/extensions/snails"
+  ;; :load-path "~/.doom.d/extensions/snails"
   :commands snails)
 
 

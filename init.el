@@ -108,7 +108,7 @@
  emacs-lisp        ; drown in parentheses
  common-lisp
  latex
- org
+ ;; org
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
  ;;  +babel
@@ -140,7 +140,7 @@
 (org-enhanced
  +latex
  +jekyll)
- edit-enhanced
- )
+
+ edit-enhanced)
 
 (load custom-file t t t)
