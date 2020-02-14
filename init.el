@@ -81,8 +81,7 @@
 
  :emacs
  (dired             ; making dired pretty [functional]
-  +icons
-  +ranger)
+  +icons)
  ;;eshell            ; a consistent, cross-platform shell (WIP)
  vc                ; version-control and Emacs, sitting in a tree
  electric
