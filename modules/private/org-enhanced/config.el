@@ -37,7 +37,7 @@
 
 (use-package! org-pdftools
   :defer t
-  ;; :load-path "~/.doom.d/extensions/org-pdftools"
+  ;;:load-path "~/.doom.d/extensions/org-pdftools"
   :config (setq org-pdftools-root-dir +my-org-dir)
   )
 
@@ -47,7 +47,11 @@
   (setq org-noter-default-notes-file-names '("notes.org")
         org-noter-notes-search-path `(,(concat +my-org-dir "research"))
         org-noter-separate-notes-from-heading t)
-  (load! "~/.emacs.d/.local/straight/repos/org-noter/other/org-noter-integration")
+  )
+
+(use-package! org-noter-pdftools
+  :after org-noter
+  ;;:load-path "~/.doom.d/extensions/org-pdftools"
   )
 
 (use-package! org-ref

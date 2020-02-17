@@ -3,7 +3,9 @@
   :commands (color-rg-search-symbol-in-project
              color-rg-search-input-in-project
              color-rg-search-input-in-current-file
-             color-rg-search-symbol-in-current-file))
+             color-rg-search-symbol-in-current-file)
+  :config
+  (setq color-rg-kill-temp-buffer-p nil))
 
 
 ;(use-package! aweshell

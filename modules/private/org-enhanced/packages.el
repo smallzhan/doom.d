@@ -46,7 +46,7 @@
 (package! org-super-agenda)
 
 (package! org-bullets)
-(package! org-pdftools :recipe (:host github :repo "fuxialexander/org-pdftools" :no-byte-compile t))
+(package! org-pdftools :recipe (:host github :repo "smallzhan/org-pdftools" :branch "integration" :no-byte-compile t))
 
 (when (featurep! +dragndrop)
   (package! org-download :pin "70401884e9"))
