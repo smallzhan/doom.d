@@ -76,7 +76,12 @@
 
   (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
 
-(after! org
+(use-package! org
+  :defer-incrementally
+  calendar find-func format-spec org-macs org-compat org-faces org-entities
+  org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
+  org-capture
+  :preface
   (setq org-directory +my-org-dir
         org-aganda-directory (concat +my-org-dir "agenda/")
         org-agenda-diary-file (concat org-directory "diary.org")
@@ -88,7 +93,7 @@
                            ,(concat org-aganda-directory "work.org")))
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
-
+  :config
   (setq org-log-done 'note
         org-log-redeadline 'note
         org-log-reschedule 'note
@@ -172,21 +177,21 @@
   (setq org-insert-heading-respect-content nil)
   (setq org-startup-truncated nil)
 
-  ;; org-capture
-  (defun org-capture-template-goto-link ()
-    (org-capture-put :target (list 'file+headline
-                                   (nth 1 (org-capture-get :target))
-                                   (org-capture-get :annotation)))
-    (org-capture-put-target-region-and-position)
-    (widen)
-    (let ((hd (nth 2 (org-capture-get :target))))
-      (goto-char (point-min))
-      (if (re-search-forward
-           (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
-          (org-end-of-subtree)
-        (goto-char (point-max))
-        (or (bolp) (insert "\n"))
-        (insert "* " hd "\n"))))
+  ;; ;; org-capture
+  ;; (defun org-capture-template-goto-link ()
+  ;;   (org-capture-put :target (list 'file+headline
+  ;;                                  (nth 1 (org-capture-get :target))
+  ;;                                  (org-capture-get :annotation)))
+  ;;   (org-capture-put-target-region-and-position)
+  ;;   (widen)
+  ;;   (let ((hd (nth 2 (org-capture-get :target))))
+  ;;     (goto-char (point-min))
+  ;;     (if (re-search-forward
+  ;;          (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
+  ;;         (org-end-of-subtree)
+  ;;       (goto-char (point-max))
+  ;;       (or (bolp) (insert "\n"))
+  ;;      (insert "* " hd "\n"))))
 
   (setq org-capture-templates
         '(("s" "scheduled task" entry
@@ -209,11 +214,11 @@
            (file+olp+datetree  "diary.org")
            "* %?\n%U\n"
            :clock-in t :clock-resume t)
-          ("l" "org-protocol" plain ;;(file+function "notes.org" org-capture-template-goto-link)
-           ;;"%?\n%i\n%U\n %:initial" :immediate-finish t)
-           (file+function "notes.org" org-capture-template-goto-link)
-           " %:initial\n%U\n"
-           :empty-lines 1)
+          ;; ("l" "org-protocol" plain ;;(file+function "notes.org" org-capture-template-goto-link)
+          ;;  ;;"%?\n%i\n%U\n %:initial" :immediate-finish t)
+          ;;  (file+function "notes.org" org-capture-template-goto-link)
+          ;;  " %:initial\n%U\n"
+          ;; :empty-lines 1)
           ("w" "Link" entry
            (file+headline "agenda/planning.org" "Idea List")
            "* TODO %:annotation\n:PROPERTIES:\n:CATEGORY: link\n:END:\n%i\n%U\n"
@@ -250,10 +255,7 @@
   ;; (ido-mode (quote both))
 
   ;; Refile settings
-  ;; Exclude DONE state tasks from refile targets
-  (defun bh/verify-refile-target ()
-    "Exclude todo keywords with a done state from refile targets"
-    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
   (setq org-refile-target-verify-function 'bh/verify-refile-target)
 
   (require 'org-expiry)
@@ -265,13 +267,7 @@
    ;; Don't have everything in the agenda view
    )
 
-  (defun mrb/insert-created-timestamp()
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    (org-expiry-insert-created)
-    (org-back-to-heading)
-    (org-end-of-line)
-    (insert " ")
-    )
+ ;;; define mrb/insert-created-timestamp
   ;; Whenever a TODO entry is created, I want a timestamp
   ;; Advice org-insert-todo-heading to insert a created timestamp using org-expiry
   (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
@@ -289,111 +285,30 @@
       (mrb/insert-created-timestamp)))
   (ad-activate 'org-capture)
   ;; Add feature to allow easy adding of tags in a capture window
-  (defun mrb/add-tags-in-capture()
-    (interactive)
-    "Insert tags in a capture window without losing the point"
-    (save-excursion
-      (org-back-to-heading)
-      (org-set-tags)))
+  ;;; define mrb/add-tags-in-capture
   ;; Bind this to a reasonable key
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;; CLOCK ;;;;;;;;;;;;;;;;
   ;;
-  ;; Resume clocking task when emacs is restarted
-  (org-clock-persistence-insinuate)
+  
   ;;
   ;; Show lot sof clocking history so it's easy to pick items off the C-F11 list
-  (setq org-clock-history-length 36)
-  ;; Resume clocking task on clock-in if the clock is open
-  (setq org-clock-in-resume t)
-  ;; Change tasks to ACTIVE when clocking in
-  (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
   ;; Separate drawers for clocking and logs
-  (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
+  ;;(setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
   ;; Save clock data and state changes and notes in the LOGBOOK drawer
-  (setq org-clock-into-drawer t)
+  
   ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
-  (setq org-clock-out-remove-zero-time-clocks t)
+  
   ;; Clock out when moving task to a done state
-  (setq org-clock-out-when-done t)
+  
   ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-  (setq org-clock-persist t)
+  
   ;; Do not prompt to resume an active clock
-  (setq org-clock-persist-query-resume nil)
-  ;; Enable auto clock resolution for finding open clocks
-  (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
   ;; Include current clocking task in clock reports
-  (setq org-clock-report-include-clocking-task t)
+  
+  
 
-  (setq bh/keep-clock-running nil)
-
-  (defun bh/clock-in-to-next (kw)
-    "Switch a task from TODO to ACTIVE when clocking in.
-Skips capture tasks, projects, and subprojects.
-Switch projects and subprojects from ACTIVE back to TODO"
-    (when (not (and (boundp 'org-capture-mode) org-capture-mode))
-      (cond
-       ((and (member (org-get-todo-state) (list "TODO"))
-             (bh/is-task-p))
-        "ACTIVE")
-       ((and (member (org-get-todo-state) (list "ACTIVE"))
-             (bh/is-project-p))
-        "TODO"))))
-
-  (defun bh/is-project-p ()
-    "Any task with a todo keyword subtask"
-    (save-restriction
-      (widen)
-      (let ((has-subtask)
-            (subtree-end (save-excursion (org-end-of-subtree t)))
-            (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-        (save-excursion
-          (forward-line 1)
-          (while (and (not has-subtask)
-                      (< (point) subtree-end)
-                      (re-search-forward "^\*+ " subtree-end t))
-            (when (member (org-get-todo-state) org-todo-keywords-1)
-              (setq has-subtask t))))
-        (and is-a-task has-subtask))))
-
-  (defun bh/is-project-subtree-p ()
-    "Any task with a todo keyword that is in a project subtree.
-Callers of this function already widen the buffer view."
-    (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
-                                (point))))
-      (save-excursion
-        (bh/find-project-task)
-        (if (equal (point) task)
-            nil
-          t))))
-
-  (defun bh/is-task-p ()
-    "Any task with a todo keyword and no subtask"
-    (save-restriction
-      (widen)
-      (let ((has-subtask)
-            (subtree-end (save-excursion (org-end-of-subtree t)))
-            (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-        (save-excursion
-          (forward-line 1)
-          (while (and (not has-subtask)
-                      (< (point) subtree-end)
-                      (re-search-forward "^\*+ " subtree-end t))
-            (when (member (org-get-todo-state) org-todo-keywords-1)
-              (setq has-subtask t))))
-        (and is-a-task (not has-subtask)))))
-
-  (defun bh/find-project-task ()
-    "Move point to the parent (project) task if any"
-    (save-restriction
-      (widen)
-      (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
-        (while (org-up-heading-safe)
-          (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-            (setq parent-task (point))))
-        (goto-char parent-task)
-        parent-task)))
 
   ;;   (defun bh/punch-in (arg)
   ;;     "Start continuous clocking and set the default task to the
@@ -452,43 +367,26 @@ Callers of this function already widen the buffer view."
   ;;   (org-with-point-at (org-id-find bh/organization-task-id 'marker)
   ;;     (org-clock-in '(16))))
 
-  (defun bh/clock-out-maybe ()
-    (when (and bh/keep-clock-running
-               (not org-clock-clocking-in)
-               (marker-buffer org-clock-default-task)
-               (not org-clock-resolving-clocks-due-to-idleness))
-      (bh/clock-in-parent-task)))
-
-  (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
 
 
-  (defun bh/insert-inactive-timestamp ()
-    (interactive)
-    (org-insert-time-stamp nil t t nil nil nil))
+  ;;(add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
 
-  (defun bh/insert-heading-inactive-timestamp ()
-    (save-excursion
-      (org-return)
-      (org-cycle)
-      (bh/insert-inactive-timestamp)))
+
 
   (setq org-enforce-todo-dependencies t)
   ;;(setq org-deadline-warning-days 30)
 
   ;; Erase all reminders and rebuilt reminders for today from the agenda
-  (defun bh/org-agenda-to-appt ()
-    (interactive)
-    (setq appt-time-msg-list nil)
-    (org-agenda-to-appt))
+
 
   ;; Rebuild the reminders everytime the agenda is displayed
   (add-hook 'org-finalize-agenda-hook 'bh/org-agenda-to-appt 'append)
 
   ;; This is at the end of my .emacs - so appointments are set up when Emacs starts
-  (bh/org-agenda-to-appt)
+  ;;(bh/org-agenda-to-appt)
 
   ;; Activate appointments so we get notifications
-  (appt-activate t)
+  ;; (appt-activate t)
 
   ;; If we leave Emacs running overnight - reset the appointments one minute after midnight
   (run-at-time "24:01" nil 'bh/org-agenda-to-appt)
@@ -506,12 +404,7 @@ Callers of this function already widen the buffer view."
 
 
 
-  (defun myorg-update-parent-cookie ()
-    (when (equal major-mode 'org-mode)
-      (save-excursion
-        (ignore-errors
-          (org-back-to-heading)
-          (org-update-parent-todo-statistics)))))
+
 
   (defadvice org-kill-line (after fix-cookies activate)
     (myorg-update-parent-cookie))
@@ -519,73 +412,9 @@ Callers of this function already widen the buffer view."
   (defadvice kill-whole-line (after fix-cookies activate)
     (myorg-update-parent-cookie))
 
-  (defun org-time-today ()
-    "Time in seconds today at 0:00.
-Returns the float number of seconds since the beginning of the
-epoch to the beginning of today (00:00)."
-    (float-time (apply 'encode-time
-                       (append '(0 0 0) (nthcdr 3 (decode-time))))))
-
-  (defun filter-by-tags ()
-    (let ((head-tags (org-get-tags-at)))
-      (member current-tag head-tags)))
-
-  (defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
-    (interactive "P")
-    (let* ((timerange-numeric-value (prefix-numeric-value timerange))
-           (files (org-add-archive-files (org-agenda-files)))
-           (include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING" "LEARN"))
-           ;;                         "LEARNING" "OUTPUT" "OTHER"))
-           (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
-           (output-string "")
-           (tstart (or tstart
-                       (and timerange (equal timerange-numeric-value 4)
-                            (- (org-time-today) 86400))
-                       (and timerange (equal timerange-numeric-value 16)
-                            (org-read-date nil nil nil "Start Date/Time:"))
-                       (org-time-today)))
-           (tend (or tend
-                     (and timerange (equal timerange-numeric-value 16)
-                          (org-read-date nil nil nil "End Date/Time:"))
-                     (+ tstart 86400)))
-           h m file item prompt donesomething)
-      (while (setq file (pop files))
-        (setq org-agenda-buffer (if (file-exists-p file)
-                                    (org-get-agenda-file-buffer file)
-                                  (error "No such file %s" file)))
-        (with-current-buffer org-agenda-buffer
-          (dolist (current-tag include-tags)
-            (org-clock-sum tstart tend 'filter-by-tags)
-            (setcdr (assoc current-tag tags-time-alist)
-                    (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
-      (while (setq item (pop tags-time-alist))
-        (unless (equal (cdr item) 0)
-          (setq donesomething t)
-          (setq h (/ (cdr item) 60)
-                m (- (cdr item) (* 60 h)))
-          (setq output-string (concat output-string (format "[-%s-] %.2d:%.2d\n" (car item) h m)))))
-      (unless donesomething
-        (setq output-string (concat output-string "[-Nothing-] Done nothing!!!\n")))
-      (unless noinsert
-        (insert output-string))
-      output-string))
 
 
-  (defun bh-archive-done-tasks ()
-    (interactive)
-    (dolist (tag (list
-                  "/DONE"
-                  "/CANCELLED"))
-      (org-map-entries 'org-archive-subtree tag 'file)))
 
-  (defun my-archive-done-tasks ()
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward
-              (concat "\\* " (regexp-opt org-done-keywords) " ") nil t)
-        (goto-char (line-beginning-position))
-        (org-archive-subtree))))
 
   (setq org-agenda-text-search-extra-files '(agenda-archives))
 
@@ -616,7 +445,7 @@ epoch to the beginning of today (00:00)."
   (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
 
   (setq org-publish-project-alist '())
-  
+
 
   (setq-default system-time-locale "C")
 
@@ -628,6 +457,9 @@ epoch to the beginning of today (00:00)."
 
   (load! "+protocol")
   (load! "next-spec-day")
+
+  (bh/org-agenda-to-appt)
+  (appt-activate t)
   )
 
 (use-package! org-super-agenda
@@ -657,8 +489,8 @@ epoch to the beginning of today (00:00)."
               (org-super-agenda-groups
                '((:name "Next"
                         :and (:scheduled nil
-                              :deadline nil
-                              :category ("task" "link" "capture"))
+                                         :deadline nil
+                                         :category ("task" "link" "capture"))
                         :date today
                         :order 1
                         )
@@ -692,9 +524,9 @@ epoch to the beginning of today (00:00)."
                         :order 15)
                  (:name "To read"
                         :and (:tag "READING"
-                              :not (:tag ("HOLD" "WAIT")))
+                                   :not (:tag ("HOLD" "WAIT")))
                         :order 16)
-                 
+
                  (:name "SomeDay"
                         :priority<= "C"
                         :tag ("WAIT" "HOLD")
@@ -716,8 +548,12 @@ epoch to the beginning of today (00:00)."
   :config
   (setq org-clock-persist 'history
         ;; Resume when clocking into task with open clock
-        org-clock-in-resume t)
+        org-clock-in-resume t
+        org-clock-out-remove-zero-time-clocks t
+        org-clock-in-switch-to-state 'bh/clock-in-to-next
+        org-clock-report-include-clocking-task t)
   (add-hook 'kill-emacs-hook #'org-clock-save))
+
 
 (use-package! org-crypt ; built-in
   :commands org-encrypt-entries
@@ -731,3 +567,7 @@ epoch to the beginning of today (00:00)."
 
 (use-package! org-bullets ; "prettier" bullets
   :hook (org-mode . org-bullets-mode))
+
+(use-package! toc-org ; auto-table of contents
+  :hook (org-mode . toc-org-enable)
+  :config (setq toc-org-hrefify-default "gh"))

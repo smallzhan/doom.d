@@ -48,6 +48,9 @@
 (package! org-bullets)
 (package! org-pdftools :recipe (:host github :repo "smallzhan/org-pdftools" :branch "integration" :no-byte-compile t))
 
+(package! htmlize)
+(package! toc-org)
+
 (when (featurep! +dragndrop)
   (package! org-download :pin "70401884e9"))
 

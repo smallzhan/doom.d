@@ -125,7 +125,10 @@
   :defer t
   )
 
-(use-package! aweshell)
+(use-package! aweshell
+  :commands (aweshell-new aweshell-toggle)
+  :init
+  (setq aweshell-use-exec-path-from-shell nil))
 
 (use-package! company-posframe
   :after company
@@ -189,10 +192,11 @@
 
 
 (use-package! lsp-python-ms
-  :demand nil
+  :defer t
+  :init
+  (when (executable-find "python3")
+    (setq lsp-python-ms-python-executable-cmd "python3")  )
   :config
-  ;;(remhash 'pyls lsp-clients)
-  (setq lsp-python-ms-python-executable-cmd "python3")
   (defun find-vscode-mspyls-executable ()
     (let* ((wildcards ".vscode/extensions/ms-python.python-*/languageServer*/Microsoft.Python.LanguageServer")
            (dir-and-ext (if IS-WINDOWS
@@ -211,7 +215,10 @@
         (car (find-vscode-mspyls-executable)))
   (if lsp-python-ms-executable
       (setq lsp-python-ms-dir
-            (file-name-directory lsp-python-ms-executable))))
+            (file-name-directory lsp-python-ms-executable)))
+  ;;(setq lsp-python-ms-dir "~/.doom.d/mspyls/")
+  :hook (python-mode . (lambda () (require 'lsp-python-ms)))
+  )
 
 (after! python
   (setq python-shell-interpreter "python3"))
@@ -221,7 +228,7 @@
 
 ;; (after! pdf-tools
 ;;   (setq pdf-view-use-scaling t)
-;;   ) 
+;;   )
 
 
 (use-package! company-tabnine
@@ -231,7 +238,8 @@
   )
 
 (use-package! snails
-  ;; :load-path "~/.doom.d/extensions/snails"
+  :load-path "~/.doom.d/extensions/snails"
+  :init (setq snails-use-exec-path-from-shell nil)
   :commands snails)
 
 
@@ -305,7 +313,7 @@
                                            (thing-at-point 'line t)))))))
     (ivy-quit-and-run
       (counsel-rg text default-directory))))
-(bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
+;;(bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
 
 (use-package! rg
   :defines projectile-command-map
@@ -333,15 +341,11 @@
     "Toggle `rg-dwim' with current swiper input."
     (interactive)
     (ivy-quit-and-run (rg-dwim default-directory)))
-  (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
-  (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
+  ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
+  ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
 
   (remove-hook 'compilation-filter-hook #'doom-apply-ansi-color-to-compilation-buffer-h)
   )
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
-
-
-
-

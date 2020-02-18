@@ -31,7 +31,6 @@
 ;;   ;;                  (toggle-frame-fullscreen))))
 ;;   )
 
-
 (setq user-full-name "Guoqiang Jin"
       user-mail-address "ustczhan@gmail.com")
 
@@ -86,8 +85,8 @@
  vc                ; version-control and Emacs, sitting in a tree
  electric
 
- :term
- vterm
+ ;;:term
+ ;;vterm
  :checkers
  (syntax
   +childframe)
@@ -136,10 +135,12 @@
 
  :private
  ;; my-cc
-(org-enhanced
+ (org-enhanced
  +latex
  +jekyll)
 
- edit-enhanced)
+ edit-enhanced
+
+ )
 
 (load custom-file t t t)

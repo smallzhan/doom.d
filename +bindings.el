@@ -244,6 +244,8 @@
    :map counse-mode-map
    [remap swiper]  #'counsel-grep-or-swiper
    [remap dired]  #'counsel-dired
+   :map swiper-map
+   "C-<return>" #'my-swiper-toggle-counsel-rg
    ;; "C-x C-r"  #'counsel-recentf
    ;; "C-x j"  #'counsel-mark-ring
    ;; "C-h F"  #'counsel-describe-face
@@ -279,4 +281,11 @@
    ;; "C-c c u"  #'counsel-unicode-char
    ;; "C-c c w"  #'counsel-colors-web
    ;; "C-c c z"  #'counsel-fzf
-   ))
+   )
+ (:after swiper
+   (:after rg
+     :map swiper-map
+     "M-<return>" #'my-swiper-toggle-rg-dwim
+     :map ivy-minibuffer-map
+     "M-<return>" #'my-swiper-toggle-rg-dwim))
+ )
