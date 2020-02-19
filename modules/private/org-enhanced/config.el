@@ -38,6 +38,7 @@
 (use-package! org-pdftools
   :defer t
   ;;:load-path "~/.doom.d/extensions/org-pdftools"
+  :init (setq org-pdftools-search-string-seperator "??")
   :config (setq org-pdftools-root-dir +my-org-dir)
   )
 
@@ -196,7 +197,7 @@
   (setq org-capture-templates
         '(("s" "scheduled task" entry
            (file+headline "agenda/planning.org" "Task List")
-           "* TODO %?\nSCHEDULD: %^t\n"
+           "* TODO %?\nSCHEDULED: %^t\n"
            :clock-in nil)
           ("t" "todo" entry
            (file+headline  "agenda/planning.org" "Task List")

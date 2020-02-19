@@ -85,11 +85,13 @@
  vc                ; version-control and Emacs, sitting in a tree
  electric
 
- ;;:term
+ :term
  ;;vterm
+
  :checkers
  (syntax
   +childframe)
+
  :tools
  eval
  magit
@@ -122,7 +124,6 @@
  (rss
   +org)
 
- :collab
 
  :config
  ;; The default module set reasonable defaults for Emacs. It also provides
@@ -136,11 +137,9 @@
  :private
  ;; my-cc
  (org-enhanced
- +latex
- +jekyll)
+  +latex
+  +jekyll)
 
- edit-enhanced
-
- )
+ edit-enhanced)
 
 (load custom-file t t t)

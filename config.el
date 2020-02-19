@@ -193,6 +193,7 @@
 
 (use-package! lsp-python-ms
   :defer t
+  :defines (flycheck-disabled-checkers flycheck-checker)
   :init
   (when (executable-find "python3")
     (setq lsp-python-ms-python-executable-cmd "python3")  )
@@ -217,7 +218,10 @@
       (setq lsp-python-ms-dir
             (file-name-directory lsp-python-ms-executable)))
   ;;(setq lsp-python-ms-dir "~/.doom.d/mspyls/")
-  :hook (python-mode . (lambda () (require 'lsp-python-ms)))
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (setq-local flycheck-disabled-checkers '(lsp-ui))
+                         (setq-local flycheck-checker 'python-flake8)))
   )
 
 (after! python
