@@ -1,26 +1,20 @@
 (use-package! ox-gfm
   :defer t)
 
+
 (use-package! cdlatex
   :defer t
   :hook (org-mode . turn-on-org-cdlatex))
+
 
 (use-package! org-pomodoro
   :defer t
   :init (when IS-MAC
           (setq org-pomodoro-audio-player "/usr/bin/afplay")))
 
-;; (use-package! deft
-;;   :config
-;;   (setq deft-directory (concat +my-org-dir "deft/")
-;;         deft-recursive t
-;;         deft-auto-save-interval 10.0
-;;         deft-file-naming-rules '((nospace . "-")
-;;                                  (case-fn . downcase))))
 
 (use-package! notdeft
   :config
-
   (setq notdeft-extension "org")
   ;;(setq notdeft-secondary-extensions '("md" "org" "muse"))
   (setq notdeft-directories `(,(concat +my-org-dir "research")
@@ -35,25 +29,27 @@
           ("C-q" . notdeft-quit)
           ("C-r" . notdeft-refresh)))
 
+
 (use-package! org-pdftools
   :defer t
   ;;:load-path "~/.doom.d/extensions/org-pdftools"
   :init (setq org-pdftools-search-string-seperator "??")
-  :config (setq org-pdftools-root-dir +my-org-dir)
-  )
+  :config (setq org-pdftools-root-dir +my-org-dir))
+
 
 (use-package! org-noter
   :after org
   :config
   (setq org-noter-default-notes-file-names '("notes.org")
         org-noter-notes-search-path `(,(concat +my-org-dir "research"))
-        org-noter-separate-notes-from-heading t)
-  )
+        org-noter-separate-notes-from-heading t))
+
 
 (use-package! org-noter-pdftools
   :after org-noter
   ;;:load-path "~/.doom.d/extensions/org-pdftools"
   )
+
 
 (use-package! org-ref
   :after org
@@ -63,6 +59,7 @@
         org-ref-bibliography-notes (concat org-ref-directory "notes.org")
         org-ref-default-bibliography `(,(concat org-ref-directory "ref.bib"))
         org-ref-pdf-directory (concat org-ref-directory "pdfs")))
+
 
 (use-package! ivy-bibtex
   :after org-ref
@@ -76,6 +73,7 @@
   (setq bibtex-completion-pdf-field "File")
 
   (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
+
 
 (use-package! org
   :defer-incrementally
@@ -163,36 +161,12 @@
   ;; For tag searches ignore tasks with scheduled and deadline dates
   (setq org-agenda-tags-todo-honor-ignore-options t)
 
-  ;; (defun bh/remove-empty-drawer-on-clock-out ()
-  ;;   (interactive)
-  ;;   (save-excursion
-  ;;     (beginning-of-line 0)
-  ;;     (org-remove-empty-drawer-at "LOGBOOK" (point))))
-
-  ;;(add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
-
   (setq org-hide-leading-stars nil)
   (setq org-cycle-separator-lines 0)
   (setq org-blank-before-new-entry '((heading)
                                      (plain-list-item . auto)))
   (setq org-insert-heading-respect-content nil)
   (setq org-startup-truncated nil)
-
-  ;; ;; org-capture
-  ;; (defun org-capture-template-goto-link ()
-  ;;   (org-capture-put :target (list 'file+headline
-  ;;                                  (nth 1 (org-capture-get :target))
-  ;;                                  (org-capture-get :annotation)))
-  ;;   (org-capture-put-target-region-and-position)
-  ;;   (widen)
-  ;;   (let ((hd (nth 2 (org-capture-get :target))))
-  ;;     (goto-char (point-min))
-  ;;     (if (re-search-forward
-  ;;          (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
-  ;;         (org-end-of-subtree)
-  ;;       (goto-char (point-max))
-  ;;       (or (bolp) (insert "\n"))
-  ;;      (insert "* " hd "\n"))))
 
   (setq org-capture-templates
         '(("s" "scheduled task" entry
@@ -222,7 +196,7 @@
           ;; :empty-lines 1)
           ("w" "Link" entry
            (file+headline "agenda/planning.org" "Idea List")
-           "* TODO %:annotation\n:PROPERTIES:\n:CATEGORY: link\n:END:\n%i\n%U\n"
+           "* TODO %:annotation\n:PROPERTIES:\n:CATEGORY: link\n:END:\n%i\n"
            :immediate-finish t :kill-buffer t)
           ("p" "Phone/Email" entry
            (file+headline  "agenda/planning.org" "Reminder List")
@@ -231,10 +205,6 @@
           ("h" "Habit" entry
            (file+headline  "agenda/notes.org" "Habit")
            "* ACTIVE %?\n%U\n%a\nSCHEDULED: %t .+1d/3d\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: ACTIVE\n:END:\n")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;; REFILE Settings ;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
   (setq org-refile-targets '((nil :maxlevel . 9)
@@ -248,164 +218,37 @@
 
   ;; Allow refile to create parent tasks with confirmation
   (setq org-refile-allow-creating-parent-nodes 'confirm)
-
-  ;; Use IDO for both buffer and file completion and ido-everywhere to t
-  ;; (setq org-completion-use-ido t)
-  ;; (setq ido-everywhere t)
-  ;; (setq ido-max-directory-size 100000)
-  ;; (ido-mode (quote both))
-
-  ;; Refile settings
-
+  
   (setq org-refile-target-verify-function 'bh/verify-refile-target)
 
   (require 'org-expiry)
   ;; Configure it a bit to my liking
-  (setq
-   org-expiry-created-property-name "CREATED"
-   ;; Name of property when an item is created
-   org-expiry-inactive-timestamps t
-   ;; Don't have everything in the agenda view
-   )
-
- ;;; define mrb/insert-created-timestamp
-  ;; Whenever a TODO entry is created, I want a timestamp
-  ;; Advice org-insert-todo-heading to insert a created timestamp using org-expiry
-  (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    (mrb/insert-created-timestamp)
-    )
-  ;; Make it active
-  (ad-activate 'org-insert-todo-heading)
-  (require 'org-capture)
-  (defadvice org-capture (after mrb/created-timestamp-advice activate)
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    ;; Test if the captured entry is a TODO, if so insert the created
-    ;; timestamp property, otherwise ignore
-    (when (member (org-get-todo-state) org-todo-keywords-1)
-      (mrb/insert-created-timestamp)))
-  (ad-activate 'org-capture)
-  ;; Add feature to allow easy adding of tags in a capture window
-  ;;; define mrb/add-tags-in-capture
-  ;; Bind this to a reasonable key
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;; CLOCK ;;;;;;;;;;;;;;;;
-  ;;
+  (setq org-expiry-created-property-name "CREATED"
+        org-expiry-inactive-timestamps t)
   
-  ;;
-  ;; Show lot sof clocking history so it's easy to pick items off the C-F11 list
-  ;; Separate drawers for clocking and logs
-  ;;(setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
-  ;; Save clock data and state changes and notes in the LOGBOOK drawer
+  (add-hook 'org-after-todo-state-change-hook
+            (lambda ()
+              (when (string= org-state "TODO")
+                (save-excursion
+                  (org-back-to-heading)
+                  (org-expiry-insert-created)))))
   
-  ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
-  
-  ;; Clock out when moving task to a done state
-  
-  ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-  
-  ;; Do not prompt to resume an active clock
-  ;; Include current clocking task in clock reports
-  
-  
-
-
-  ;;   (defun bh/punch-in (arg)
-  ;;     "Start continuous clocking and set the default task to the
-  ;; selected task.  If no task is selected set the Organization task
-  ;; as the default task."
-  ;;     (interactive "p")
-  ;;     (setq bh/keep-clock-running t)
-  ;;     (if (equal major-mode 'org-agenda-mode)
-  ;;         ;;
-  ;;         ;; We're in the agenda
-  ;;         ;;
-  ;;         (let* ((marker (org-get-at-bol 'org-hd-marker))
-  ;;                (tags (org-with-point-at marker (org-get-tags-at))))
-  ;;           (if (and (eq arg 4) tags)
-  ;;               (org-agenda-clock-in '(16)))))
-  ;;     ;;
-  ;;     ;; We are not in the agenda
-  ;;     ;;
-  ;;     (save-restriction
-  ;;       (widen)
-  ;;       ;; Find the tags on the current task
-  ;;       (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
-  ;;           (org-clock-in '(16)))))
-
-  ;;   (defun bh/punch-out ()
-  ;;     (interactive)
-  ;;     (setq bh/keep-clock-running nil)
-  ;;     (when (org-clock-is-active)
-  ;;       (org-clock-out))
-  ;;     (org-agenda-remove-restriction-lock))
-
-  ;;   (defun bh/clock-in-default-task ()
-  ;;     (save-excursion
-  ;;       (org-with-point-at org-clock-default-task
-  ;;         (org-clock-in))))
-
-  ;;   (defun bh/clock-in-parent-task ()
-  ;;     "Move point to the parent (project) task if any and clock in"
-  ;;     (let ((parent-task))
-  ;;       (save-excursion
-  ;;         (save-restriction
-  ;;           (widen)
-  ;;           (while (and (not parent-task) (org-up-heading-safe))
-  ;;             (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-  ;;               (setq parent-task (point))))
-  ;;           (if parent-task
-  ;;               (org-with-point-at parent-task
-  ;;                 (org-clock-in))
-  ;;             (when bh/keep-clock-running
-  ;;              (bh/clock-in-default-task)))))))
-
-  ;; (defvar bh/organization-task-id "eb155a82-92b2-4f25-a3c6-0304591af2f9")
-
-  ;; (defun bh/clock-in-organization-task-as-default ()
-  ;;   (interactive)
-  ;;   (org-with-point-at (org-id-find bh/organization-task-id 'marker)
-  ;;     (org-clock-in '(16))))
-
-
-
-  ;;(add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
-
-
-
   (setq org-enforce-todo-dependencies t)
-  ;;(setq org-deadline-warning-days 30)
-
-  ;; Erase all reminders and rebuilt reminders for today from the agenda
-
-
+  
   ;; Rebuild the reminders everytime the agenda is displayed
   (add-hook 'org-finalize-agenda-hook 'bh/org-agenda-to-appt 'append)
-
-  ;; This is at the end of my .emacs - so appointments are set up when Emacs starts
-  ;;(bh/org-agenda-to-appt)
-
-  ;; Activate appointments so we get notifications
-  ;; (appt-activate t)
 
   ;; If we leave Emacs running overnight - reset the appointments one minute after midnight
   (run-at-time "24:01" nil 'bh/org-agenda-to-appt)
 
   (setq org-export-with-timestamps nil)
-  ;;(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-
+  
   (require 'org-tempo)
-
 
   (setq org-agenda-exporter-settings
         '((ps-number-of-columns 1)
           (ps-landscape-mode t)
           (htmlize-output-type 'css)))
-
-
-
-
 
   (defadvice org-kill-line (after fix-cookies activate)
     (myorg-update-parent-cookie))
@@ -413,40 +256,15 @@
   (defadvice kill-whole-line (after fix-cookies activate)
     (myorg-update-parent-cookie))
 
-
-
-
-
   (setq org-agenda-text-search-extra-files '(agenda-archives))
-
-  ;; (defun zin/org-tag-match-context (&optional todo-only match)
-  ;;   "Identical search to `org-match-sparse-tree', but shows the content of the matches"
-  ;;   (interactive "P")
-  ;;   (org-agenda-prepare-buffers (list (current-buffer)))
-  ;;   (org-overview)
-  ;;   (org-remove-occur-highlights)
-  ;;   (org-scan-tags '(progn (org-show-entry)
-  ;;                          (org-show-context))
-  ;;                  (cdr (org-make-tags-matcher match)) todo-only)
-  ;;   )
-
-  ;; (add-hook 'org-mode-hook
-  ;;            (lambda ()
-  ;;              (set (make-local-variable 'system-time-locale) "C")))
-
-  ;;(add-hook 'org-mode-hook 'turn-off-smartparens-mode)
-  ;; (set-face-attribute
-  ;;  'org-table nil
-  ;;  :fontset (create-fontset-from-fontset-spec
-  ;;            (concat "-*-*-*-*-*--*-*-*-*-*-*-fontset-orgtable"
-  ;;                    ",han:Sarasa Mono SC"
-  ;;                    ",cjk-misc:Sarasa Mono SC"))
-  ;;  :family "Sarasa Mono SC")
 
   (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
 
-  (setq org-publish-project-alist '())
+  (setq org-global-properties
+        '(("Effort_ALL" .
+           "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")))
 
+  (setq org-publish-project-alist '())
 
   (setq-default system-time-locale "C")
 
@@ -462,6 +280,7 @@
   (bh/org-agenda-to-appt)
   (appt-activate t)
   )
+
 
 (use-package! org-super-agenda
   :after org
@@ -534,6 +353,7 @@
                         :todo ("SOMEDAY" )
                         :order 90))))))))))
 
+
 (use-package! org-clock ; built-in
   :commands org-clock-save
   :init
@@ -547,11 +367,12 @@
               org-clock-cancel)
     (org-clock-load))
   :config
-  (setq org-clock-persist 'history
+  (setq org-clock-persist t
         ;; Resume when clocking into task with open clock
         org-clock-in-resume t
         org-clock-out-remove-zero-time-clocks t
-        org-clock-in-switch-to-state 'bh/clock-in-to-next
+        org-clock-in-switch-to-state "ACTIVE"
+        org-clock-persist-query-resume nil
         org-clock-report-include-clocking-task t)
   (add-hook 'kill-emacs-hook #'org-clock-save))
 
@@ -568,6 +389,7 @@
 
 (use-package! org-bullets ; "prettier" bullets
   :hook (org-mode . org-bullets-mode))
+
 
 (use-package! toc-org ; auto-table of contents
   :hook (org-mode . toc-org-enable)

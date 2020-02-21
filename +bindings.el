@@ -157,7 +157,7 @@
      :desc "Do what I mean"           "w" #'+org/dwim-at-point
      :desc "Blog of github"           "B" #'my-pages-start-post
      :desc "NotDeft"                  "d" #'notdeft
-     :desc "Clock in"                 "i" #'org-clock-in
+     :desc "Clock in"                 "i" #'my/org-clock-in
      :desc "Clock out"                "o" #'org-clock-out
      :desc "Pomodoro"                 "m" #'org-pomodoro
      :desc "Agenda"                   "a" #'org-agenda
@@ -171,6 +171,7 @@
      :desc "Goto capture"             "C" #'org-capture-goto-target
      :desc "Link store"               "l" #'org-store-link
      :desc "Sync org caldav"          "S" #'org-caldav-sync
+     :desc "Mark default task"        "t" #'org-clock-mark-default-task
 
      (:prefix ("e" . "org export")
        :desc "Export beamer to latex" "l b" #'org-beamer-export-to-latex

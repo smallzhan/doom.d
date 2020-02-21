@@ -1,92 +1,26 @@
 ;;; private/org-enhanced/autoload.el -*- lexical-binding: t; -*-
 ;;;
 
-;;;###autoload
-(defun mrb/insert-created-timestamp()
-  "Insert a CREATED property using org-expiry.el for TODO entries"
-  (org-expiry-insert-created)
-  (org-back-to-heading)
-  (org-end-of-line)
-  (insert " ")
-  )
+;; ;;;###autoload
+;; (defun mrb/insert-created-timestamp()
+;;   "Insert a CREATED property using org-expiry.el for TODO entries"
+;;   (org-expiry-insert-created)
+;;   (org-back-to-heading)
+;;   (org-end-of-line)
+;;   (insert " ")
+;;   )
+
+;; ;;;###autoload
+;; (defun mrb/add-tags-in-capture()
+;;   (interactive)
+;;   "Insert tags in a capture window without losing the point"
+;;   (save-excursion
+;;     (org-back-to-heading)
+;;     (org-set-tags)))
+
+
 
 ;;;###autoload
-(defun mrb/add-tags-in-capture()
-  (interactive)
-  "Insert tags in a capture window without losing the point"
-  (save-excursion
-    (org-back-to-heading)
-    (org-set-tags)))
-
-;;;###autoload
-(defun bh/clock-in-to-next (kw)
-  "Switch a task from TODO to ACTIVE when clocking in.
-Skips capture tasks, projects, and subprojects.
-Switch projects and subprojects from ACTIVE back to TODO"
-  (when (not (and (boundp 'org-capture-mode) org-capture-mode))
-    (cond
-     ((and (member (org-get-todo-state) (list "TODO"))
-           (bh/is-task-p))
-      "ACTIVE")
-     ((and (member (org-get-todo-state) (list "ACTIVE"))
-           (bh/is-project-p))
-      "TODO"))))
-
-(defun bh/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-
-(defun bh/is-project-subtree-p ()
-  "Any task with a todo keyword that is in a project subtree.
-Callers of this function already widen the buffer view."
-  (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
-                              (point))))
-    (save-excursion
-      (bh/find-project-task)
-      (if (equal (point) task)
-          nil
-        t))))
-
-(defun bh/is-task-p ()
-  "Any task with a todo keyword and no subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task (not has-subtask)))))
-
-(defun bh/find-project-task ()
-  "Move point to the parent (project) task if any"
-  (save-restriction
-    (widen)
-    (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
-      (while (org-up-heading-safe)
-        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-          (setq parent-task (point))))
-      (goto-char parent-task)
-      parent-task)))
-
-
 (defun bh/insert-inactive-timestamp ()
   (interactive)
   (org-insert-time-stamp nil t t nil nil nil))
@@ -96,6 +30,12 @@ Callers of this function already widen the buffer view."
     (org-return)
     (org-cycle)
     (bh/insert-inactive-timestamp)))
+
+;;;###autoload
+(defun my/org-clock-in ()
+  "Clock in tasks everywhere"
+  (interactive)
+  (org-clock-in '(4)))
 
 ;;;###autoload
 (defun bh/org-agenda-to-appt ()
@@ -188,3 +128,100 @@ epoch to the beginning of today (00:00)."
 (defun bh/verify-refile-target ()
   "Exclude todo keywords with a done state from refile targets"
     (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+;;;###autoload
+(defun +org/dwim-at-point ()
+  "Do-what-I-mean at point.
+
+If on a:
+- checkbox list item or todo heading: toggle it.
+- clock: update its time.
+- headline: toggle latex fragments and inline images underneath.
+- footnote reference: jump to the footnote's definition
+- footnote definition: jump to the first reference of this footnote
+- table-row or a TBLFM: recalculate the table's formulas
+- table-cell: clear it and go into insert mode. If this is a formula cell,
+  recaluclate it instead.
+- babel-call: execute the source block
+- statistics-cookie: update it.
+- latex fragment: toggle it.
+- link: follow it
+- otherwise, refresh all inline images in current tree."
+  (interactive)
+  (let* ((context (org-element-context))
+         (type (org-element-type context)))
+    ;; skip over unimportant contexts
+    (while (and context (memq type '(verbatim code bold italic underline strike-through subscript superscript)))
+      (setq context (org-element-property :parent context)
+            type (org-element-type context)))
+    (pcase type
+      (`headline
+       (cond ((and (fboundp 'toc-org-insert-toc)
+                   (member "TOC" (org-get-tags)))
+              (toc-org-insert-toc)
+              (message "Updating table of contents"))
+             ((string= "ARCHIVE" (car-safe (org-get-tags)))
+              (org-force-cycle-archived))
+             ((or (org-element-property :todo-type context)
+                  (org-element-property :scheduled context))
+              (org-todo
+               (if (eq (org-element-property :todo-type context) 'done)
+                   (or (car (+org-get-todo-keywords-for (org-element-property :todo-keyword context)))
+                       'todo)
+                 'done)))
+             (t
+              (+org--refresh-inline-images-in-subtree)
+              (org-clear-latex-preview)
+              (org-latex-preview '(4)))))
+
+      (`clock (org-clock-update-time-maybe))
+
+      (`footnote-reference
+       (org-footnote-goto-definition (org-element-property :label context)))
+
+      (`footnote-definition
+       (org-footnote-goto-previous-reference (org-element-property :label context)))
+
+      ((or `planning `timestamp)
+       (org-follow-timestamp-link))
+
+      ((or `table `table-row)
+       (if (org-at-TBLFM-p)
+           (org-table-calc-current-TBLFM)
+         (ignore-errors
+           (save-excursion
+             (goto-char (org-element-property :contents-begin context))
+             (org-call-with-arg 'org-table-recalculate (or arg t))))))
+
+      (`table-cell
+       (org-table-blank-field)
+       (org-table-recalculate)
+       (when (and (string-empty-p (string-trim (org-table-get-field)))
+                  (bound-and-true-p evil-local-mode))
+         (evil-change-state 'insert)))
+
+      (`babel-call
+       (org-babel-lob-execute-maybe))
+
+      (`statistics-cookie
+       (save-excursion (org-update-statistics-cookies nil)))
+
+      ((or `src-block `inline-src-block)
+       (org-babel-execute-src-block))
+
+      ((or `latex-fragment `latex-environment)
+       (org-latex-preview))
+
+      (`link
+       (let* ((lineage (org-element-lineage context '(link) t))
+              (path (org-element-property :path lineage)))
+         (if (or (equal (org-element-property :type lineage) "img")
+                 (and path (image-type-from-file-name path)))
+             (+org--refresh-inline-images-in-subtree)
+           (org-open-at-point))))
+
+      ((guard (org-element-property :checkbox (org-element-lineage context '(item) t)))
+       (let ((match (and (org-at-item-checkbox-p) (match-string 1))))
+         (org-toggle-checkbox (if (equal match "[ ]") '(16)))))
+
+      (_ (+org--refresh-inline-images-in-subtree)))))
