@@ -157,7 +157,8 @@
      :desc "Do what I mean"           "w" #'+org/dwim-at-point
      :desc "Blog of github"           "B" #'my-pages-start-post
      :desc "NotDeft"                  "d" #'notdeft
-     :desc "Clock in"                 "i" #'my/org-clock-in
+     :desc "Clock in"                 "i" #'org-clock-in
+     :desc "Clock in recent"          "I" #'my/org-clock-in
      :desc "Clock out"                "o" #'org-clock-out
      :desc "Pomodoro"                 "m" #'org-pomodoro
      :desc "Agenda"                   "a" #'org-agenda
@@ -289,4 +290,33 @@
      "M-<return>" #'my-swiper-toggle-rg-dwim
      :map ivy-minibuffer-map
      "M-<return>" #'my-swiper-toggle-rg-dwim))
+
+ (:after pdf-tools
+   :map pdf-view-mode-map
+   "C-s" #'isearch-forward
+   "q" #'kill-current-buffer)
+
+ (:after elfeed
+   :map elfeed-search-mode-map
+   "/ c" #'elfeed-db-compact
+   "/ g" #'elfeed-search-update--force
+   "/ G" #'elfeed-search-fetch
+   "/ y" #'elfeed-search-yank
+   "/ +" #'elfeed-search-tag-all
+   "/ -" #'elfeed-search-untag-all
+   "/ s" #'elfeed-search-live-filter
+   "/ S" #'elfeed-search-filter
+   "/ *" #'(elfeed-search-set-filter "@6-months-ago +star")
+   "/ b" #'elfeed-search-browse-url
+   "/ n" #'next-line
+   "/ p" #'previous-line
+   "/ u" #'elfeed-search-tag-all-unread
+   "/ e" #'elfeed-search-untag-all-unread
+   "/ <return>" #'elfeed-search-show-entry
+   :map elfeed-show-mode-map
+   "/ o" #'ace-link
+   "/ q" #'delete-window
+   )
  )
+
+

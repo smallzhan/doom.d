@@ -24,8 +24,7 @@
 (package! org-mode
   :recipe (:host github
            :repo "emacs-straight/org-mode"
-           :files ("*.el" "lisp/*.el" "contrib/lisp/*.el"))
-  :pin "2096c9c76f")
+           :files ("*.el" "lisp/*.el" "contrib/lisp/*.el")))
 ;; ...And prevent other packages from pulling org; org-plus-contrib satisfies
 ;; the dependency already: https://github.com/raxod502/straight.el/issues/352
 (package! org :recipe (:local-repo nil))
@@ -46,13 +45,13 @@
 (package! org-super-agenda)
 
 (package! org-bullets)
-(package! org-pdftools :recipe (:host github :repo "smallzhan/org-pdftools" :branch "integration" :no-byte-compile t))
+(package! org-pdftools :recipe (:host github :repo "fuxialexander/org-pdftools" :no-byte-compile t))
 
 (package! htmlize)
 (package! toc-org)
 
 (when (featurep! +dragndrop)
-  (package! org-download :pin "70401884e9"))
+  (package! org-download))
 
 (when (featurep! +jupyter)
-  (package! jupyter :pin "9e3c163358"))
+  (package! jupyter))

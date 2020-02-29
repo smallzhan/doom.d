@@ -225,3 +225,16 @@ If on a:
          (org-toggle-checkbox (if (equal match "[ ]") '(16)))))
 
       (_ (+org--refresh-inline-images-in-subtree)))))
+
+(defun +org--refresh-inline-images-in-subtree ()
+  "Refresh image previews in the current heading/tree."
+  (if (> (length org-inline-image-overlays) 0)
+      (org-remove-inline-images)
+    (org-display-inline-images
+     t t
+     (if (org-before-first-heading-p)
+         (line-beginning-position)
+       (save-excursion (org-back-to-heading) (point)))
+     (if (org-before-first-heading-p)
+         (line-end-position)
+       (save-excursion (org-end-of-subtree) (point))))))

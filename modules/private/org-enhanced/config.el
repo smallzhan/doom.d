@@ -32,9 +32,18 @@
 
 (use-package! org-pdftools
   :defer t
+  :after org
   ;;:load-path "~/.doom.d/extensions/org-pdftools"
   :init (setq org-pdftools-search-string-seperator "??")
-  :config (setq org-pdftools-root-dir +my-org-dir))
+  :config (setq org-pdftools-root-dir +my-org-dir)
+  ;;with-eval-after-load 'org
+  (org-link-set-parameters "pdftools"
+                           :follow #'org-pdftools-open
+                           :complete #'org-pdftools-complete-link
+                           :store #'org-pdftools-store-link
+                           :export #'org-pdftools-export)
+  (add-hook 'org-store-link-functions 'org-pdftools-store-link)
+  )
 
 
 (use-package! org-noter

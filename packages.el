@@ -19,6 +19,9 @@
   :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar")
   :disable t)
 
+(package! pyim
+  :recipe (:host github :repo "tumashu/pyim" :branch "new-rime"))
+
 (package! lsp-python-ms)
 
 (package! company-tabnine )

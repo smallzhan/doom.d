@@ -99,7 +99,7 @@
   +docsets)
  ;;editorconfig
  lsp
- pdf
+ ;;pdf
 
  :lang
  (cc

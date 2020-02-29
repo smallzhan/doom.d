@@ -75,8 +75,12 @@
 
 ;;   (setq TeX-save-query nil))
 
-;; (after! lsp
-;;   (setq lsp-enable-snippet nil))
+(after! lsp
+  (setq lsp-enable-snippet nil
+        lsp-diagnostic-package :flycheck
+        lsp-prefer-capf t
+        lsp-enable-symbol-highlighting nil)
+  )
 
 (after! color-rg
   ;; solve the issue that color-rg buffer color is messed
@@ -109,6 +113,7 @@
                 '(pyim-probe-punctuation-line-beginning
                   pyim-probe-punctuation-after-punctuation))
 
+  ;;(pyim-isearch-mode 1)
   (setq pyim-page-tooltip 'posframe)
 
   (setq pyim-page-length 9)
@@ -117,7 +122,23 @@
     (require 'liberime)
     (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/.emacs.d/.local/pyim/rime/"))
     (liberime-select-schema "luna_pinyin_simp")
-    (setq pyim-default-scheme 'rime-quanpin)))
+    (setq pyim-default-scheme 'rime-quanpin))
+
+  ;;; pinyin search for ivy
+  (defun eh-ivy-cregexp (str)
+    (let ((x (ivy--regex-plus str))
+          (case-fold-search nil))
+      (if (listp x)
+          (mapcar (lambda (y)
+                    ((if t) (cdr y)
+                     y
+                     (list (pyim-cregexp-build (car y))))
+                    x))
+        (pyim-cregexp-build x))))
+  
+  (setq ivy-re-builders-alist
+        '((t . eh-ivy-cregexp)))
+  )
 
 
 (use-package! yapfify
@@ -353,3 +374,7 @@
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
+
+
+
+
