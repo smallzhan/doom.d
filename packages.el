@@ -20,7 +20,8 @@
   :disable t)
 
 (package! pyim
-  :recipe (:host github :repo "tumashu/pyim" :branch "new-rime"))
+  ;;:recipe (:host github :repo "tumashu/pyim" :branch "new-rime")
+  )
 
 (package! lsp-python-ms)
 

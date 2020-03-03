@@ -99,8 +99,8 @@
   :commands (toggle-company-english-helper))
 
 (after! pyim
-  (setq pyim-dicts
-        '((:name "greatdict" :file "~/.doom.d/pyim/pyim-bigdict.pyim.gz")))
+  ;;(setq pyim-dicts
+  ;;      '((:name "greatdict" :file "~/.doom.d/pyim/pyim-bigdict.pyim.gz")))
 
   (setq-default pyim-english-input-switch-functions
                 '(
@@ -117,12 +117,16 @@
   (setq pyim-page-tooltip 'posframe)
 
   (setq pyim-page-length 9)
-  (when IS-MAC
-    (add-to-list 'load-path "~/.doom.d/extensions")
-    (require 'liberime)
-    (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/.emacs.d/.local/pyim/rime/"))
-    (liberime-select-schema "luna_pinyin_simp")
-    (setq pyim-default-scheme 'rime-quanpin))
+  (if IS-MAC
+      (setq rime-shared-path "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
+            rime-user-path "~/Library/Rime/")
+    (setq rime-shared-path "~/.doom.d/extensions/rime/data"
+          rime-user-path "~/.rime/"))
+  (add-to-list 'load-path "~/.doom.d/extensions/rime")
+  (require 'liberime)
+  (liberime-start rime-shared-path (file-truename rime-user-path))
+  (liberime-select-schema "luna_pinyin_simp")
+  (setq pyim-default-scheme 'rime-quanpin)
 
   ;;; pinyin search for ivy
   (defun eh-ivy-cregexp (str)
