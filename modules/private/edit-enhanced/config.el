@@ -63,7 +63,10 @@
                         'counsel-etags-virtual-update-tags 'append 'local)))
   :config
   (setq counsel-etags-update-interval 60)
-  (push "build" counsel-etags-ignore-directories))
+  (dolist (dir '("build" ".ccls-cache" "Debug" "Release" "rime" ".local"))
+    (push dir counsel-etags-ignore-directories))
+  (dolist (ext '("*.bin" "*.hex" "*.pdb"))
+    (push ext counsel-etags-ignore-filenames)))
 
 (load! "+latex")
 
