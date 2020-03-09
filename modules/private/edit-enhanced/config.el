@@ -68,50 +68,75 @@
 (load! "+latex")
 
 (use-package! pdf-tools
-  ;;:load-path "~/.doom.d/extensions/pdf-tools/lisp"
-  :diminish (pdf-view-midnight-minor-mode pdf-view-printer-minor-mode)
-  :defines pdf-annot-activate-created-annotations
-  :functions (my-pdf-view-set-midnight-colors my-pdf-view-set-dark-theme)
-  :commands pdf-view-midnight-minor-mode
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
-  :init (setq pdf-annot-activate-created-annotations t)
+  :init
+  (after! pdf-annot
+    (defun +pdf-cleanup-windows-h ()
+      "Kill left-over annotation buffers when the document is killed."
+      (when (buffer-live-p pdf-annot-list-document-buffer)
+        (pdf-info-close pdf-annot-list-document-buffer))
+      (when (buffer-live-p pdf-annot-list-buffer)
+        (kill-buffer pdf-annot-list-buffer))
+      (let ((contents-buffer (get-buffer "*Contents*")))
+        (when (and contents-buffer (buffer-live-p contents-buffer))
+          (kill-buffer contents-buffer))))
+    (add-hook! 'pdf-view-mode-hook
+      (add-hook 'kill-buffer-hook #'+pdf-cleanup-windows-h nil t)))
+
   :config
   (map! :map pdf-view-mode-map
-        "C-s" #'isearch-forward
-        "q" #'kill-current-buffer)
-  (when IS-MAC
-    (setenv "PKG_CONFIG_PATH"
-            "/usr/local/lib/pkgconfig:/usr/local/opt/libffi/lib/pkgconfig"))
-  (pdf-tools-install t nil t nil)
-
-  ;; Set dark theme
-  (defun my-pdf-view-set-midnight-colors ()
-    "Set pdf-view midnight colors."
-    (setq pdf-view-midnight-colors
-          `(,(face-foreground 'default) . ,(face-background 'default))))
-
-  (defun my-pdf-view-set-dark-theme ()
-    "Set pdf-view midnight theme as color theme."
-    (my-pdf-view-set-midnight-colors)
-    (dolist (buf (buffer-list))
-      (with-current-buffer buf
-        (when (eq major-mode 'pdf-view-mode)
-          (pdf-view-midnight-minor-mode (if pdf-view-midnight-minor-mode 1 -1))))))
-
-  (my-pdf-view-set-midnight-colors)
-  (add-hook 'after-load-theme-hook #'my-pdf-view-set-dark-theme)
+        :gn "q" #'kill-current-buffer
+        :gn "C-s" #'isearch-forward)
 
   (setq-default pdf-view-display-size 'fit-page
                 pdf-view-use-scaling t
                 pdf-view-use-imagemagick nil)
+
+  ;; Turn off cua so copy works
+  (add-hook! 'pdf-view-mode-hook (cua-mode 0))
+
+  ;; Handle PDF-tools related popups better
   (set-popup-rules!
     '(("^\\*Outline*" :side right :size 40 :select nil)
       ("\\(?:^\\*Contents\\|'s annots\\*$\\)" :ignore t)))
-  ;; Recover last viewed position
-  ;; (when emacs/>=26p
-  ;;   (use-package pdf-view-restore
-  ;;     :hook (pdf-view-mode . pdf-view-restore-mode)
-  ;;     :init (setq pdf-view-restore-filename
-  ;;                 (locate-user-emacs-file ".pdf-view-restore"))))
+
+  ;; The mode-line does serve any useful purpose is annotation windows
+  (add-hook 'pdf-annot-list-mode-hook #'hide-mode-line-mode)
+
+  ;; Sets up `pdf-tools-enable-minor-modes', `pdf-occur-global-minor-mode' and
+  ;; `pdf-virtual-global-minor-mode'.
+  (pdf-tools-install-noverify)
   )
+
+(use-package! flywrap
+  :hook
+  ('text-mode . #'flywrap-mode))
+
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :hook (nov-mode . my-nov-setup)
+  :init
+  (defun my-nov-setup ()
+    "Setup `nov-mode' for better reading experience."
+    (visual-line-mode 1)
+    ;;(centaur-read-mode)
+    (face-remap-add-relative 'variable-pitch :family "Times New Roman" :height 1.5))
+  :config
+  (with-no-warnings
+    ;; FIXME: errors while opening `nov' files with Unicode characters
+    ;; @see https://github.com/wasamasa/nov.el/issues/63
+    (defun my-nov-content-unique-identifier (content)
+      "Return the the unique identifier for CONTENT."
+      (let* ((name (nov-content-unique-identifier-name content))
+             (selector (format "package>metadata>identifier[id='%s']"
+                               (regexp-quote name)))
+             (id (car (esxml-node-children (esxml-query selector content)))))
+        (and id (intern id))))
+    (advice-add #'nov-content-unique-identifier :override #'my-nov-content-unique-identifier))
+
+  ;; Fix encoding issue on Windows
+  (when IS-WINDOWS
+    (setq process-coding-system-alist
+          (cons `(,nov-unzip-program . (gbk . gbk))
+                process-coding-system-alist))))

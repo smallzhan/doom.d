@@ -117,14 +117,14 @@
   (setq pyim-page-tooltip 'posframe)
 
   (setq pyim-page-length 9)
-  (if IS-MAC
-      (setq rime-shared-path "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
-            rime-user-path "~/Library/Rime/")
-    (setq rime-shared-path "~/.doom.d/extensions/rime/data"
-          rime-user-path "~/.rime/"))
+  ;(if IS-MAC
+  ;    (setq rime-shared-path "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
+  ;          rime-user-path "~/Library/Rime/")
+  ;  (setq rime-shared-path "~/.doom.d/extensions/rime/data"
+  ;        rime-user-path "~/.rime/"))
   (add-to-list 'load-path "~/.doom.d/extensions/rime")
   (require 'liberime)
-  (liberime-start rime-shared-path (file-truename rime-user-path))
+  ;;(liberime-start rime-shared-path (file-truename rime-user-path))
   (liberime-select-schema "luna_pinyin_simp")
   (setq pyim-default-scheme 'rime-quanpin)
 
@@ -378,7 +378,6 @@
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
-
 
 
 

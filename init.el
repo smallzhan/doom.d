@@ -34,7 +34,7 @@
 (setq user-full-name "Guoqiang Jin"
       user-mail-address "ustczhan@gmail.com")
 
-(setq custom-file (concat user-emacs-directory ".local/custom.el"))
+;;(setq custom-file (concat user-emacs-directory ".local/custom.el"))
 
 (doom!
  :input
@@ -142,4 +142,4 @@
 
  edit-enhanced)
 
-(load custom-file t t t)
+;;(load custom-file t t t)

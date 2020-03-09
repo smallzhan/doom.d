@@ -11,3 +11,8 @@
 (package! counsel-etags)
 
 (package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
+
+(package! flywrap
+  :recipe (:host github :repo "casouri/lunarymacs" :files ("site-lisp/flywrap.el")))
+
+(package! nov)

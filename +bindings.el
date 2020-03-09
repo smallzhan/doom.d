@@ -291,10 +291,10 @@
      :map ivy-minibuffer-map
      "M-<return>" #'my-swiper-toggle-rg-dwim))
 
- (:after pdf-tools
-   :map pdf-view-mode-map
-   "C-s" #'isearch-forward
-   "q" #'kill-current-buffer)
+ ;; (:after pdf-tools
+ ;;   :map pdf-view-mode-map
+ ;;   "C-s" #'isearch-forward
+ ;;   "q" #'kill-current-buffer)
 
  (:after elfeed
    :map elfeed-search-mode-map

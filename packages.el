@@ -28,7 +28,7 @@
 (package! company-tabnine )
 
 (package! rg)
-;;(package! pdf-tools :recipe (:host github :repo "fuxialexander/pdf-tools" :branch "add-mac-retina"))
+;;(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
 ;;(package! pdf-tools)
 (package! ggtags :disable t)
 

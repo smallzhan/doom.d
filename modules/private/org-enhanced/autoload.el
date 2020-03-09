@@ -59,16 +59,16 @@ epoch to the beginning of today (00:00)."
   (float-time (apply 'encode-time
                      (append '(0 0 0) (nthcdr 3 (decode-time))))))
 
-(defun filter-by-tags ()
+(defun filter-by-tags (current-tag)
   (let ((head-tags (org-get-tags-at)))
     (member current-tag head-tags)))
 
 ;;;###autoload
-(defun org-clock-sum-today-by-tags (timerange &optional tstart tend noinsert)
+(defun org-clock-sum-today-by-tags (include-tags timerange &optional tstart tend noinsert)
   (interactive "P")
   (let* ((timerange-numeric-value (prefix-numeric-value timerange))
          (files (org-add-archive-files (org-agenda-files)))
-         (include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING" "LEARN"))
+         ;;(include-tags '("PROG" "READING" "NOTE" "OTHER" "@Work" "@Self" "MEETING" "LEARN"))
          ;;                         "LEARNING" "OUTPUT" "OTHER"))
          (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
          (output-string "")
@@ -89,7 +89,7 @@ epoch to the beginning of today (00:00)."
                                 (error "No such file %s" file)))
       (with-current-buffer org-agenda-buffer
         (dolist (current-tag include-tags)
-          (org-clock-sum tstart tend 'filter-by-tags)
+          (org-clock-sum tstart tend #'(lambda() (filter-by-tags current-tag)))
           (setcdr (assoc current-tag tags-time-alist)
                   (+ org-clock-file-total-minutes (cdr (assoc current-tag tags-time-alist)))))))
     (while (setq item (pop tags-time-alist))
