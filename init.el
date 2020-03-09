@@ -34,6 +34,7 @@
 (setq user-full-name "Guoqiang Jin"
       user-mail-address "ustczhan@gmail.com")
 
+
 ;;(setq custom-file (concat user-emacs-directory ".local/custom.el"))
 
 (doom!
@@ -108,7 +109,8 @@
  emacs-lisp        ; drown in parentheses
  common-lisp
  latex
- ;; org
+ (org
+  +jupyter)
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
  ;;  +babel
@@ -138,7 +140,9 @@
  ;; my-cc
  (org-enhanced
   +latex
-  +jekyll)
+  +jekyll
+  ;;+jupyter
+  )
 
  edit-enhanced)
 

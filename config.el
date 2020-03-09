@@ -25,9 +25,7 @@
 
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix)
-    (setq company-lsp-cache-candidates 'auto)
-    )
-  )
+    (setq company-lsp-cache-candidates 'auto)))
 
 ;; there is a wired bug in company-box, the scroll bar is very huge and cover the candicate list
 ;; see https://github.com/sebastiencs/company-box/issues/44 , it is not resolved, now i hack the
@@ -79,8 +77,7 @@
   (setq lsp-enable-snippet nil
         lsp-diagnostic-package :flycheck
         lsp-prefer-capf t
-        lsp-enable-symbol-highlighting nil)
-  )
+        lsp-enable-symbol-highlighting nil))
 
 (after! color-rg
   ;; solve the issue that color-rg buffer color is messed
@@ -117,11 +114,11 @@
   (setq pyim-page-tooltip 'posframe)
 
   (setq pyim-page-length 9)
-  ;(if IS-MAC
-  ;    (setq rime-shared-path "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
-  ;          rime-user-path "~/Library/Rime/")
-  ;  (setq rime-shared-path "~/.doom.d/extensions/rime/data"
-  ;        rime-user-path "~/.rime/"))
+                                        ;(if IS-MAC
+                                        ;    (setq rime-shared-path "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
+                                        ;          rime-user-path "~/Library/Rime/")
+                                        ;  (setq rime-shared-path "~/.doom.d/extensions/rime/data"
+                                        ;        rime-user-path "~/.rime/"))
   (add-to-list 'load-path "~/.doom.d/extensions/rime")
   (require 'liberime)
   ;;(liberime-start rime-shared-path (file-truename rime-user-path))
@@ -139,16 +136,14 @@
                      (list (pyim-cregexp-build (car y))))
                     x))
         (pyim-cregexp-build x))))
-  
+
   (setq ivy-re-builders-alist
-        '((t . eh-ivy-cregexp)))
-  )
+        '((t . eh-ivy-cregexp))))
 
 
 (use-package! yapfify
   :after python
-  :defer t
-  )
+  :defer t)
 
 (use-package! aweshell
   :commands (aweshell-new aweshell-toggle)
@@ -157,8 +152,7 @@
 
 (use-package! company-posframe
   :after company
-  :config (company-posframe-mode 1)
-  )
+  :config (company-posframe-mode 1))
 
 ;; (when IS-MAC
 ;;   (setq ns-use-thin-smoothing t
@@ -204,8 +198,7 @@
   (setq ivy-use-virtual-buffers t)
   (setq ivy-display-functions-alist
         '((counsel-irony . ivy-display-function-overlay)
-          (ivy-completion-in-region . ivy-display-function-overlay)))
-  )
+          (ivy-completion-in-region . ivy-display-function-overlay))))
 
 ;; (after! ivy-posframe
 ;;   ;; (dolist (fn '(swiper counsel-ag counsel-grep counsel-git-grep))
@@ -246,8 +239,7 @@
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)
                          (setq-local flycheck-disabled-checkers '(lsp-ui))
-                         (setq-local flycheck-checker 'python-flake8)))
-  )
+                         (setq-local flycheck-checker 'python-flake8))))
 
 (after! python
   (setq python-shell-interpreter "python3"))
@@ -373,11 +365,7 @@
   ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
   ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
 
-  (remove-hook 'compilation-filter-hook #'doom-apply-ansi-color-to-compilation-buffer-h)
-  )
+  (remove-hook 'compilation-filter-hook #'doom-apply-ansi-color-to-compilation-buffer-h))
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
-
-
-

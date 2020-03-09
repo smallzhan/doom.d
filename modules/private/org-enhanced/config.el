@@ -84,15 +84,13 @@
   (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
 
 
-(use-package! org
-  :defer-incrementally
-  calendar find-func format-spec org-macs org-compat org-faces org-entities
-  org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
-  org-capture
-  :preface
+(after! org
+
+  ;; (remove-hook 'org-load-hook #'+org-init-agenda-h)
+  ;; (remove-hook 'org-load-hook #'+org-init-capture-defaults-h)
   (setq org-directory +my-org-dir
         org-aganda-directory (concat +my-org-dir "agenda/")
-        org-agenda-diary-file (concat org-directory "diary.org")
+        org-agenda-diary-file (concat  org-directory "diary.org")
         org-default-notes-file (concat org-directory "note.org")
         ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
         ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
@@ -101,7 +99,11 @@
                            ,(concat org-aganda-directory "work.org")))
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
-  :config
+
+  (setq org-agenda-span 'week
+        org-agenda-start-on-weekday nil
+        org-agenda-start-day nil)
+  ;;:config
   (setq org-log-done 'note
         org-log-redeadline 'note
         org-log-reschedule 'note
@@ -216,34 +218,34 @@
            "* ACTIVE %?\n%U\n%a\nSCHEDULED: %t .+1d/3d\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: ACTIVE\n:END:\n")))
 
   ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
-  (setq org-refile-targets '((nil :maxlevel . 9)
-                             (org-agenda-files :maxlevel . 9)))
+  ;; (setq org-refile-targets '((nil :maxlevel . 9)
+  ;;                            (org-agenda-files :maxlevel . 9)))
 
   ;; Use full outline paths for refile targets - we file directly with IDO
-  (setq org-refile-use-outline-path t)
+  ;; (setq org-refile-use-outline-path t)
 
   ;; Targets complete directly with IDO
-  (setq org-outline-path-complete-in-steps nil)
+  ;; (setq org-outline-path-complete-in-steps nil)
 
   ;; Allow refile to create parent tasks with confirmation
   (setq org-refile-allow-creating-parent-nodes 'confirm)
-  
+
   (setq org-refile-target-verify-function 'bh/verify-refile-target)
 
   (require 'org-expiry)
   ;; Configure it a bit to my liking
   (setq org-expiry-created-property-name "CREATED"
         org-expiry-inactive-timestamps t)
-  
+
   (add-hook 'org-after-todo-state-change-hook
             (lambda ()
               (when (string= org-state "TODO")
                 (save-excursion
                   (org-back-to-heading)
                   (org-expiry-insert-created)))))
-  
+
   (setq org-enforce-todo-dependencies t)
-  
+
   ;; Rebuild the reminders everytime the agenda is displayed
   (add-hook 'org-finalize-agenda-hook 'bh/org-agenda-to-appt 'append)
 
@@ -251,7 +253,7 @@
   (run-at-time "24:01" nil 'bh/org-agenda-to-appt)
 
   (setq org-export-with-timestamps nil)
-  
+
   (require 'org-tempo)
 
   (setq org-agenda-exporter-settings
@@ -280,10 +282,10 @@
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
-  (if (featurep! +dragndrop) (load! "~/.emacs.d/modules/lang/org/contrib/dragndrop"))
-  (if (featurep! +jupyter) (load! "~/.emacs.d/modules/lang/org/contrib/jupyter"))
+  ;;(if (featurep! +dragndrop) (load! "~/.emacs.d/modules/lang/org/contrib/dragndrop"))
+  ;;(if (featurep! +jupyter) (load! "~/.emacs.d/modules/lang/org/contrib/jupyter"))
 
-  (load! "+protocol")
+  ;;(load! "+protocol")
   (load! "next-spec-day")
 
   (bh/org-agenda-to-appt)
@@ -318,8 +320,8 @@
               (org-super-agenda-groups
                '((:name "Next"
                         :and (:scheduled nil
-                                         :deadline nil
-                                         :category ("task" "link" "capture"))
+                              :deadline nil
+                              :category ("task" "link" "capture"))
                         :date today
                         :order 1
                         )
@@ -353,7 +355,7 @@
                         :order 15)
                  (:name "To read"
                         :and (:tag "READING"
-                                   :not (:tag ("HOLD" "WAIT")))
+                              :not (:tag ("HOLD" "WAIT")))
                         :order 16)
 
                  (:name "SomeDay"
@@ -361,45 +363,3 @@
                         :tag ("WAIT" "HOLD")
                         :todo ("SOMEDAY" )
                         :order 90))))))))))
-
-
-(use-package! org-clock ; built-in
-  :commands org-clock-save
-  :init
-  (setq org-clock-persist-file (concat doom-etc-dir "org-clock-save.el"))
-  (defadvice! +org--clock-load-a (&rest _)
-    "Lazy load org-clock until its commands are used."
-    :before '(org-clock-in
-              org-clock-out
-              org-clock-in-last
-              org-clock-goto
-              org-clock-cancel)
-    (org-clock-load))
-  :config
-  (setq org-clock-persist t
-        ;; Resume when clocking into task with open clock
-        org-clock-in-resume t
-        org-clock-out-remove-zero-time-clocks t
-        org-clock-in-switch-to-state "ACTIVE"
-        org-clock-persist-query-resume nil
-        org-clock-report-include-clocking-task t)
-  (add-hook 'kill-emacs-hook #'org-clock-save))
-
-
-(use-package! org-crypt ; built-in
-  :commands org-encrypt-entries
-  :hook (org-reveal-start . org-decrypt-entry)
-  :config
-  (add-hook! 'org-mode-hook
-    (add-hook 'before-save-hook 'org-encrypt-entries nil t))
-  (add-to-list 'org-tags-exclude-from-inheritance "crypt")
-  (setq org-crypt-key user-mail-address))
-
-
-(use-package! org-bullets ; "prettier" bullets
-  :hook (org-mode . org-bullets-mode))
-
-
-(use-package! toc-org ; auto-table of contents
-  :hook (org-mode . toc-org-enable)
-  :config (setq toc-org-hrefify-default "gh"))
