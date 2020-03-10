@@ -99,7 +99,7 @@
  (lookup
   +docsets)
  ;;editorconfig
- lsp
+ ;;lsp
  ;;pdf
 
  :lang
@@ -143,7 +143,7 @@
   +jekyll
   ;;+jupyter
   )
-
+ lsp
  edit-enhanced)
 
 ;;(load custom-file t t t)

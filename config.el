@@ -15,6 +15,10 @@
 
 (after! company
   (setq company-tooltip-limit 12)
+
+  ;; remove company-yasnippet.
+  (setq company-backends (remq 'company-yasnippet company-backends))
+  
   (after! pyim
     (defun eh-company-dabbrev--prefix (orig-fun)
       "取消中文补全"
@@ -25,7 +29,20 @@
 
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix)
-    (setq company-lsp-cache-candidates 'auto)))
+    (setq company-lsp-cache-candidates 'auto))
+  
+  (defun my-company-yasnippet ()
+    "Hide the current completions and show snippets."
+    (interactive)
+    (company-abort)
+    (call-interactively 'company-yasnippet))
+  
+  (bind-keys
+   :map company-mode-map
+   ("<backtab>" . company-yasnippet)
+   :map company-active-map
+   ("<backtab>" . my-company-yasnippet)))
+
 
 ;; there is a wired bug in company-box, the scroll bar is very huge and cover the candicate list
 ;; see https://github.com/sebastiencs/company-box/issues/44 , it is not resolved, now i hack the
@@ -74,10 +91,13 @@
 ;;   (setq TeX-save-query nil))
 
 (after! lsp
-  (setq lsp-enable-snippet nil
+  (setq +lsp-company-backend 'company-capf
+
+        lsp-enable-snippet nil
         lsp-diagnostic-package :flycheck
-        lsp-prefer-capf t
-        lsp-enable-symbol-highlighting nil))
+        ;;lsp-prefer-capf t
+        lsp-enable-symbol-highlighting nil
+        lsp-enable-links nil))
 
 (after! color-rg
   ;; solve the issue that color-rg buffer color is messed
@@ -209,40 +229,6 @@
 ;;   )
 
 
-(use-package! lsp-python-ms
-  :defer t
-  :defines (flycheck-disabled-checkers flycheck-checker)
-  :init
-  (when (executable-find "python3")
-    (setq lsp-python-ms-python-executable-cmd "python3")  )
-  :config
-  (defun find-vscode-mspyls-executable ()
-    (let* ((wildcards ".vscode/extensions/ms-python.python-*/languageServer*/Microsoft.Python.LanguageServer")
-           (dir-and-ext (if IS-WINDOWS
-                            (cons (getenv "USERPROFILE") ".exe")
-                          (cons (getenv "HOME") nil)))
-           (cmd (concat (file-name-as-directory (car dir-and-ext))
-                        wildcards (cdr dir-and-ext)))
-           ;; need to copy a fallback path.
-           (fallback (concat "~/.doom.d/mspyls/Microsoft.Python.LanguageServer" (cdr dir-and-ext)))
-           (exe (file-expand-wildcards cmd t)))
-      (if exe
-          exe
-        (file-expand-wildcards fallback t))))
-
-  (setq lsp-python-ms-executable
-        (car (find-vscode-mspyls-executable)))
-  (if lsp-python-ms-executable
-      (setq lsp-python-ms-dir
-            (file-name-directory lsp-python-ms-executable)))
-  ;;(setq lsp-python-ms-dir "~/.doom.d/mspyls/")
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (setq-local flycheck-disabled-checkers '(lsp-ui))
-                         (setq-local flycheck-checker 'python-flake8))))
-
-(after! python
-  (setq python-shell-interpreter "python3"))
 
 (after! smartparens
   (add-hook 'prog-mode-hook #'turn-on-smartparens-strict-mode))
@@ -252,11 +238,7 @@
 ;;   )
 
 
-(use-package! company-tabnine
-  :after company
-  :config
-  (add-to-list 'company-backends #'company-tabnine)
-  )
+
 
 (use-package! snails
   :load-path "~/.doom.d/extensions/snails"

@@ -23,9 +23,9 @@
   ;;:recipe (:host github :repo "tumashu/pyim" :branch "new-rime")
   )
 
-(package! lsp-python-ms)
+;;(package! lsp-python-ms)
 
-(package! company-tabnine )
+;;(package! company-tabnine )
 
 (package! rg)
 ;;(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
