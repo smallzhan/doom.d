@@ -1,8 +1,5 @@
 ;;; private/lsp/config.el -*- lexical-binding: t; -*-
 
-;;(def-package! spinner)
-
-;; https://github.com/emacs-lsp/lsp-mode#supported-languages
 (use-package! lsp-mode
   :defines (lsp-clients-python-library-directories lsp-rust-rls-server-command)
   :commands (lsp-enable-which-key-integration )
@@ -24,63 +21,21 @@
   ;; @see https://github.com/emacs-lsp/lsp-mode#performance
   (setq read-process-output-max (* 1024 1024)) ;; 1MB
   
-  (setq lsp-auto-guess-root nil      ; Detect project root
+  (setq lsp-auto-guess-root t      ; Detect project root
         lsp-keep-workspace-alive nil ; Auto-kill LSP server
-           lsp-enable-indentation nil
-           lsp-enable-on-type-formatting nil
-           lsp-keymap-prefix "C-c l")
-
+        lsp-enable-indentation nil
+        lsp-enable-on-type-formatting nil
+        lsp-enable-snippet nil
+        lsp-diagnostic-package :flycheck
+        lsp-enable-links nil
+        lsp-enable-symbol-highlighting nil
+        lsp-keymap-prefix "C-c l")
+  
      ;; For `lsp-clients'
-     (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))
+     ;; (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))
      (unless (executable-find "rls")
        (setq lsp-rust-rls-server-command '("rustup" "run" "stable" "rls"))))
 
-
-;;  (use-package! company-lsp
-;;      :init (setq company-lsp-cache-candidates 'auto)
-;;      :config
-;;      (with-no-warnings
-;;        ;; WORKAROUND: Fix tons of unrelated completion candidates shown
-;;        ;; when a candidate is fulfilled
-;;        ;; @see https://github.com/emacs-lsp/lsp-python-ms/issues/79
-;;        (add-to-list 'company-lsp-filter-candidates '(mspyls))
-
-;;        (defun my-company-lsp--on-completion (response prefix)
-;;          "Handle completion RESPONSE.
-
-;; PREFIX is a string of the prefix when the completion is requested.
-
-;; Return a list of strings as the completion candidates."
-;;          (let* ((incomplete (and (hash-table-p response) (gethash "isIncomplete" response)))
-;;                 (items (cond ((hash-table-p response) (gethash "items" response))
-;;                              ((sequencep response) response)))
-;;                 (candidates (mapcar (lambda (item)
-;;                                       (company-lsp--make-candidate item prefix))
-;;                                     (lsp--sort-completions items)))
-;;                 (server-id (lsp--client-server-id (lsp--workspace-client lsp--cur-workspace)))
-;;                 (should-filter (or (eq company-lsp-cache-candidates 'auto)
-;;                                    (and (null company-lsp-cache-candidates)
-;;                                         (company-lsp--get-config company-lsp-filter-candidates server-id)))))
-;;            (when (null company-lsp--completion-cache)
-;;              (add-hook 'company-completion-cancelled-hook #'company-lsp--cleanup-cache nil t)
-;;              (add-hook 'company-completion-finished-hook #'company-lsp--cleanup-cache nil t))
-;;            (when (eq company-lsp-cache-candidates 'auto)
-;;              ;; Only cache candidates on auto mode. If it's t company caches the
-;;              ;; candidates for us.
-;;              (company-lsp--cache-put prefix (company-lsp--cache-item-new candidates incomplete)))
-;;            (if should-filter
-;;                (company-lsp--filter-candidates candidates prefix)
-;;              candidates)))
-;;        (advice-add #'company-lsp--on-completion :override #'my-company-lsp--on-completion)))
-
-;; (def-package! company-lsp
-;;   :after lsp-mode
-;;   :init
-;;   (setq company-transformers nil 
-;;         company-lsp-cache-candidates 'auto)
-;;   :config
-;;   (set-company-backend! 'lsp-mode 'company-lsp)
-;;   )
 
 (use-package! lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
@@ -88,23 +43,22 @@
   (set-lookup-handlers! 'lsp-ui-mode
     :definition #'lsp-ui-peek-find-definitions
     :references #'lsp-ui-peek-find-references)
-  (setq
-   lsp-ui-doc-use-webkit nil
-   lsp-ui-doc-use-childframe t
-   lsp-ui-doc-max-height 20
-   lsp-ui-doc-max-width 50
-   lsp-ui-sideline-enable nil
-   lsp-ui-peek-always-show t)
-  (map!
-   :map lsp-ui-peek-mode-map
-   "h" #'lsp-ui-peek--select-prev-file
-   "j" #'lsp-ui-peek--select-next
-   "k" #'lsp-ui-peek--select-prev
-   "l" #'lsp-ui-peek--select-next-file))
+  (setq lsp-ui-doc-use-webkit nil
+        lsp-ui-doc-use-childframe t
+        lsp-ui-doc-max-height 20
+        lsp-ui-doc-max-width 50
+        lsp-ui-sideline-enable nil
+        lsp-ui-peek-always-show nil)
+  (map! :map lsp-ui-peek-mode-map
+        "h" #'lsp-ui-peek--select-prev-file
+        "j" #'lsp-ui-peek--select-next
+        "k" #'lsp-ui-peek--select-prev
+        "l" #'lsp-ui-peek--select-next-file))
 
 
  (def-package! dap-mode
        ;; :functions dap-hydra/nil
+       :after lsp-mode
        :diminish
        :bind (:map lsp-mode-map
               ("<f5>" . dap-debug)

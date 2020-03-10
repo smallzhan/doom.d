@@ -18,6 +18,7 @@
 
   ;; remove company-yasnippet.
   (setq company-backends (remq 'company-yasnippet company-backends))
+  (setq +company-backend-alist nil)
   
   (after! pyim
     (defun eh-company-dabbrev--prefix (orig-fun)
@@ -90,14 +91,14 @@
 
 ;;   (setq TeX-save-query nil))
 
-(after! lsp
-  (setq +lsp-company-backend 'company-capf
+;; (after! lsp
+;;   (setq +lsp-company-backend 'company-capf
 
-        lsp-enable-snippet nil
-        lsp-diagnostic-package :flycheck
-        ;;lsp-prefer-capf t
-        lsp-enable-symbol-highlighting nil
-        lsp-enable-links nil))
+;;         lsp-enable-snippet nil
+;;         lsp-diagnostic-package :flycheck
+;;         ;;lsp-prefer-capf t
+;;         lsp-enable-symbol-highlighting nil
+;;         lsp-enable-links nil))
 
 (after! color-rg
   ;; solve the issue that color-rg buffer color is messed
