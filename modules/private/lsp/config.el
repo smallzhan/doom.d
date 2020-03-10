@@ -40,13 +40,14 @@
 (use-package! lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :config
-  (set-lookup-handlers! 'lsp-ui-mode
+  (set-lookup-handlers! 'lsp-ui-mode :async t
     :definition #'lsp-ui-peek-find-definitions
     :references #'lsp-ui-peek-find-references)
   (setq lsp-ui-doc-use-webkit nil
-        lsp-ui-doc-use-childframe t
-        lsp-ui-doc-max-height 20
-        lsp-ui-doc-max-width 50
+        lsp-ui-doc-use-childframe nil
+        lsp-ui-doc-max-height 8
+        lsp-ui-doc-max-width 35
+        lsp-ui-doc-enable nil
         lsp-ui-sideline-enable nil
         lsp-ui-peek-always-show nil)
   (map! :map lsp-ui-peek-mode-map
@@ -56,7 +57,7 @@
         "l" #'lsp-ui-peek--select-next-file))
 
 
- (def-package! dap-mode
+ (use-package! dap-mode
        ;; :functions dap-hydra/nil
        :after lsp-mode
        :diminish
