@@ -168,7 +168,7 @@
 
   ;; Allow setting single tags without the menu
   (setq org-fast-tag-selection-single-key 'expert)
-
+  (setq org-tags-column -77)
   ;; For tag searches ignore tasks with scheduled and deadline dates
   (setq org-agenda-tags-todo-honor-ignore-options t)
 
@@ -363,3 +363,9 @@
                         :tag ("WAIT" "HOLD")
                         :todo ("SOMEDAY" )
                         :order 90))))))))))
+
+
+(use-package! org-superstar
+  :hook (org-mode . org-superstar-mode))
+
+

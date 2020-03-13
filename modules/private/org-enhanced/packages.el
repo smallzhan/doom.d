@@ -15,3 +15,6 @@
 (package! org-super-agenda)
 
 (package! org-pdftools :recipe (:host github :repo "fuxialexander/org-pdftools" :no-byte-compile t))
+
+(package! org-bullets :disable t)
+(package! org-superstar :recipe (:host github :repo "integral-dw/org-superstar-mode"))
