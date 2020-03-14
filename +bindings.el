@@ -295,28 +295,6 @@
  ;;   :map pdf-view-mode-map
  ;;   "C-s" #'isearch-forward
  ;;   "q" #'kill-current-buffer)
-
- (:after elfeed
-   :map elfeed-search-mode-map
-   "/ c" #'elfeed-db-compact
-   "/ g" #'elfeed-search-update--force
-   "/ G" #'elfeed-search-fetch
-   "/ y" #'elfeed-search-yank
-   "/ +" #'elfeed-search-tag-all
-   "/ -" #'elfeed-search-untag-all
-   "/ s" #'elfeed-search-live-filter
-   "/ S" #'elfeed-search-filter
-   "/ *" #'(elfeed-search-set-filter "@6-months-ago +star")
-   "/ b" #'elfeed-search-browse-url
-   "/ n" #'next-line
-   "/ p" #'previous-line
-   "/ u" #'elfeed-search-tag-all-unread
-   "/ e" #'elfeed-search-untag-all-unread
-   "/ <return>" #'elfeed-search-show-entry
-   :map elfeed-show-mode-map
-   "/ o" #'ace-link
-   "/ q" #'delete-window
-   )
  )
 
 

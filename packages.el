@@ -19,9 +19,7 @@
   :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar")
   :disable t)
 
-(package! pyim
-  ;;:recipe (:host github :repo "tumashu/pyim" :branch "new-rime")
-  )
+(package! pyim :recipe (:host github :repo "tumashu/pyim"))
 
 ;;(package! lsp-python-ms)
 
@@ -33,3 +31,4 @@
 (package! ggtags :disable t)
 
 
+(package! pretty-hydra)

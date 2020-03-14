@@ -129,3 +129,29 @@ epoch to the beginning of today (00:00)."
   "Exclude todo keywords with a done state from refile targets"
     (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
+;;;###autoload
+(defun hot-expand (str &optional mod)
+  "Expand org template.
+
+STR is a structure template string recognised by org like <s. MOD is a
+string with additional parameters to add the begin line of the
+structure element. HEADER string includes more parameters that are
+prepended to the element after the #+HEADER: tag."
+  (let (text)
+    (when (region-active-p)
+      (setq text (buffer-substring (region-beginning) (region-end)))
+      (delete-region (region-beginning) (region-end)))
+    (insert str)
+    ;; (if (fboundp 'org-try-structure-completion)
+    ;;     (org-try-structure-completion) ; < org 9
+    ;;   (progn
+    ;;     ;; New template expansion since org 9
+    ;;     (require 'org-tempo nil t)
+    ;;     (org-tempo-complete-tag)))
+    (if (fboundp 'org-tempo-complete-tag) ;; may always org 9
+        (org-tempo-complete-tag)
+      (progn
+        (require 'org-tempo nil t)
+        (org-tempo-complete-tag)))
+    (when mod (insert mod) (forward-line))
+    (when text (insert text))))

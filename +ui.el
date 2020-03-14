@@ -16,11 +16,12 @@
 ;; disable line-number
 (setq display-line-numbers-type nil)
 
-;;font
-(if IS-WINDOWS
-    (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14))
+(defvar default-fonts '("JetBrains Mono" "Fira Code" "SF Mono" "Hack"))
 
-  (setq doom-font (font-spec :family "Fira Code" :size 13)))
+;;font
+(if IS-MAC
+    (setq doom-font (font-spec :family (nth (random (length default-fonts)) default-fonts) :size 13))
+  (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)))
 
 ;(set-default-font "Sarasa Mono SC 14")
 (set-face-attribute 'fixed-pitch nil

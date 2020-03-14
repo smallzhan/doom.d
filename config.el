@@ -17,7 +17,7 @@
   (setq company-tooltip-limit 12)
   ;; remove doom company mode settings...
   (setq +company-backend-alist nil)
-  
+
   (after! pyim
     (defun eh-company-dabbrev--prefix (orig-fun)
       "取消中文补全"
@@ -28,13 +28,13 @@
 
     (advice-add 'company-dabbrev--prefix
                 :around #'eh-company-dabbrev--prefix))
-  
+
   (defun my-company-yasnippet ()
     "Hide the current completions and show snippets."
     (interactive)
     (company-abort)
     (call-interactively 'company-yasnippet))
-  
+
   (bind-keys
    :map company-mode-map
    ("<backtab>" . company-yasnippet)
@@ -299,3 +299,39 @@
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
+
+
+(use-package! pretty-hydra)
+
+(after! elfeed
+  (pretty-hydra-define
+    elfeed-hydra
+    (:title "Elfeed"
+            :color amaranth :quit-key "q")
+    ("Search"
+     (("c" elfeed-db-compact "compact db")
+      ("g" elfeed-search-update--force "refresh")
+      ("G" elfeed-search-fetch "update")
+      ("y" elfeed-search-yank "copy URL")
+      ("+" elfeed-search-tag-all "tag all")
+      ("-" elfeed-search-untag-all "untag all"))
+     "Filter"
+     (("s" elfeed-search-live-filter "live filter")
+      ("S" elfeed-search-set-filter "set filter")
+      ("*" (elfeed-search-set-filter "@6-months-ago +star") "starred")
+      ("A" (elfeed-search-set-filter "@6-months-ago" "all"))
+      ("T" (elfeed-search-set-filter "@1-day-ago" "today")))
+     "Article"
+     (("b" elfeed-search-browse-url "browse")
+      ("n" next-line "next")
+      ("p" previous-line "previous")
+      ("u" elfeed-search-tag-all-unread "mark unread")
+      ("r" elfeed-search-untag-all-unread "mark read")
+      ("RET" elfeed-search-show-entry "show"))))
+  (map!
+   :map elfeed-search-mode-map
+   "?" #'elfeed-hydra/body
+   :map elfeed-show-mode-map
+   "o" #'ace-link
+   "q" #'delete-window))
+  
