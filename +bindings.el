@@ -127,8 +127,7 @@
          :desc "thing-copy-url"      "u" #'thing-copy-url
          :desc "thing-copy-email"    "e" #'thing-copy-email
          :desc "thing-copy-comment"  ";" #'thing-copy-comment
-         :desc "thing-copy-number"   "n" #'thing-copy-number
-         )
+         :desc "thing-copy-number"   "n" #'thing-copy-number)
        (:prefix ("x" . "Thing Edit Cut")
          :desc "thing-cut-defun"    "d" #'thing-cut-defun
          :desc "thing-cut-line"     "l" #'thing-cut-line
@@ -143,11 +142,22 @@
          :desc "thing-cut-url"      "u" #'thing-cut-url
          :desc "thing-cut-email"    "e" #'thing-cut-email
          :desc "thing-cut-comment"  ";" #'thing-cut-comment
-         :desc "thing-cut-number"   "n" #'thing-cut-number
-         ))
-     ;; :desc "Yapfify buffer"       "y" #'yapfify-buffer
-     ;; :desc "Yapfify region"       "p" #'yapfify-region
-     )
+         :desc "thing-cut-number"   "n" #'thing-cut-number)
+        (:prefix ("x" . "Thing Edit Replace")
+         :desc "thing-replace-defun"    "d" #'thing-replace-defun
+         :desc "thing-replace-line"     "l" #'thing-replace-line
+         :desc "thing-replace-sexp"     "s" #'thing-replace-sexp
+         :desc "thing-replace-word"     "w" #'thing-replace-word
+         :desc "thing-replace-symbol"   "b" #'thing-replace-symbol
+         :desc "thing-replace-filename" "f" #'thing-replace-filename
+         :desc "thing-replace-list"     "t" #'thing-replace-list
+         :desc "thing-replace-sentence" "c" #'thing-replace-sentence
+         :desc "thing-replace-paragrah" "p" #'thing-replace-paragraph
+         :desc "thing-replace-page"     "g" #'thing-replace-page
+         :desc "thing-replace-url"      "u" #'thing-replace-url
+         :desc "thing-replace-email"    "e" #'thing-replace-email
+         :desc "thing-replace-comment"  ";" #'thing-replace-comment
+         :desc "thing-replace-number"   "n" #'thing-replace-number)))
    (:prefix ("f" . "file")
      :desc "Find git file"        "g" #'counsel-git)
 

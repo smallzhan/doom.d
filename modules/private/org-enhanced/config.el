@@ -123,39 +123,39 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "ACTIVE(a)" "|" "DONE(d!/!)")
           (sequence "WAIT(w@/!)" "HOLD(h@/!)"
-                    "|" "CANCELLED(c@/!)" "PHONE")))
+                    "|" "CANCEL(c@/!)" "PHONE")))
 
   (setq org-todo-state-tags-triggers
-        '(("CANCELLED" ("CANCELLED" . t))
+        '(("CANCEL" ("CANCEL" . t))
           ("WAIT" ("WAIT" . t))
           ("HOLD" ("WAIT" . t) ("HOLD" . t))
           (done ("WAIT") ("HOLD"))
-          ("TODO" ("WAIT") ("CANCELLED") ("HOLD"))
-          ("ACTIVE" ("WAIT") ("CANCELLED") ("HOLD"))
-          ("DONE" ("WAIT") ("CANCELLED") ("HOLD"))))
+          ("TODO" ("WAIT") ("CANCEL") ("HOLD"))
+          ("ACTIVE" ("WAIT") ("CANCEL") ("HOLD"))
+          ("DONE" ("WAIT") ("CANCEL") ("HOLD"))))
 
   (setq org-columns-default-format "%70ITEM(Task) %10Effort(Effort){:} %20CLOCKSUM")
   (setq org-agenda-log-mode-items '(closed state))
 
   (setq org-tag-alist '((:startgroup)
-                        ("@News" . ?n)
                         ("@Work" . ?w)
-                        ("@Funny" . ?f)
                         ("@Self" . ?e)
-                        ("@Ideas" . ?i)
+                        ("@Home" . ?h)
+                        ("@Outer" . ?o)
                         (:endgroup)
-                        ("PERSONAL" . ?P)
-                        ("READING" . ?r)
-                        ("PROG" . ?p)
-                        ("SOFT" . ?s)
-                        ("MEETING" . ?M)
-                        ("OTHER" . ?o)
-                        ("NOTE" . ?N)
+                        ("IDEA" . ?i)
+                        ("NOTE" . ?n)
                         ("TIPS" . ?t)
-                        ("MARK" . ?m)
+                        ("READING" . ?r)
+                        ("WRITE" . ?W)
+                        ("PROG" . ?p)
+                        ("MEETING" . ?m)
+                        ("STUDY" . ?d)
+                        ("OTHER" . ?o)   
+                        ("MARK" . ?M)
                         ("TEAM" . ?T)
-                        ("OUTER" .?O)
-                        ("LEARN" .?l)
+                        ("LEARN" . ?l)
+                        ("PROJ" . ?j)
                         ))
   (setq org-emphasis-regexp-components
         '(
@@ -179,6 +179,7 @@
   (setq org-insert-heading-respect-content nil)
   (setq org-startup-truncated nil)
 
+  (add-hook! org-mode-hook (lambda () (yas-minor-mode -1)))
   (setq org-capture-templates
         '(("s" "scheduled task" entry
            (file+headline "agenda/planning.org" "Task List")
@@ -381,20 +382,17 @@
                  (:name "Overdue"
                         :deadline past
                         :order 7)
-                 ;; (:name "Assignments"
-                 ;;        :tag "Assignment"
-                 ;;        :order 10)
                  (:name "Issues"
                         :tag "Issue"
                         :order 12)
                  (:name "Projects"
-                        :tag "Project"
+                        :tag "PROJ"
                         :order 14)
                  (:name "Emacs"
                         :tag "Emacs"
                         :order 13)
                  (:name "Research"
-                        :tag "LEARN"
+                        :tag ("LEARN" "STUDY")
                         :order 15)
                  (:name "To read"
                         :and (:tag "READING"

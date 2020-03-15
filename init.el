@@ -49,7 +49,7 @@
 
  (ivy               ; a search engine for love and life
   +fuzzy
-  ;;+childframe
+;;  +childframe     ;; macos 下面会有卡死的情况。不知道为什么。
   )
 
  :ui
