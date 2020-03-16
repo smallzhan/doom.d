@@ -109,7 +109,7 @@ epoch to the beginning of today (00:00)."
   (interactive)
   (dolist (tag (list
                 "/DONE"
-                "/CANCELLED"))
+                "/CANCEL"))
     (org-map-entries 'org-archive-subtree tag 'file)))
 
 ;;;###autoload

@@ -42,8 +42,7 @@
                            :complete #'org-pdftools-complete-link
                            :store #'org-pdftools-store-link
                            :export #'org-pdftools-export)
-  (add-hook 'org-store-link-functions 'org-pdftools-store-link)
-  )
+  (add-hook 'org-store-link-functions 'org-pdftools-store-link))
 
 
 (use-package! org-noter
@@ -333,8 +332,16 @@
   (load! "next-spec-day")
 
   (bh/org-agenda-to-appt)
-  (appt-activate t)
-  )
+  (appt-activate t))
+
+
+(after! org-clock
+  (setq  org-clock-persist t
+         ;; Resume when clocking into task with open clock
+         org-clock-out-remove-zero-time-clocks t
+         org-clock-in-switch-to-state "ACTIVE"
+         org-clock-persist-query-resume nil
+         org-clock-report-include-clocking-task t))
 
 
 (use-package! org-super-agenda

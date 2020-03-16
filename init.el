@@ -140,9 +140,7 @@
  ;; my-cc
  (org-enhanced
   +latex
-  +jekyll
-  ;;+jupyter
-  )
+  +jekyll)
  lsp
  edit-enhanced)
 

@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; config/private/packages.el
 
-(disable-packages! glsl-mode cuda-mode opencl-mode latex-preview-pane org-ref nose anaconda-mode)
+(disable-packages! glsl-mode cuda-mode opencl-mode latex-preview-pane org-ref nose anaconda-mode company-anaconda company-auctex company-reftex fcitx)
 
 (package! company-english-helper
   :recipe (:host github :repo "manateelazycat/company-english-helper")
