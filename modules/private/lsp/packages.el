@@ -1,13 +1,15 @@
 ;; -*- no-byte-compile: t; -*-
 ;; lsp/packages.el
 
-(package! lsp-mode)
+(package! lsp-mode :disable t)
 
-(package! lsp-ui)
+(package! lsp-ui :disable t)
 
-(package! dap-mode)
+(package! dap-mode :disable t)
 
-(package! lsp-python-ms)
+(package! lsp-python-ms :disable t)
 (package! company-tabnine)
 
-(package! lsp-ivy)
+(package! lsp-ivy :disable t)
+
+;;(package! nox :recipe (:host github :repo "manateelazycat/nox"))

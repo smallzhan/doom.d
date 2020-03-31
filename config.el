@@ -106,7 +106,8 @@
         (pyim-cregexp-build x))))
 
   (setq ivy-re-builders-alist
-        '((t . eh-ivy-cregexp))))
+        '((t . eh-ivy-cregexp)))
+  )
 
 
 (use-package! yapfify
@@ -334,4 +335,96 @@
    :map elfeed-show-mode-map
    "o" #'ace-link
    "q" #'delete-window))
-  
+
+
+(use-package! rime
+  :load-path "~/.doom.d/extensions/emacs-rime"
+  :config
+  ;;; Code:
+  (setq rime-user-data-dir "~/.emacs.d/rime")
+
+  (setq rime-posframe-properties
+        (list :background-color "#333333"
+              :foreground-color "#dcdccc"
+              ;;:font "SF Mono-14"
+              :internal-border-width 10))
+
+  (setq default-input-method "rime"
+        rime-show-candidate 'posframe
+        )
+
+  (defvar +rime-input-key 0
+    "保存最后一个输入 key 值的变量。")
+
+  (defadvice! +get-key--rime-input-method-a (key)
+    "在执行 `rime-input-method' 之前获取 key 值。"
+    :before #'rime-input-method
+    (setq +rime-input-key key))
+
+  (defun +rime-force-enable ()
+    "强制 `rime' 使用中文输入状态.
+如果当前不是 `rime' 输入法，则先激活 `rime' 输入法。如果当前是
+`evil' 的非编辑状态，则转为 `evil-insert-state'。"
+    (interactive)
+    (let ((input-method "rime"))
+      (unless (string= current-input-method input-method)
+        (activate-input-method input-method))
+      (when (rime-predicate-evil-mode-p)
+        (evil-insert-state))
+      (rime-force-enable)))
+
+  (defun +rime-convert-string-at-point (&optional return-cregexp)
+    "将光标前的字符串转换为中文."
+    (interactive "P")
+    (let ((string (if mark-active
+                      (buffer-substring-no-properties
+                       (region-beginning) (region-end))
+                    (buffer-substring-no-properties
+                     (point) (line-beginning-position))))
+          code
+          length)
+      (+rime-force-enable)
+      (cond ((string-match "\\([a-z'-]+\\|[[:punct:]]\\) *$" string)
+             (setq code (replace-regexp-in-string
+                         "^[-']" ""
+                         (match-string 0 string)))
+             (setq length (length code))
+             (setq code (replace-regexp-in-string " +" "" code))
+             (if mark-active
+                 (delete-region (region-beginning) (region-end))
+               (when (> length 0)
+                 (delete-char (- 0 length))))
+             (when (> length 0)
+               (setq unread-command-events
+                     (append (listify-key-sequence code)
+                             unread-command-events))))
+            (t (message "`+rime-convert-string-at-point' did nothing.")))))
+
+  (defun +rime-predicate-current-uppercase-letter-p ()
+    "If the current charactor entered is a uppercase letter.
+Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
+    (and rime--current-input-key
+         (>= rime--current-input-key ?A)
+         (<= rime--current-input-key ?Z)))
+
+  (defun +rime-predicate-button-at-point-p ()
+    "Determines whether the point is a button.
+\"Button\" means that positon is not editable.
+Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
+    (button-at (point)))
+
+  (setq-default rime-disable-predicates
+                '(+rime-predicate-button-at-point-p
+                  rime-predicate-prog-in-code-p
+                  rime-predicate-punctuation-line-begin-p
+                  rime-predicate-after-alphabet-char-p
+                  rime-predicate-auto-english-p
+                  ))
+  (setq-default rime-inline-predicates
+                '(+rime-predicate-current-uppercase-letter-p))
+  :bind
+  ("M-l" . #'+rime-convert-string-at-point)
+  (:map rime-active-mode-map
+    ("M-l" . #'rime-inline-ascii))
+  (:map rime-mode-map
+    ("M-l" . #'rime-force-enable)))

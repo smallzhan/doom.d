@@ -1,4 +1,4 @@
-;;; init.el -*- lexical-binding: t; -*-
+;; init.el -*- lexical-binding: t; -*-
 
 ;; 插件源, skip in straight.
 (setq package-archives '(("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -39,7 +39,7 @@
 
 (doom!
  :input
- chinese
+ ;;chinese
 
  :completion
  ;; (
@@ -91,7 +91,8 @@
 
  :checkers
  (syntax
-  +childframe)
+  +childframe
+  )
 
  :tools
  eval
@@ -104,7 +105,8 @@
 
  :lang
  (cc
-  +lsp)                ; C/C++/Obj-C madness
+ ;; +lsp
+  )                ; C/C++/Obj-C madness
  data              ; config/data formats
  emacs-lisp        ; drown in parentheses
  common-lisp
@@ -120,7 +122,8 @@
  ;;  +protocol)
                                         ; Emacs for presentations
  (python            ; beautiful is better than ugly
-  +lsp)
+  ;;+lsp
+  )
 
  :app
  (rss

@@ -1,7 +1,12 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; config/private/packages.el
 
-(disable-packages! glsl-mode cuda-mode opencl-mode latex-preview-pane org-ref nose anaconda-mode company-anaconda company-auctex company-reftex fcitx)
+(disable-packages! glsl-mode cuda-mode opencl-mode
+                   latex-preview-pane org-ref nose
+                   anaconda-mode company-anaconda
+                   company-auctex company-reftex fcitx
+                   irony irony-doc flycheck-irony company-irony
+                   rtags)
 
 (package! company-english-helper
   :recipe (:host github :repo "manateelazycat/company-english-helper")
@@ -19,7 +24,7 @@
   :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar")
   :disable t)
 
-(package! pyim :recipe (:host github :repo "tumashu/pyim"))
+(package! pyim :recipe (:host github :repo "tumashu/pyim") :disable t)
 
 ;;(package! lsp-python-ms)
 
@@ -32,3 +37,4 @@
 
 
 (package! pretty-hydra)
+
