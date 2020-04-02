@@ -12,4 +12,4 @@
 
 (package! lsp-ivy :disable t)
 
-;;(package! nox :recipe (:host github :repo "manateelazycat/nox"))
+(package! nox :recipe (:host github :repo "manateelazycat/nox"))

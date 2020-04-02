@@ -155,7 +155,6 @@
 
 
 (use-package! nox
-  :load-path "~/.doom.d/extensions/nox"
   :config
   (setq nox-python-path "/usr/local/bin/python"
         nox-python-server-dir "~/.doom.d/mspyls/")
@@ -172,5 +171,7 @@
                'c++-mode-hook
                'haskell-mode-hook
                ))
-  (add-hook hook '(lambda () (nox-ensure))))
+    (add-hook hook '(lambda () (nox-ensure))))
+
+  (add-hook 'python-mode-hook '(lambda () (remove-hook 'completion-at-point-functions 'python-completion-at-point t)))
 )
