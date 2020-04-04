@@ -157,7 +157,7 @@
 (use-package! nox
   :load-path "~/.doom.d/extensions/nox"
   :config
-  (setq nox-python-path "/usr/local/bin/python"
+  (setq nox-python-path (executable-find "python3")
         nox-python-server-dir "~/.doom.d/mspyls/")
   (dolist (hook (list
                'js-mode-hook

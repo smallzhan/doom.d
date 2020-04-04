@@ -341,8 +341,9 @@
   :load-path "~/.doom.d/extensions/emacs-rime"
   :config
   ;;; Code:
-  (setq rime-user-data-dir "~/.emacs.d/rime")
-
+  (setq rime-user-data-dir "~/.emacs.d/rime") 
+  (if IS-WINDOWS
+      (setq rime-share-data-dir "~/.doom.d/extensions/emacs-rime/data"))
   (setq rime-posframe-properties
         (list :background-color "#333333"
               :foreground-color "#dcdccc"
