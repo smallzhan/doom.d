@@ -41,6 +41,7 @@
      :desc "Elfeed Rss Reader" "r" #'elfeed
      :desc "Org Noter"         "n" #'org-noter)
    
+   "c" nil
    (:prefix ("c" . "code")
      :desc "Compile"                     "c" #'compile
      :desc "Jump to definition"          "d" #'+lookup/definition
@@ -54,25 +55,30 @@
      :desc "List errors"                 "x" #'flycheck-list-errors
      :desc "Describe thing at point"     "t" #'lsp-describe-thing-at-point
      (:prefix ("g" . "Go to")
-       :desc "Implementation"            "i" #'lsp-goto-implementation
-       :desc "Definition"                "d" #'lsp-goto-type-definition
-       :desc "Find Definition"           "D" #'lsp-find-definition
-       :desc "Find References"           "r" #'lsp-find-references)
-     (:prefix ("p" . "Peek")
-       :desc "Implementation"            "i" #'lsp-ui-peek-find-implementation
-       :desc "Definition"                "d" #'lsp-ui-peek-find-definitions
-       :desc "Reference"                 "r" #'lsp-ui-peek-find-references)
-     (:prefix ("l" . "Lens")
-       :desc "Show"                      "l" #'lsp-lens-show
-       :desc "Hide"                      "q" #'lsp-lens-hide)
-     (:prefix ("m" . "menu")
-       :desc "Show"                      "m" #'lsp-ui-imenu
-       :desc "Hide"                      "q" #'lsp-ui-imenu--kill)
+       :desc "Implementation"            "i" #'nox-find-implementation
+       ;;:desc "Definition"                "d" #'lsp-goto-type-definition
+       :desc "Definition"                "d" #'xref-find-definitions
+       ;;:desc "Find Definition"           "D" #'lsp-find-definition
+       :desc "Find Definition"           "D" #'nox-find-typeDefinition
+       
+       :desc "Find References"           "r" #'xref-find-references)
+     (:after lsp-mode 
+       (:prefix ("p" . "Peek")
+         :desc "Implementation"            "i" #'lsp-ui-peek-find-implementation
+         :desc "Definition"                "d" #'lsp-ui-peek-find-definitions
+         :desc "Reference"                 "r" #'lsp-ui-peek-find-references)
+       (:prefix ("l" . "Lens")
+         :desc "Show"                      "l" #'lsp-lens-show
+         :desc "Hide"                      "q" #'lsp-lens-hide)
+       (:prefix ("m" . "menu")
+         :desc "Show"                      "m" #'lsp-ui-imenu
+         :desc "Hide"                      "q" #'lsp-ui-imenu--kill))
      (:after yapfify
        (:prefix ("y" . "Yapf")
          :desc "Yapfify buffer"          "b" #'yapfify-buffer
          :desc "Yapfify region"          "r" #'yapfify-region))
      )
+   
 
    (:prefix ("d" . "doom")
      :desc "Dashboard"                   "d" #'+doom-dashboard/open
@@ -160,6 +166,18 @@
          :desc "thing-replace-number"   "n" #'thing-replace-number)))
    (:prefix ("f" . "file")
      :desc "Find git file"        "g" #'counsel-git)
+
+   "g" nil
+   (:after nox
+     (:prefix ("g" . "Goto")
+       :desc "Implementation"            "i" #'nox-find-implementation
+       ;;:desc "Definition"                "d" #'lsp-goto-type-definition
+       :desc "Definition"                "d" #'xref-find-definitions
+       ;;:desc "Find Definition"           "D" #'lsp-find-definition
+       :desc "Find Definition"           "D" #'nox-find-typeDefinition
+       
+       :desc "Find References"           "r" #'xref-find-references
+       ))
 
    "o" nil ;; default keybinding for org agenda is too complicated
    (:prefix ("o". "org")

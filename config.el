@@ -401,13 +401,6 @@
                              unread-command-events))))
             (t (message "`+rime-convert-string-at-point' did nothing.")))))
 
-  (defun +rime-predicate-current-uppercase-letter-p ()
-    "If the current charactor entered is a uppercase letter.
-Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
-    (and rime--current-input-key
-         (>= rime--current-input-key ?A)
-         (<= rime--current-input-key ?Z)))
-
   (defun +rime-predicate-button-at-point-p ()
     "Determines whether the point is a button.
 \"Button\" means that positon is not editable.
@@ -422,10 +415,11 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
                   rime-predicate-auto-english-p
                   ))
   (setq-default rime-inline-predicates
-                '(+rime-predicate-current-uppercase-letter-p))
+                '(rime-predicate-current-uppercase-letter-p))
   :bind
   ("M-l" . #'+rime-convert-string-at-point)
-  (:map rime-active-mode-map
-    ("M-l" . #'rime-inline-ascii))
-  (:map rime-mode-map
-    ("M-l" . #'rime-force-enable)))
+  ;; (:map rime-active-mode-map
+  ;;   ("M-l" . #'rime-inline-ascii))
+  ;; (:map rime-mode-map
+  ;;   ("M-l" . #'rime-inline-ascii))
+  )
