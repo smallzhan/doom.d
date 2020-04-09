@@ -39,7 +39,7 @@
 
 (doom!
  :input
- ;;chinese
+ chinese
 
  :completion
  ;; (

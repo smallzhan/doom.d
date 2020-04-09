@@ -6,7 +6,7 @@
                    anaconda-mode company-anaconda
                    company-auctex company-reftex fcitx
                    irony irony-doc flycheck-irony company-irony
-                   rtags)
+                   rtags pyim)
 
 (package! company-english-helper
   :recipe (:host github :repo "manateelazycat/company-english-helper")

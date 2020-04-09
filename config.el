@@ -341,7 +341,8 @@
   :load-path "~/.doom.d/extensions/emacs-rime"
   :config
   ;;; Code:
-  (setq rime-user-data-dir "~/.emacs.d/rime") 
+  (if IS-MAC
+      (setq rime-user-data-dir "~/Library/Rime")) 
   (if IS-WINDOWS
       (setq rime-share-data-dir "~/.doom.d/extensions/emacs-rime/data"))
   (setq rime-posframe-properties
@@ -418,8 +419,8 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
                 '(rime-predicate-current-uppercase-letter-p))
   :bind
   ("M-l" . #'+rime-convert-string-at-point)
-  ;; (:map rime-active-mode-map
-  ;;   ("M-l" . #'rime-inline-ascii))
-  ;; (:map rime-mode-map
-  ;;   ("M-l" . #'rime-inline-ascii))
+  (:map rime-active-mode-map
+    ("M-l" . #'rime-inline-ascii))
+  (:map rime-mode-map
+    ("M-l" . #'rime-force-enable))
   )

@@ -155,3 +155,14 @@ prepended to the element after the #+HEADER: tag."
         (org-tempo-complete-tag)))
     (when mod (insert mod) (forward-line))
     (when text (insert text))))
+
+;;;###autoload
+ (defun org-buffer-face-mode-variable ()
+    (interactive)
+    (make-face 'width-font-face)
+    (setq font-size "13")
+    (if IS-WINDOWS
+        (setq font-size "14"))
+    (set-face-attribute 'width-font-face nil :font (concat "Sarasa Mono SC " font-size))
+    (setq buffer-face-mode-face 'width-font-face)
+    (buffer-face-mode))
