@@ -341,8 +341,7 @@
   :load-path "~/.doom.d/extensions/emacs-rime"
   :config
   ;;; Code:
-  (if IS-MAC
-      (setq rime-user-data-dir "~/Library/Rime")) 
+  
   (if IS-WINDOWS
       (setq rime-share-data-dir "~/.doom.d/extensions/emacs-rime/data"))
   (setq rime-posframe-properties
@@ -352,8 +351,23 @@
               :internal-border-width 10))
 
   (setq default-input-method "rime"
-        rime-show-candidate 'posframe
-        )
+        rime-show-candidate 'posframe)
+  
+  (defun +rime--posframe-display-content-a (args)
+    "给 `rime--posframe-display-content' 传入的字符串加一个全角空
+格，以解决 `posframe' 偶尔吃字的问题。"
+    (cl-destructuring-bind (content) args
+      (let ((newresult (if (string-blank-p content)
+                           content
+                         (concat content "　"))))
+        (list newresult))))
+
+  (if (fboundp 'rime--posframe-display-content)
+      (advice-add 'rime--posframe-display-content
+                  :filter-args
+                  #'+rime--posframe-display-content-a)
+    (error "Function `rime--posframe-display-content' is not available."))
+
 
   (defvar +rime-input-key 0
     "保存最后一个输入 key 值的变量。")
@@ -424,3 +438,6 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
   (:map rime-mode-map
     ("M-l" . #'rime-force-enable))
   )
+
+
+
