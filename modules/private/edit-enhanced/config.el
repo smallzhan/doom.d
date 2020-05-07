@@ -118,7 +118,7 @@
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode)
-  :hook (nov-mode . my-nov-setup)
+  ;;:hook (nov-mode . my-nov-setup)
   :init
   (defun my-nov-setup ()
     "Setup `nov-mode' for better reading experience."
@@ -143,3 +143,47 @@
     (setq process-coding-system-alist
           (cons `(,nov-unzip-program . (gbk . gbk))
                 process-coding-system-alist))))
+
+
+(use-package! shr-tag-pre-highlight
+  :after shr
+  :config
+  (defun shrface-shr-tag-pre-highlight (pre)
+  "Highlighting code in PRE."
+  (let* ((shr-folding-mode 'none)
+         (shr-current-font 'default)
+         (code (with-temp-buffer
+                 (shr-generic pre)
+                 (setq-local fill-column 120)
+                 (indent-rigidly (point-min) (point-max) 2)
+                 ;; (fill-region (point-min) (point-max) nil nil nil)
+                 (buffer-string)))
+         (lang (or (shr-tag-pre-highlight-guess-language-attr pre)
+                   (let ((sym (language-detection-string code)))
+                     (and sym (symbol-name sym)))))
+         (mode (and lang
+                    (shr-tag-pre-highlight--get-lang-mode lang))))
+    (shr-ensure-newline)
+    (insert "  ") ; indentation
+    (insert (propertize (concat "#+BEGIN_SRC" lang) 'face 'org-block-begin-line)) ; delete "lang" of this line, if you found the wrong detected langugage is annoying
+    (shr-ensure-newline)
+    (insert
+     (or (and (fboundp mode)
+              (with-demoted-errors "Error while fontifying: %S"
+                (shr-tag-pre-highlight-fontify code mode)))
+         code))
+    (shr-ensure-newline)
+    (insert "  ") ; indentation
+    (insert (propertize "#+END_SRC" 'face 'org-block-end-line ) )
+    (shr-ensure-newline)))
+  (add-to-list 'shr-external-rendering-functions
+               '(pre . shrface-shr-tag-pre-highlight))
+  )
+
+(use-package! shrface
+  :after shr
+  :config
+  (setq nov-shr-rendering-functions shr-external-rendering-functions)
+  (setq shrface-paragraph-indentation 2)
+  (setq shrface-paragraph-fill-column 120)
+  )

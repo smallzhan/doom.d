@@ -11,9 +11,10 @@
 ;;(package! org-noter :recipe (:host github :repo "fuxialexander/org-noter" :branch "pdf-notes-booster"))
 (package! org-noter)
 (package! org-ref)
-(package! ivy-bibtex)
+(package! ivy-bibtex :disable t)
 (package! org-super-agenda)
-
+;;(package! org-pdftools)
+;;(package! org-noter-pdftools)
 (package! org-pdftools :recipe (:host github :repo "fuxialexander/org-pdftools" :no-byte-compile t))
 
 (package! org-bullets :disable t)

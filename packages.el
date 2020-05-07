@@ -6,7 +6,7 @@
                    anaconda-mode company-anaconda
                    company-auctex company-reftex fcitx
                    irony irony-doc flycheck-irony company-irony
-                   rtags pyim)
+                   rtags pyim bibtex-completion)
 
 (package! company-english-helper
   :recipe (:host github :repo "manateelazycat/company-english-helper")
@@ -37,4 +37,5 @@
 
 
 (package! pretty-hydra)
+
 

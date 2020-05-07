@@ -17,3 +17,7 @@
   :disable t)
 
 (package! nov)
+
+(package! shrface :recipe (:host github :repo "chenyanming/shrface") :disable t)
+
+(package! shr-tag-pre-highlight :disable t)
