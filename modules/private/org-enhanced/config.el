@@ -267,7 +267,7 @@
 
   (setq org-agenda-text-search-extra-files '(agenda-archives))
 
-  (set-face-attribute 'org-table nil :family "Sarasa Mono SC")
+  ;;(set-face-attribute 'org-table nil :family "Sarasa Mono SC")
 
   (setq org-global-properties
         '(("Effort_ALL" .
@@ -417,3 +417,9 @@
   :hook (org-mode . org-superstar-mode))
 
 
+(use-package! valign
+  ;:load-path "~/.doom.d/extensions/valign"
+  ;:init
+  ;(require 'valign)
+  :hook
+  ('org-mode . #'valign-mode))

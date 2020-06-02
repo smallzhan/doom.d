@@ -23,6 +23,7 @@
     (setq doom-font (font-spec :family (nth (random (length default-fonts)) default-fonts) :size 13))
   (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)))
 
+;;(setq doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 14))
 ;(set-default-font "Sarasa Mono SC 14")
 (set-face-attribute 'fixed-pitch nil
                     :family "Sarasa Mono SC"
@@ -41,4 +42,8 @@
 
 (let ((font (find-fonts chinese-fonts)))
   (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font t charset font)))
+    (set-fontset-font t charset font))
+  (if IS-WINDOWS
+      (setq doom-unicode-font (font-spec :family font))))
+
+

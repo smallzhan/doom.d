@@ -14,7 +14,10 @@
 (package! ivy-bibtex)
 (package! org-super-agenda)
 
-(package! org-pdftools :recipe (:host github :repo "fuxialexander/org-pdftools" :no-byte-compile t))
+(package! org-pdftools)
+(package! org-noter-pdftools)
 
 (package! org-bullets :disable t)
 (package! org-superstar :recipe (:host github :repo "integral-dw/org-superstar-mode"))
+
+(package! valign :recipe (:host github :repo "casouri/valign"))
