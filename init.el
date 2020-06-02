@@ -39,7 +39,7 @@
 
 (doom!
  :input
- ;;chinese
+ chinese
 
  :completion
  ;; (
@@ -85,6 +85,7 @@
  ;;eshell            ; a consistent, cross-platform shell (WIP)
  vc                ; version-control and Emacs, sitting in a tree
  electric
+ undo
 
  :term
  ;;vterm
