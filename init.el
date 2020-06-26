@@ -49,7 +49,7 @@
 
  (ivy               ; a search engine for love and life
   +fuzzy
-;;  +childframe     ;; macos 下面会有卡死的情况。不知道为什么。
+  ;;  +childframe     ;; macos 下面会有卡死的情况。不知道为什么。
   )
 
  :ui
@@ -106,13 +106,17 @@
 
  :lang
  (cc
- ;; +lsp
+  ;; +lsp
   )                ; C/C++/Obj-C madness
  data              ; config/data formats
  emacs-lisp        ; drown in parentheses
  common-lisp
- latex
+ (latex
+  +cdlatex)
+ 
  (org
+  +dragndrop
+  +pomodoro
   +jupyter)
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system

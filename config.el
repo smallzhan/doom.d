@@ -121,7 +121,9 @@
 
 (use-package! company-posframe
   :after company
-  :config (company-posframe-mode 1))
+  :config
+  (company-posframe-mode 1)
+  (setq company-posframe-quickhelp-delay nil))
 
 ;; (when IS-MAC
 ;;   (setq ns-use-thin-smoothing t
@@ -179,9 +181,6 @@
 
 
 
-(after! smartparens
-  (add-hook 'prog-mode-hook #'turn-on-smartparens-strict-mode))
-
 ;; (after! pdf-tools
 ;;   (setq pdf-view-use-scaling t)
 ;;   )
@@ -190,7 +189,7 @@
 
 
 (use-package! snails
-  :load-path "~/.doom.d/extensions/snails"
+  ;;:load-path "~/.doom.d/extensions/snails"
   :init (setq snails-use-exec-path-from-shell nil)
   :commands snails)
 
@@ -434,7 +433,7 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
   :bind
   ("M-l" . #'+rime-convert-string-at-point)
   (:map rime-active-mode-map
-    ("M-l" . #'rime-inline-ascii))
+    ("M-j" . #'rime-inline-ascii))
   (:map rime-mode-map
     ("M-l" . #'rime-force-enable))
   )

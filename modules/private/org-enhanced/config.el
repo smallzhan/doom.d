@@ -7,10 +7,10 @@
   :hook (org-mode . turn-on-org-cdlatex))
 
 
-(use-package! org-pomodoro
-  :defer t
-  :init (when IS-MAC
-          (setq org-pomodoro-audio-player "/usr/bin/afplay")))
+;; (use-package! org-pomodoro
+;;   :defer t
+;;   :init (when IS-MAC
+;;           (setq org-pomodoro-audio-player "/usr/bin/afplay")))
 
 
 (use-package! notdeft
@@ -404,8 +404,8 @@
                         :order 90))))))))))
 
 
-(use-package! org-superstar
-  :hook (org-mode . org-superstar-mode))
+;; (use-package! org-superstar
+;;   :hook (org-mode . org-superstar-mode))
 
 
 (use-package! valign
@@ -414,3 +414,24 @@
   ;(require 'valign)
   :hook
   ('org-mode . #'valign-mode))
+
+(use-package! org-clock-budget
+  :commands (org-clock-budget-report)
+  :init
+  (defun my-buffer-face-mode-org-clock-budget ()
+    "Sets a fixed width (monospace) font in current buffer"
+    (interactive)
+    (setq buffer-face-mode-face '(:family "Iosevka" :height 1.0))
+    (buffer-face-mode)
+    (setq-local line-spacing nil))
+  :config
+  (map! :map org-clock-budget-report-mode-map
+        :nm "h" #'org-shifttab
+        :nm "l" #'org-cycle
+        :nm "e" #'org-clock-budget-report
+        :nm "s" #'org-clock-budget-report-sort
+        :nm "d" #'org-clock-budget-remove-budget
+        :nm "q" #'quit-window)
+  (add-hook! 'org-clock-budget-report-mode-hook
+    (toggle-truncate-lines 1)
+    (my-buffer-face-mode-org-clock-budget)))

@@ -5,7 +5,7 @@
 (package! ob-ipython :disable t)
 (package! cdlatex)
 ;;(package! org-jekyll :ignore t)
-(package! org-pomodoro)
+;;(package! org-pomodoro :disable t)
 (package! org-protocol-capture-html :disable t
   :recipe (:host github :repo "alphapapa/org-protocol-capture-html"))
 ;;(package! org-noter :recipe (:host github :repo "fuxialexander/org-noter" :branch "pdf-notes-booster"))
@@ -17,7 +17,8 @@
 (package! org-pdftools)
 (package! org-noter-pdftools)
 
-(package! org-bullets :disable t)
-(package! org-superstar :recipe (:host github :repo "integral-dw/org-superstar-mode"))
+;;(package! org-bullets :disable t)
+;;(package! org-superstar :recipe (:host github :repo "integral-dw/org-superstar-mode"))
 
 (package! valign :recipe (:host github :repo "casouri/valign"))
+(package! org-clock-budget :recipe (:host github :repo "Fuco1/org-clock-budget" :files ("*")))
