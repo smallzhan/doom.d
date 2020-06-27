@@ -145,6 +145,7 @@
    +bindings)
 
  :private
+ chinese
  ;; my-cc
  (org-enhanced
   +latex
