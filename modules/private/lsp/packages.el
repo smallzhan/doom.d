@@ -8,7 +8,7 @@
 (package! dap-mode :disable t)
 
 (package! lsp-python-ms :disable t)
-(package! company-tabnine)
+(package! company-tabnine :disable t)
 
 (package! lsp-ivy :disable t)
 

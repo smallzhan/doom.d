@@ -85,14 +85,14 @@ input scheme to convert to Chinese."
 Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
     (button-at (point)))
 
-  ;; (setq-default rime-disable-predicates
-  ;;               '(+rime-predicate-button-at-point-p
-  ;;                 rime-predicate-prog-in-code-p
-  ;;                 rime-predicate-punctuation-line-begin-p
-  ;;                 rime-predicate-after-alphabet-char-p
-  ;;                 ;;rime-predicate-auto-english-p
-  ;;                 rime-predicate-hydra-p
-  ;;                 ))
+  (setq-default rime-disable-predicates
+                '(+rime-predicate-button-at-point-p
+                  rime-predicate-prog-in-code-p
+                  rime-predicate-punctuation-line-begin-p
+                  rime-predicate-after-alphabet-char-p
+                  ;;rime-predicate-auto-english-p
+                  rime-predicate-hydra-p
+                  ))
   (setq-default rime-inline-predicates
                 '(rime-predicate-space-after-cc-p
                   rime-predicate-current-uppercase-letter-p))
