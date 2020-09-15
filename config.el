@@ -349,3 +349,7 @@
    "q" #'delete-window))
 
 
+(put 'customize-face 'disabled nil)
+
+
+(load custom-file t t t)

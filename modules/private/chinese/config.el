@@ -14,9 +14,10 @@
 
   (setq default-input-method "rime"
         rime-show-preedit 'inline
+        rime-preedit-face '(t (:underline t))
         rime-show-candidate 'posframe)
 
-  (setq rime-preedit-face '(:underline t))
+  ;;(setq rime-preedit-face '(:underline t))
 
   (defun +rime--posframe-display-content-a (args)
     "给 `rime--posframe-display-content' 传入的字符串加一个全角空

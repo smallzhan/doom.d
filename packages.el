@@ -18,11 +18,11 @@
 (package! yapfify
   :disable t)
 
-(package! company-posframe)
+(package! company-posframe :disable t)
 
-(package! company-box
-  :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar")
-  :disable t)
+;; (package! company-box
+;;   :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar")
+;;   :disable t)
 
 (package! pyim :recipe (:host github :repo "tumashu/pyim") :disable t)
 
