@@ -13,6 +13,7 @@
               :internal-border-width 10))
 
   (setq default-input-method "rime"
+        rime-show-preedit 'inline
         rime-show-candidate 'posframe)
 
   (setq rime-preedit-face '(:underline t))

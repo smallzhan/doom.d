@@ -10,6 +10,7 @@
 
 ;; Org文件
 (defvar +my-org-dir (expand-file-name "~/Dropbox/Notes/org/"))
+(setq org-roam-directory (expand-file-name "roam" +my-org-dir))
 ;; (when IS-MAC
 ;;   (setq frame-resize-pixelwise t
 
@@ -35,11 +36,11 @@
       user-mail-address "ustczhan@gmail.com")
 
 
-;;(setq custom-file (concat user-emacs-directory ".local/custom.el"))
+(setq custom-file (concat user-emacs-directory ".local/custom.el"))
 
 (doom!
  :input
- chinese
+ ;;chinese
 
  :completion
  ;; (
@@ -117,7 +118,8 @@
  (org
   +dragndrop
   +pomodoro
-  +jupyter)
+  +jupyter
+  +roam)
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
  ;;  +babel
@@ -145,12 +147,12 @@
    +bindings)
 
  :private
- chinese
  ;; my-cc
+ chinese
  (org-enhanced
   +latex
   +jekyll)
  lsp
  edit-enhanced)
 
-;;(load custom-file t t t)
+(load custom-file t t t)

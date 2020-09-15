@@ -16,7 +16,7 @@
 ;; disable line-number
 (setq display-line-numbers-type nil)
 
-(defvar default-fonts '("JetBrains Mono" "Fira Code" "SF Mono" "Hack"))
+(defvar default-fonts '("JetBrains Mono" "Fira Code" "SF Mono"))
 ;;font
 (if IS-MAC
     (setq doom-font (font-spec :family (nth (random (length default-fonts)) default-fonts) :size 13))
