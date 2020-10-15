@@ -10,7 +10,7 @@
 
 ;; Org文件
 (defvar +my-org-dir (expand-file-name "~/Dropbox/Notes/org/"))
-(setq org-roam-directory (expand-file-name "roam" +my-org-dir))
+;; (setq org-roam-directory (expand-file-name "roam" +my-org-dir))
 ;; (when IS-MAC
 ;;   (setq frame-resize-pixelwise t
 
@@ -118,7 +118,9 @@
   +dragndrop
   +pomodoro
   +jupyter
-  +roam)
+  ;;+roam
+  +pretty
+  )
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
  ;;  +babel
@@ -131,6 +133,7 @@
   ;;+lsp
   )
 
+ rust
  :app
  (rss
   +org)

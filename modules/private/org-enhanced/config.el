@@ -435,3 +435,23 @@
   (add-hook! 'org-clock-budget-report-mode-hook
     (toggle-truncate-lines 1)
     (my-buffer-face-mode-org-clock-budget)))
+
+(use-package! gkroam
+  :init
+  (setq gkroam-root-dir (expand-file-name "roam" +my-org-dir))
+  (setq gkroam-prettify-p nil
+        gkroam-show-brackets-p t
+        gkroam-use-default-filename t
+        gkroam-window-margin 4)
+  :bind
+  (("C-c k I" . gkroam-index)
+   ("C-c k d" . gkroam-daily)
+   ("C-c k f" . gkroam-find)
+   ("C-c k i" . gkroam-insert)
+   ("C-c k c" . gkroam-capture)
+   ("C-c k e" . gkroam-link-edit)
+   ("C-c k n" . gkroam-smart-new)
+   ("C-c k p" . gkroam-toggle-prettify)
+   ("C-c k t" . gkroam-toggle-brackets)
+   ("C-c k D" . gkroam-toggle-dynamic)
+   ("C-c k g" . gkroam-update)))
