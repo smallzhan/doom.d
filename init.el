@@ -137,7 +137,8 @@
  :app
  (rss
   +org)
-
+ :email
+ wanderlust
 
  :config
  ;; The default module set reasonable defaults for Emacs. It also provides

@@ -6,7 +6,8 @@
                    anaconda-mode company-anaconda
                    company-auctex company-reftex fcitx
                    irony irony-doc flycheck-irony company-irony
-                   rtags pyim bibtex-completion)
+                   rtags pyim bibtex-completion
+                   ivy-rtags irony-mode irony-eldoc)
 
 (package! company-english-helper
   :recipe (:host github :repo "manateelazycat/company-english-helper")
@@ -17,7 +18,6 @@
   :recipe (:host github :repo "manateelazycat/snails" :no-byte-compile t))
 (package! yapfify
   :disable t)
-
 (package! company-posframe :disable t)
 
 ;; (package! company-box
