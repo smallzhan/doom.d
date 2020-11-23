@@ -157,7 +157,9 @@
 (use-package! nox
   :config
   (setq nox-python-path (executable-find "python3")
+        nox-python-server "pyright"
         nox-python-server-dir "~/.doom.d/mspyls/")
+  ;;(add-to-list 'nox-server-programs '((c++-mode c-mode) "clangd"))       
   (dolist (hook (list
                'js-mode-hook
                'rust-mode-hook

@@ -187,3 +187,7 @@
   (setq shrface-paragraph-indentation 2)
   (setq shrface-paragraph-fill-column 120)
   )
+
+(use-package burly
+  :bind (("C-c b b" . burly-bookmark-frames)
+         ("C-c b o" . burly-open-bookmark)))
