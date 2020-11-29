@@ -10,17 +10,17 @@
          (lsp-mode . (lambda ()
                        ;; Integrate `which-key'
                        (lsp-enable-which-key-integration)
-                       
+
                        ;; Format and organize imports
                        )))
   :bind (:map lsp-mode-map
-          ("C-c C-d" . lsp-describe-thing-at-point)
-          ([remap xref-find-definitions] . lsp-find-definition)
-          ([remap xref-find-references] . lsp-find-references))
+         ("C-c C-d" . lsp-describe-thing-at-point)
+         ([remap xref-find-definitions] . lsp-find-definition)
+         ([remap xref-find-references] . lsp-find-references))
   :init
   ;; @see https://github.com/emacs-lsp/lsp-mode#performance
   (setq read-process-output-max (* 1024 1024)) ;; 1MB
-  
+
   (setq lsp-auto-guess-root t      ; Detect project root
         lsp-keep-workspace-alive nil ; Auto-kill LSP server
         lsp-enable-indentation nil
@@ -30,11 +30,11 @@
         lsp-enable-links nil
         lsp-enable-symbol-highlighting nil
         lsp-keymap-prefix "C-c l")
-  
-     ;; For `lsp-clients'
-     ;; (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))
-     (unless (executable-find "rls")
-       (setq lsp-rust-rls-server-command '("rustup" "run" "stable" "rls"))))
+
+  ;; For `lsp-clients'
+  ;; (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))
+  (unless (executable-find "rls")
+    (setq lsp-rust-rls-server-command '("rustup" "run" "stable" "rls"))))
 
 
 (use-package! lsp-ui
@@ -57,28 +57,28 @@
         "l" #'lsp-ui-peek--select-next-file))
 
 
- (use-package! dap-mode
-       ;; :functions dap-hydra/nil
-       :after lsp-mode
-       :diminish
-       :bind (:map lsp-mode-map
-              ("<f5>" . dap-debug)
-              ("M-<f5>" . dap-hydra))
-       :hook ((after-init . dap-mode)
-              (dap-mode . dap-ui-mode)
+(use-package! dap-mode
+  ;; :functions dap-hydra/nil
+  :after lsp-mode
+  :diminish
+  :bind (:map lsp-mode-map
+         ("<f5>" . dap-debug)
+         ("M-<f5>" . dap-hydra))
+  :hook ((after-init . dap-mode)
+         (dap-mode . dap-ui-mode)
          ;;     (dap-session-created . (lambda (_args) (dap-hydra)))
-           ;;   (dap-stopped . (lambda (_args) (dap-hydra)))
-            ;;  (dap-terminated . (lambda (_args) (dap-hydra/nil)))
+         ;;   (dap-stopped . (lambda (_args) (dap-hydra)))
+         ;;  (dap-terminated . (lambda (_args) (dap-hydra/nil)))
 
-              (python-mode . (lambda () (require 'dap-python)))
-              (ruby-mode . (lambda () (require 'dap-ruby)))
-              (go-mode . (lambda () (require 'dap-go)))
-              (java-mode . (lambda () (require 'dap-java)))
-              ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
-              (php-mode . (lambda () (require 'dap-php)))
-              (elixir-mode . (lambda () (require 'dap-elixir)))
-              ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))
-              (powershell-mode . (lambda () (require 'dap-pwsh)))))
+         (python-mode . (lambda () (require 'dap-python)))
+         (ruby-mode . (lambda () (require 'dap-ruby)))
+         (go-mode . (lambda () (require 'dap-go)))
+         (java-mode . (lambda () (require 'dap-java)))
+         ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
+         (php-mode . (lambda () (require 'dap-php)))
+         (elixir-mode . (lambda () (require 'dap-elixir)))
+         ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))
+         (powershell-mode . (lambda () (require 'dap-pwsh)))))
 
 
 (use-package! lsp-python-ms
@@ -117,10 +117,10 @@
   (setq python-shell-interpreter "python3"))
 
 (use-package! lsp-ivy
-     :after lsp-mode
-     :bind (:map lsp-mode-map
-            ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)
-            ("C-s-." . lsp-ivy-global-workspace-symbol)))
+  :after lsp-mode
+  :bind (:map lsp-mode-map
+         ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)
+         ("C-s-." . lsp-ivy-global-workspace-symbol)))
 ;; lsp client config
 
 ;; (def-package! ccls
@@ -155,25 +155,34 @@
 
 
 (use-package! nox
+  :load-path "~/.doom.d/extensions/nox"
   :config
   (setq nox-python-path (executable-find "python3")
         nox-python-server "pyright"
         nox-python-server-dir "~/.doom.d/mspyls/")
-  ;;(add-to-list 'nox-server-programs '((c++-mode c-mode) "clangd"))       
+  (add-to-list 'nox-server-programs '((c++-mode c-mode) "clangd"))
   (dolist (hook (list
-               'js-mode-hook
-               'rust-mode-hook
-               'python-mode-hook
-               'ruby-mode-hook
-               'java-mode-hook
-               'sh-mode-hook
-               'php-mode-hook
-               'c-mode-common-hook
-               'c-mode-hook
-               'c++-mode-hook
-               'haskell-mode-hook
-               ))
+                 'js-mode-hook
+                 'rust-mode-hook
+                 'python-mode-hook
+                 'ruby-mode-hook
+                 'java-mode-hook
+                 'sh-mode-hook
+                 'php-mode-hook
+                 'c-mode-common-hook
+                 'c-mode-hook
+                 'c++-mode-hook
+                 'haskell-mode-hook
+                 ))
     (add-hook hook '(lambda () (nox-ensure))))
 
   (add-hook 'python-mode-hook '(lambda () (remove-hook 'completion-at-point-functions 'python-completion-at-point t)))
-)
+  )
+
+(use-package! eglot
+  :config
+  (setq eglot-python-path (executable-find "python3"))
+  ;;(add-to-list 'eglot-server-programs '((python-mode) "pyright-langserver" "--stdio"))
+  (add-to-list 'eglot-server-programs '((python-mode) "jedi-language-server"))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-hook 'prog-mode-hook '(lambda () (eglot-ensure))))
