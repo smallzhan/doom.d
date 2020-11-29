@@ -26,8 +26,8 @@
   (setq notdeft-sparse-directories `(("~" . (,(concat +my-org-dir "webclip.org")))))
   (setq notdeft-xapian-program (executable-find "notdeft-xapian"))
   :bind (:map notdeft-mode-map
-          ("C-q" . notdeft-quit)
-          ("C-r" . notdeft-refresh)))
+         ("C-q" . notdeft-quit)
+         ("C-r" . notdeft-refresh)))
 
 
 (use-package! org-pdftools
@@ -271,7 +271,7 @@
   (pretty-hydra-define
     org-hydra
     (:title "Org Templates"
-            :color blue :quit-key "q")
+     :color blue :quit-key "q")
     ("Basic"
      (("a" (hot-expand "<a") "ascii")
       ("c" (hot-expand "<c") "center")
@@ -346,62 +346,62 @@
              ((org-agenda-span 'day)
               (org-super-agenda-groups
                '((:name "Today"
-                        :time-grid t
-                        :date today
-                        :todo "TODAY"
-                        :scheduled today
-                        :order 1)
+                  :time-grid t
+                  :date today
+                  :todo "TODAY"
+                  :scheduled today
+                  :order 1)
                  (:name "Planned"
-                        :time-grid t
-                        :todo t
-                        :order 2)
+                  :time-grid t
+                  :todo t
+                  :order 2)
                  ))))
             (alltodo
              ""
              ((org-agenda-overriding-header "")
               (org-super-agenda-groups
                '((:name "Next"
-                        :and (:scheduled nil
-                                         :deadline nil
-                                         :category ("task" "link" "capture"))
-                        :date today
-                        :order 1
-                        )
+                  :and (:scheduled nil
+                        :deadline nil
+                        :category ("task" "link" "capture"))
+                  :date today
+                  :order 1
+                  )
                  (:name "Important"
-                        :tag "Important"
-                        :priority "A"
-                        :order 6)
+                  :tag "Important"
+                  :priority "A"
+                  :order 6)
                  (:name "Due Today"
-                        :deadline today
-                        :order 2)
+                  :deadline today
+                  :order 2)
                  (:name "Due Soon"
-                        :deadline future
-                        :order 8)
+                  :deadline future
+                  :order 8)
                  (:name "Overdue"
-                        :deadline past
-                        :order 7)
+                  :deadline past
+                  :order 7)
                  (:name "Issues"
-                        :tag "Issue"
-                        :order 12)
+                  :tag "Issue"
+                  :order 12)
                  (:name "Projects"
-                        :tag "PROJ"
-                        :order 14)
+                  :tag "PROJ"
+                  :order 14)
                  (:name "Emacs"
-                        :tag "Emacs"
-                        :order 13)
+                  :tag "Emacs"
+                  :order 13)
                  (:name "Research"
-                        :tag ("LEARN" "STUDY")
-                        :order 15)
+                  :tag ("LEARN" "STUDY")
+                  :order 15)
                  (:name "To read"
-                        :and (:tag "READING"
-                                   :not (:tag ("HOLD" "WAIT")))
-                        :order 16)
+                  :and (:tag "READING"
+                        :not (:tag ("HOLD" "WAIT")))
+                  :order 16)
 
                  (:name "SomeDay"
-                        :priority<= "C"
-                        :tag ("WAIT" "HOLD")
-                        :todo ("SOMEDAY" )
-                        :order 90))))))))))
+                  :priority<= "C"
+                  :tag ("WAIT" "HOLD")
+                  :todo ("SOMEDAY" )
+                  :order 90))))))))))
 
 
 ;; (use-package! org-superstar
@@ -409,9 +409,9 @@
 
 
 (use-package! valign
-  ;:load-path "~/.doom.d/extensions/valign"
-  ;:init
-  ;(require 'valign)
+                                        ;:load-path "~/.doom.d/extensions/valign"
+                                        ;:init
+                                        ;(require 'valign)
   :hook
   ('org-mode . #'valign-mode))
 
@@ -444,16 +444,19 @@
         gkroam-show-brackets-p t
         gkroam-use-default-filename t
         gkroam-window-margin 4)
-  
+
   :bind
-  (:map gkroam-mode-map  
-       (("C-c k I" . gkroam-index)
-        ("C-c k d" . gkroam-daily)
-        ("C-c k f" . gkroam-find)
-        ("C-c k i" . gkroam-insert)
-        ("C-c k c" . gkroam-capture)
-        ("C-c k e" . gkroam-link-edit)
-        ("C-c k n" . gkroam-smart-new)
-        ("C-c k p" . gkroam-toggle-prettify)
-        ("C-c k t" . gkroam-toggle-brackets)
-        ("C-c k g" . gkroam-update))))
+  (:map gkroam-mode-map
+   ("C-c k I" . gkroam-index)
+   ("C-c k d" . gkroam-daily)
+   ("C-c k D" . gkroam-delete)
+   ("C-c k f" . gkroam-find)
+   ("C-c k i" . gkroam-insert)
+   ("C-c k n" . gkroam-dwim)
+   ("C-c k c" . gkroam-capture)
+   ("C-c k e" . gkroam-link-edit)
+   ("C-c k u" . gkroam-show-unlinked)
+   ("C-c k p" . gkroam-toggle-prettify)
+   ("C-c k t" . gkroam-toggle-brackets)
+   ("C-c k R" . gkroam-rebuild-caches)
+   ("C-c k g" . gkroam-update)))
