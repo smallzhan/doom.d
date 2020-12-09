@@ -113,7 +113,7 @@
  common-lisp
  (latex
   +cdlatex)
- 
+
  (org
   +dragndrop
   +pomodoro
@@ -151,7 +151,7 @@
 
  :private
  ;; my-cc
-  (company
+ (company
   +childframe)
  chinese
  (org-enhanced

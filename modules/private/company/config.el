@@ -20,8 +20,8 @@
         ;; These auto-complete the current selection when
         ;; `company-auto-complete-chars' is typed. This is too magical. We
         ;; already have the much more explicit RET and TAB.
-        company-auto-commit t
-        
+        company-auto-commit nil
+
         company-auto-commit-chars nil
 
         ;; Only search the current buffer for `company-dabbrev' (a backend that
@@ -34,7 +34,7 @@
         company-dabbrev-downcase nil)
 
   :config
-  
+
 
   (add-hook 'after-change-major-mode-hook #'+company-init-backends-h 'append)
 
@@ -52,18 +52,18 @@
   :when (featurep! +childframe)
   :hook (company-mode . company-box-mode)
   :config
-   (defun +company-box-icons--nox (candidate)
+  (defun +company-box-icons--nox (candidate)
     (-when-let* ((eglot-item (get-text-property 0 'nox--lsp-item candidate))
                  (kind-num (plist-get eglot-item :kind)))
       (alist-get kind-num company-box-icons--lsp-alist)))
-   
+
   (setq company-box-show-single-candidate t
         company-box-backends-colors nil
         company-box-icons-alist 'company-box-icons-all-the-icons
         company-box-icons-functions
         (cons #'+company-box-icons--nox company-box-icons-functions)
         company-box-icons-all-the-icons
-         `((Unknown . ,(all-the-icons-material "find_in_page" :height 0.8 :v-adjust -0.15))
+        `((Unknown . ,(all-the-icons-material "find_in_page" :height 0.8 :v-adjust -0.15))
           (Text . ,(all-the-icons-faicon "text-width" :height 0.8 :v-adjust -0.02))
           (Method . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.02 :face 'all-the-icons-purple))
           (Function . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.02 :face 'all-the-icons-purple))
@@ -103,11 +103,7 @@
 
   ;; Don't show documentation in echo area, because company-box displays its own
   ;; in a child frame.
-  (delq! 'company-echo-metadata-frontend company-frontends)
-
-  
-
-  )
+  (delq! 'company-echo-metadata-frontend company-frontends))
 
 
 (use-package! company-dict
@@ -121,5 +117,6 @@
           (add-to-list 'company-dict-minor-mode-list mode nil #'eq)
         (setq company-dict-minor-mode-list (delq mode company-dict-minor-mode-list))))))
 
-  (use-package! company-prescient
-    :init (company-prescient-mode 1))
+(use-package! company-prescient
+  :after company
+  :config (company-prescient-mode 1))
