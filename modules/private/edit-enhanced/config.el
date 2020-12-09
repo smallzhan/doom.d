@@ -5,7 +5,8 @@
              color-rg-search-input-in-current-file
              color-rg-search-symbol-in-current-file)
   :config
-  (setq color-rg-buffer (projectile-compilation-buffer-name "color-rg"))
+  (setq compilation-buffer-name-function #'compilation--default-buffer-name
+        compilation-save-buffers-predicate nil)
   (setq color-rg-kill-temp-buffer-p nil))
 
 
