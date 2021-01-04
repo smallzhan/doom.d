@@ -6,6 +6,7 @@
 
   (if IS-WINDOWS
       (setq rime-share-data-dir "~/.doom.d/extensions/emacs-rime/data"))
+  (setq rime-user-data-dir "~/.emacs.d/rime")
   (setq rime-posframe-properties
         (list :background-color "#333333"
               :foreground-color "#dcdccc"
