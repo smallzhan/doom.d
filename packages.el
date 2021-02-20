@@ -15,7 +15,7 @@
 (package! aweshell
   :recipe (:host github :repo "manateelazycat/aweshell"))
 (package! snails
-  :recipe (:host github :repo "manateelazycat/snails" :no-byte-compile t))
+  :recipe (:host github :repo "manateelazycat/snails" :build (:not compile)))
 (package! yapfify
   :disable t)
 (package! company-posframe :disable t)
