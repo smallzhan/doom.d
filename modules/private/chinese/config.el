@@ -1,6 +1,9 @@
 ;;; -*- lexical-binding: t; -*-
 (use-package! rime
-  :load-path "~/.doom.d/extensions/emacs-rime"
+  ;:load-path "~/.doom.d/extensions/emacs-rime"
+  :init
+  (if IS-MAC
+      (setq rime-librime-root "~/Projects/librime/dist"))
   :config
   ;;; Code:
 

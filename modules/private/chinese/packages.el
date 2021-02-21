@@ -1,3 +1,3 @@
 
 (package! pinyinlib)
-
+(package! rime)
