@@ -37,12 +37,11 @@
          font
        (find-fonts other)))))
 
-(defvar chinese-fonts '("Sarasa Mono SC" "PingFang SC" "Microsoft YaHei"))
-
-(let ((font (find-fonts chinese-fonts)))
-  (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font t charset font))
-  (if IS-WINDOWS
-      (setq doom-unicode-font (font-spec :family font))))
+(defvar chinese-fonts '("PingFang SC" "Microsoft YaHei" "Sarasa Mono SC"))
 
 
+(run-at-time "2sec" nil
+             (lambda ()         
+               (let ((font (find-fonts chinese-fonts)))        
+                 (dolist (charset '(kana han cjk-misc bopomofo))
+                   (set-fontset-font t charset font)))))

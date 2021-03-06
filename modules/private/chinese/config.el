@@ -3,7 +3,8 @@
   ;:load-path "~/.doom.d/extensions/emacs-rime"
   :init
   (if IS-MAC
-      (setq rime-librime-root "~/Projects/librime/dist"))
+      (setq rime-librime-root "~/Projects/librime/dist")
+    (setq rime-librime-root "E:/Projects/librime/dist"))
   :config
   ;;; Code:
 
