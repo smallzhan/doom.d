@@ -92,11 +92,23 @@ input scheme to convert to Chinese."
 Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
     (button-at (point)))
 
+
+  (defun +translate-symbol-to-rime ()
+    (interactive) 
+    (let* ((input (thing-at-point 'symbol))
+           (beg (car (bounds-of-thing-at-point 'symbol)))
+           (end (point)))
+      (delete-region beg end)
+      (toggle-input-method)
+      (dolist (c (string-to-list input))
+        (rime-lib-process-key c 0))
+      (rime--redisplay)))
+  
   (setq-default rime-disable-predicates
                 '(+rime-predicate-button-at-point-p
                   rime-predicate-prog-in-code-p
                   rime-predicate-punctuation-line-begin-p
-                  rime-predicate-after-alphabet-char-p
+                  ;;rime-predicate-after-alphabet-char-p
                   ;;rime-predicate-auto-english-p
                   rime-predicate-hydra-p
                   ))
@@ -104,12 +116,14 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
                 '(rime-predicate-space-after-cc-p
                   rime-predicate-current-uppercase-letter-p))
   :bind
-  ("M-l" . #'+rime-convert-string-at-point)
+  ("M-l" . #'+translate-symbol-to-rime)
   (:map rime-active-mode-map
-   ("M-l" . #'rime-inline-ascii))
+   ("<tab>" . #'+rime-inline-ascii)
+   ("M-l" . #'+translate-symbol-to-rime))
   (:map rime-mode-map
-   ("M-l" . #'rime-force-enable))
-  )
+   ("M-l" . #'+translate-symbol-to-rime)
+   ("M-j" . #'rime-force-enable)))
+
 
 (use-package! pinyinlib
   :commands (pinyinlib-build-regexp-string)
