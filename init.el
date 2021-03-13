@@ -159,6 +159,7 @@
   +jekyll)
 
  lsp
+ eaf
  edit-enhanced)
 
 (load custom-file t t t)
