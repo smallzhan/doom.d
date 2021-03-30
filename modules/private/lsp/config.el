@@ -175,9 +175,9 @@
                  'c++-mode-hook
                  'haskell-mode-hook
                  ))
-    (add-hook hook '(lambda () (nox-ensure))))
+    (add-hook hook #'(lambda () (nox-ensure))))
 
-  (add-hook 'python-mode-hook '(lambda () (remove-hook 'completion-at-point-functions 'python-completion-at-point t)))
+  (add-hook 'python-mode-hook #'(lambda () (remove-hook 'completion-at-point-functions 'python-completion-at-point t)))
   )
 
 (use-package! eglot
@@ -186,4 +186,4 @@
   ;;(add-to-list 'eglot-server-programs '((python-mode) "pyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs '((python-mode) "jedi-language-server"))
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-hook 'prog-mode-hook '(lambda () (eglot-ensure))))
+  (add-hook 'prog-mode-hook #'(lambda () (eglot-ensure))))

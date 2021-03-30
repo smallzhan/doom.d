@@ -22,7 +22,9 @@
 ;;
 ;;
 ;;; Change log:
-;;
+;; 2021/03/24
+;;      * cl --> cl-lib
+;;      
 ;; 2019/07/15
 ;;      * Tidy the code. Add support to timestamp such as <2019-07-15 Mon 15:00-16:00>
 ;;
@@ -30,7 +32,7 @@
 ;;      * First edition. Just copy the file from the url.
 ;;        https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
 
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (unless (fboundp 'read-from-whole-string) (require 'thingatpt))
 
@@ -72,8 +74,8 @@
             (unless func (message "Sexp is wrong") (throw 'exit nil))
             (when (symbolp func)
               (setq func (cadr (assoc func next-spec-day-alist))))
-            (incf (nth 3 pt))
-            (do ((i 0 (1+ i)))
+            (cl-incf (nth 3 pt))
+            (cl-do ((i 0 (1+ i)))
                 ((or
                   (> i next-spec-day-search-days)
                   (let* ((d (nth 3 pt))
@@ -83,7 +85,7 @@
                     (eval func)))
                  (when (> i next-spec-day-search-days)
                    (setf pt nil)))
-              (incf (nth 3 pt)))
+              (cl-incf (nth 3 pt)))
             (if pt
                 (funcall
                  (if (string= "NEXT_SPEC_DEADLINE" type)
