@@ -11,9 +11,10 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;redguardtoo/counsel-etags
 (package! counsel-etags)
 
-(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
+;;(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
 ;;(package! pdf-tools :recipe (:host github :repo "politza/pdf-tools"))
 
+(package! pdf-tools :disable t)
 (package! flywrap
   :recipe (:host github :repo "casouri/lunarymacs" :files ("site-lisp/flywrap.el"))
   :disable t)
