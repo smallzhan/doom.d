@@ -14,8 +14,8 @@
 (package! ivy-bibtex :disable t)
 (package! org-super-agenda)
 
-(package! org-pdftools)
-(package! org-noter-pdftools)
+(package! org-pdftools :disable t)
+(package! org-noter-pdftools :disable t)
 
 ;;(package! org-bullets :disable t)
 ;;(package! org-superstar :recipe (:host github :repo "integral-dw/org-superstar-mode"))
