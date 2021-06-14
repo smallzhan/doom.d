@@ -460,3 +460,12 @@
    ("C-c k t" . gkroam-toggle-brackets)
    ("C-c k R" . gkroam-rebuild-caches)
    ("C-c k g" . gkroam-update)))
+
+(after! org-roam
+  (add-to-list 'org-roam-capture-ref-templates
+               '("a" "Annotation" plain (function org-roam-capture--get-point)
+                 "%U ${body}\n"
+                 :file-name "${slug}"
+                 :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+                 :immediate-finish t
+                 :unnarrowed t)))

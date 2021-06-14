@@ -9,7 +9,7 @@
 (package! org-protocol-capture-html :disable t
   :recipe (:host github :repo "alphapapa/org-protocol-capture-html"))
 ;;(package! org-noter :recipe (:host github :repo "fuxialexander/org-noter" :branch "pdf-notes-booster"))
-(package! org-noter)
+(package! org-noter :disable t)
 (package! org-ref)
 (package! ivy-bibtex :disable t)
 (package! org-super-agenda)
@@ -22,4 +22,4 @@
 
 (package! valign :recipe (:host github :repo "casouri/valign"))
 (package! org-clock-budget :recipe (:host github :repo "Fuco1/org-clock-budget" :files ("*")))
-(package! gkroam :recipe (:host github :repo "Kinneyzhang/gkroam" :branch "develop"))
+(package! gkroam :recipe (:host github :repo "Kinneyzhang/gkroam" :branch "develop") :disable t)
