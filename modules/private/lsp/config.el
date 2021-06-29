@@ -187,3 +187,22 @@
   (add-to-list 'eglot-server-programs '((python-mode) "jedi-language-server"))
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'prog-mode-hook #'(lambda () (eglot-ensure))))
+
+
+(use-package! citre
+  :load-path "~/.doom.d/extensions/citre"
+  :defer t
+  :init
+  ;; This is needed in `:init' block for lazy load to work.
+  (require 'citre-config)
+  ;; Bind your frequently used commands.
+  (global-set-key (kbd "C-c c j") #'citre-jump)
+  (global-set-key (kbd "C-c c J") #'citre-jump-back)
+  (global-set-key (kbd "C-c c p") #'citre-ace-peek)
+  :config
+  (setq
+   ;; Set this if readtags is not in your path.
+   ;; citre-readtags-program "/path/to/readtags"
+   ;; Set this if you use project management plugin like projectile.  It's
+   ;; only used to display paths relatively, and doesn't affect actual use.
+   citre-project-root-function #'projectile-project-root))

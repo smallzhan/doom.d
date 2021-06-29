@@ -18,9 +18,32 @@
 
 (after! projectile
   (setq projectile-require-project-root t)
-  (if IS-WINDOWS
-      (setq projectile-git-submodule-command
-            "git submodule --quiet foreach \"echo $sm_path\" | tr '\\n' '\\0'"))
+  (when IS-WINDOWS
+    (setq projectile-git-submodule-command
+          "git submodule --quiet foreach \"echo $sm_path\" | tr '\\n' '\\0'")
+    (defun build-keil-project()
+      (interactive)
+      (setq rootdir (projectile-project-root)
+            logfile (concat (projectile-project-root) "build.txt"))
+      (if (file-exists-p logfile)
+          (delete-file logfile))
+      (setq projfile (ivy-read "Projs: " (directory-files rootdir nil "\.uvproj$")))
+
+      (make-process
+       :name "build"
+       :command `("D:\\Keil_v5\\UV4\\UV4.exe"
+                  "-cr"
+                  ,(concat rootdir projfile)
+                  "-j0"
+                  "-o"
+                  ,logfile)
+       :connection-type 'pipe)
+
+      (find-file-other-window logfile)
+      (auto-save-mode -1)
+      (auto-revert-mode 1)
+      (compilation-mode 1)))
+
   (add-to-list 'projectile-project-root-files-bottom-up ".projectile"))
 
 (after! company
