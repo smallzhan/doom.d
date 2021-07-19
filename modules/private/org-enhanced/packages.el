@@ -23,3 +23,4 @@
 (package! valign :recipe (:host github :repo "casouri/valign"))
 (package! org-clock-budget :recipe (:host github :repo "Fuco1/org-clock-budget" :files ("*")))
 (package! gkroam :recipe (:host github :repo "Kinneyzhang/gkroam" :branch "develop") :disable t)
+(package! org-roam)

@@ -118,7 +118,7 @@
   +dragndrop
   +pomodoro
   +jupyter
-  +roam
+  ;;+roam
   +pretty
   )
  ;; (org              ; organize your plain life in plain text

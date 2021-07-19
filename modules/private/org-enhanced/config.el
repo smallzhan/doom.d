@@ -461,7 +461,23 @@
    ("C-c k R" . gkroam-rebuild-caches)
    ("C-c k g" . gkroam-update)))
 
-(after! org-roam
+
+(use-package! org-roam
+  ;;:hook (org-load . org-roam-setup)
+  :after org
+  :custom
+  (org-roam-directory (file-truename (concat org-directory "roam")))
+  :bind (("C-c n r b" . org-roam-buffer-toggle)
+         ("C-c n r f" . org-roam-node-find)
+         ("C-c n r g" . org-roam-graph)
+         ("C-c n r i" . org-roam-node-insert)
+         ("C-c n r c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n r j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-setup)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol)
   (add-to-list 'org-roam-capture-ref-templates
                '("a" "Annotation" plain (function org-roam-capture--get-point)
                  "%U ${body}\n"
