@@ -467,14 +467,15 @@
   :after org
   :custom
   (org-roam-directory (file-truename (concat org-directory "roam")))
-  :bind (("C-c n r b" . org-roam-buffer-toggle)
-         ("C-c n r f" . org-roam-node-find)
-         ("C-c n r g" . org-roam-graph)
-         ("C-c n r i" . org-roam-node-insert)
-         ("C-c n r c" . org-roam-capture)
+  :bind (("C-c o r b" . org-roam-buffer-toggle)
+         ("C-c o r f" . org-roam-node-find)
+         ("C-c o r g" . org-roam-graph)
+         ("C-c o r i" . org-roam-node-insert)
+         ("C-c o r c" . org-roam-capture)
          ;; Dailies
-         ("C-c n r j" . org-roam-dailies-capture-today))
+         ("C-c o r j" . org-roam-dailies-capture-today))
   :config
+  (setq org-roam-v2-ack t)
   (org-roam-setup)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol)
@@ -482,6 +483,6 @@
                '("a" "Annotation" plain (function org-roam-capture--get-point)
                  "%U ${body}\n"
                  :file-name "${slug}"
-                 :head "#+title: ${title}\n#+roam_key: ${ref}\n#+roam_alias:\n"
+                 :head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
                  :immediate-finish t
                  :unnarrowed t)))
