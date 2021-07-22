@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 (use-package! rime
-  ;:load-path "~/.doom.d/extensions/emacs-rime"
+                                        ;:load-path "~/.doom.d/extensions/emacs-rime"
   :init
   (if IS-MAC
       (setq rime-librime-root "~/Projects/librime/dist")
@@ -20,7 +20,11 @@
   (setq default-input-method "rime"
         rime-show-preedit 'inline
         rime-preedit-face '(t (:underline t))
-        rime-show-candidate 'posframe)
+        rime-show-candidate 'posframe
+        rime-inline-ascii-holder ?a
+        rime-cursor "|"
+        window-min-height 1
+        rime-title "")
 
   ;;(setq rime-preedit-face '(:underline t))
 
@@ -40,7 +44,7 @@
     (error "Function `rime--posframe-display-content' is not available."))
 
 
-(defun +rime-force-enable ()
+  (defun +rime-force-enable ()
     "[ENHANCED] Force into Chinese input state.
 If current input method is not `rime', active it first. If it is
 currently in the `evil' non-editable state, then switch to
@@ -94,7 +98,7 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
 
 
   (defun +translate-symbol-to-rime ()
-    (interactive) 
+    (interactive)
     (let* ((input (thing-at-point 'symbol))
            (beg (car (bounds-of-thing-at-point 'symbol)))
            (end (point)))
@@ -103,7 +107,7 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
       (dolist (c (string-to-list input))
         (rime-lib-process-key c 0))
       (rime--redisplay)))
-  
+
   (setq-default rime-disable-predicates
                 '(+rime-predicate-button-at-point-p
                   rime-predicate-prog-in-code-p
@@ -115,13 +119,15 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
   (setq-default rime-inline-predicates
                 '(rime-predicate-space-after-cc-p
                   rime-predicate-current-uppercase-letter-p))
+  (load! "im-cursor-chg")
+  (cursor-chg-mode 1)
   :bind
-  ("M-l" . #'+translate-symbol-to-rime)
+  ("M-l" . #'+rime-convert-string-at-point)
   (:map rime-active-mode-map
    ("<tab>" . #'+rime-inline-ascii)
-   ("M-l" . #'+translate-symbol-to-rime))
+   ("M-l" . #'+rime-convert-string-at-point))
   (:map rime-mode-map
-   ("M-l" . #'+translate-symbol-to-rime)
+   ("M-l" . #'+rime-convert-string-at-point)
    ("M-j" . #'rime-force-enable)))
 
 
