@@ -516,11 +516,10 @@
   :after org
   :load-path "~/.doom.d/extensions/org-caldav"
   :config
-  (setq org-caldav-url "https://calendar.dingtalk.com/dav/u_kxmc6elm")
-  (setq org-caldav-calendar-id "primary")
-  (setq org-caldav-uuid-extension "")
-  (setq org-caldav-sync-direction 'twoway)
-  (setq org-caldav-inbox (concat org-directory "agenda/dingtalk.org"))
-  (setq org-caldav-files `(,org-caldav-inbox))
+  (setq org-caldav-url "https://calendar.dingtalk.com/dav/u_kxmc6elm"
+        org-caldav-calendar-id "primary"
+        org-caldav-uuid-extension ""
+        org-caldav-sync-direction 'cal->org
+        org-caldav-inbox (concat org-directory "agenda/dingtalk.org"))
+  (setq org-caldav-files `(org-caldav-inbox))
   (add-to-list 'org-agenda-files org-caldav-inbox))
-  
