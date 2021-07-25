@@ -521,5 +521,5 @@
         org-caldav-uuid-extension ""
         org-caldav-sync-direction 'cal->org
         org-caldav-inbox (concat org-directory "agenda/dingtalk.org"))
-  (setq org-caldav-files `(org-caldav-inbox))
+  (setq org-caldav-files (list org-caldav-inbox))
   (add-to-list 'org-agenda-files org-caldav-inbox))
