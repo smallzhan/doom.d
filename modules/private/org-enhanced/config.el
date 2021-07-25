@@ -355,6 +355,9 @@
                   :time-grid t
                   :todo t
                   :order 2)
+                 (:name "Work"
+                  :category "dingtalk"
+                  :order 3)
                  ))))
             (alltodo
              ""
@@ -474,15 +477,50 @@
          ("C-c o r c" . org-roam-capture)
          ;; Dailies
          ("C-c o r j" . org-roam-dailies-capture-today))
-  :config
+  :init
   (setq org-roam-v2-ack t)
+  :config
   (org-roam-setup)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol)
   (add-to-list 'org-roam-capture-ref-templates
-               '("a" "Annotation" plain (function org-roam-capture--get-point)
+               '("a" "Annotation" plain ;;(function org-roam-capture--get-point)
                  "%U ${body}\n"
-                 :file-name "${slug}"
-                 :head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
+                 :if-new (file+head "${slug}.org" "#+title: ${title}\n")
+                 ;;:file-name "${slug}"
+                 ;;:head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
                  :immediate-finish t
-                 :unnarrowed t)))
+                 :unnarrowed t))
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                 (display-buffer-in-direction)
+                 (direction . right)
+                 (window-width . 0.33)
+                 (window-height . fit-window-to-buffer))))
+
+(use-package! org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref))
+
+
+(use-package! elfeed-dashboard
+  :after elfeed
+  :commands elfeed-dashboard
+  :config
+  (setq elfeed-dashboard-file (concat org-directory "elfeed-dashboard.org"))
+  ;; update feed counts on elfeed-quit
+  (advice-add 'elfeed-search-quit-window :after #'elfeed-dashboard-update-links))
+
+(use-package! org-caldav
+  :after org
+  :load-path "~/.doom.d/extensions/org-caldav"
+  :config
+  (setq org-caldav-url "https://calendar.dingtalk.com/dav/u_kxmc6elm")
+  (setq org-caldav-calendar-id "primary")
+  (setq org-caldav-uuid-extension "")
+  (setq org-caldav-sync-direction 'twoway)
+  (setq org-caldav-inbox (concat org-directory "agenda/dingtalk.org"))
+  (setq org-caldav-files `(,org-caldav-inbox))
+  (add-to-list 'org-agenda-files org-caldav-inbox))
+  

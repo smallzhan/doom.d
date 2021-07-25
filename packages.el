@@ -2,7 +2,7 @@
 ;;; config/private/packages.el
 
 (disable-packages! glsl-mode cuda-mode opencl-mode
-                   latex-preview-pane org-ref nose
+                   latex-preview-pane nose
                    anaconda-mode company-anaconda
                    company-auctex company-reftex fcitx
                    irony irony-doc flycheck-irony company-irony

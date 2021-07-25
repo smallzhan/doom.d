@@ -1,6 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 
-(package! notdeft :recipe (:host github :repo "hasu/notdeft")) 
+(package! notdeft :recipe (:host github :repo "hasu/notdeft"))
 (package! ox-gfm)
 (package! ob-ipython :disable t)
 (package! cdlatex)
@@ -24,3 +24,5 @@
 (package! org-clock-budget :recipe (:host github :repo "Fuco1/org-clock-budget" :files ("*")))
 (package! gkroam :recipe (:host github :repo "Kinneyzhang/gkroam" :branch "develop") :disable t)
 (package! org-roam)
+(package! org-roam-bibtex :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+(package! elfeed-dashboard :recipe (:host github :repo "Manoj321/elfeed-dashboard"))

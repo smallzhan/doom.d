@@ -18,8 +18,11 @@
 (defvar im-cursor-color "Orange"
   "The color for input method.")
 
-(defvar im-default-cursor-color (frame-parameter nil 'cursor-color)
-  "The default cursor color.")
+;;(defvar im-default-cursor-color (frame-parameter nil 'cursor-color)
+;;   "The default cursor color.")
+(defvar im-default-cursor-color "#51afef")
+
+;(defvar im-default-cursor-color (face-attribute 'highlight :background))
 
 (defun im--chinese-p ()
   "Check if the current input state is Chinese."
@@ -44,7 +47,6 @@ When this mode is on, `im-change-cursor-color' control cursor changing."
   (if cursor-chg-mode
       (add-hook 'post-command-hook 'im-change-cursor-color)
     (remove-hook 'post-command-hook 'im-change-cursor-color)))
-
 
 (provide 'im-cursor-chg)
 ;;; im-cursor-chg.el ends here
