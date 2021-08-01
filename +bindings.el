@@ -15,8 +15,8 @@
  "s-<left>"  #'windmove-left
  "s-<down>"  #'windmove-down
 
- "C-s"       #'swiper-isearch
- "C-r"       #'swiper-isearch-backward
+ "C-s"       #'my-isearch-or-consult
+ "C-r"       #'consult-isearch-backward
  "C-S-s"     #'isearch-forward
  "C-x k"     #'ido-kill-buffer
  "C-x K"     #'doom/kill-this-buffer-in-all-windows
@@ -36,10 +36,10 @@
 
  (:leader
 
-   (:prefix ("a" . "application")
-     :desc "Snails"            "s" #'snails
-     :desc "Elfeed Rss Reader" "r" #'elfeed
-     :desc "Org Noter"         "n" #'org-noter)
+   ;; (:prefix ("a" . "application")
+   ;;   :desc "Snails"            "s" #'snails
+   ;;   :desc "Elfeed Rss Reader" "r" #'elfeed
+   ;;   :desc "Org Noter"         "n" #'org-noter)
    
    "c" nil
    (:prefix ("c" . "code")

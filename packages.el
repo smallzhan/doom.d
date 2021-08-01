@@ -38,6 +38,8 @@
 
 (package! pretty-hydra)
 
+(package! isearch-mb)
+
 ;(package! alert :recipe (:no-byte-compile t))
 ;(package! org-pomodoro :recipe (:no-byte-compile t))
 ;(package! auctex :recipe (:no-byte-compile t))

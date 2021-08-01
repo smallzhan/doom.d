@@ -519,7 +519,8 @@
   (setq org-caldav-url "https://calendar.dingtalk.com/dav/u_kxmc6elm"
         org-caldav-calendar-id "primary"
         org-caldav-uuid-extension ""
-        org-caldav-sync-direction 'cal->org
+        org-caldav-sync-direction 'twoway
+        org-caldav-delete-calendar-entries 'never
         org-caldav-inbox (concat org-directory "agenda/dingtalk.org"))
   (setq org-caldav-files (list org-caldav-inbox))
   (add-to-list 'org-agenda-files org-caldav-inbox))

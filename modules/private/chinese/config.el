@@ -167,15 +167,22 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
               ""))
             (t nil)))
 
-    (mapcar
-     (lambda (item)
-       (let ((key (car item))
-             (value (cdr item)))
-         (when (member value '(+ivy-prescient-non-fuzzy
-                               ivy--regex-plus))
-           (setf (alist-get key ivy-re-builders-alist)
-                 #'ivy--regex-pinyin))))
-     ivy-re-builders-alist)))
+    (after! orderless
+      (defun completion--regex-pinyin (str)
+        (orderless-regexp (pinyinlib-build-regexp-string str)))
+      (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+
+
+    ;; (mapcar
+    ;;  (lambda (item)
+    ;;    (let ((key (car item))
+    ;;          (value (cdr item)))
+    ;;      (when (member value '(+ivy-prescient-non-fuzzy
+    ;;                            ivy--regex-plus))
+    ;;        (setf (alist-get key ivy-re-builders-alist)
+    ;;              #'ivy--regex-pinyin))))
+    ;;  ivy-re-builders-alist)
+    ))
 
 
 (after! pyim

@@ -53,7 +53,7 @@
           )
   :hook ((prog-mode ielm-mode minibuffer-inactive-mode sh-mode) . awesome-pair-mode))
 
-(use-package counsel-etags
+(use-package! counsel-etags
   ;;:ensure t
   :bind (("M-]" . counsel-etags-find-tag-at-point))
   :init

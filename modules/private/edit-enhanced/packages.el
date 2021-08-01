@@ -9,7 +9,7 @@
 (package! awesome-pair :disable t :recipe (:host github :repo "manateelazycat/awesome-pair"))
 ;;(package! counsel-etags :recipe (:host github :repo "redguardtoo/counsel-etags"))
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;redguardtoo/counsel-etags
-(package! counsel-etags)
+(package! counsel-etags :disable t)
 
 ;;(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
 ;;(package! pdf-tools :recipe (:host github :repo "politza/pdf-tools"))

@@ -1,14 +1,18 @@
 ;;; completion/company/config.el -*- lexical-binding: t; -*-
 
 (use-package! company
-  :commands company-complete-common company-manual-begin company-grab-line
+  :commands (company-complete-common
+             company-manual-begin
+             company-grab-line
+             company-complete-common-or-cycle)
   :hook (doom-first-input . global-company-mode)
   :init
   (setq company-minimum-prefix-length 2
         company-tooltip-limit 14
         company-tooltip-align-annotations t
         company-require-match 'never
-        company-global-modes '(not erc-mode message-mode help-mode gud-mode)
+        company-global-modes
+        '(not erc-mode message-mode help-mode gud-mode vterm-mode)
         company-frontends
         '(company-pseudo-tooltip-frontend  ; always show candidates in overlay tooltip
           company-echo-metadata-frontend)  ; show selected candidate docs in echo area
@@ -38,6 +42,11 @@
 
   (add-hook 'after-change-major-mode-hook #'+company-init-backends-h 'append)
 
+  (after! eldoc
+    (eldoc-add-command 'company-complete-selection
+                       'company-complete-common
+                       'company-capf
+                       'company-abort))
   )
 
 
