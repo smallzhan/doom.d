@@ -119,7 +119,7 @@
  (org
   +dragndrop
   +pomodoro
-  +jupyter
+  ;;+jupyter
   ;;+roam
   +pretty
   )
@@ -157,8 +157,8 @@
   +childframe)
  chinese
  (org-enhanced
-  +latex
-  +jekyll)
+ +latex
+ +jekyll)
 
  lsp
  eaf

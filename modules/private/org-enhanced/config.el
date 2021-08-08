@@ -51,8 +51,10 @@
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
 (use-package! org-ref
+  :load-path ("~/.doom.d/extensions/org-ref" "~/.doom.d/extensions/parsebib")
   :after org
   :init
+  (setq org-ref-completion-library 'org-ref-reftex)
   (setq org-ref-directory (concat +my-org-dir "bib/"))
   (setq reftex-default-bibliography `(,(concat org-ref-directory "ref.bib"))
         org-ref-bibliography-notes (concat org-ref-directory "notes.org")
@@ -75,18 +77,16 @@
 
 
 (after! org
-
-  ;; (remove-hook 'org-load-hook #'+org-init-agenda-h)
-  ;; (remove-hook 'org-load-hook #'+org-init-capture-defaults-h)
-  (setq org-directory +my-org-dir
-        org-aganda-directory (concat +my-org-dir "agenda/")
-        org-agenda-diary-file (concat  org-directory "diary.org")
-        org-default-notes-file (concat org-directory "note.org")
-        ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
-        ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
-        org-agenda-files `(,(concat org-aganda-directory "planning.org")
-                           ,(concat org-aganda-directory "notes.org")
-                           ,(concat org-aganda-directory "work.org")))
+  ;;; already set in ~/.doom.d/config.el
+  ;; (setq org-directory +my-org-dir
+  ;;       org-aganda-directory (concat +my-org-dir "agenda/")
+  ;;       org-agenda-diary-file (concat  org-directory "diary.org")
+  ;;       org-default-notes-file (concat org-directory "note.org")
+  ;;       ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
+  ;;       ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
+  ;;       org-agenda-files `(,(concat org-agenda-directory "planning.org")
+  ;;                          ,(concat org-agenda-directory "notes.org")
+  ;;                          ,(concat org-agenda-directory "work.org")))
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
 
@@ -94,8 +94,7 @@
         org-agenda-start-on-weekday nil
         org-agenda-start-day nil)
   ;;:config
-  (setq org-log-done 'note
-        org-log-redeadline 'note
+  (setq org-log-redeadline 'note
         org-log-reschedule 'note
         org-log-into-drawer "LOGBOOK"
         org-deadline-warning-days 14 ;; two weeks enough
@@ -111,16 +110,16 @@
         org-agenda-skip-scheduled-if-deadline-is-shown t)
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "ACTIVE(a)" "|" "DONE(d!/!)")
+        '((sequence "TODO(t)" "ACTIVE(a)" "|" "DONE(d)")
           (sequence "WAIT(w@/!)" "HOLD(h@/!)"
-                    "|" "CANCEL(c@/!)" "PHONE")))
+                    "|" "CANCEL(c@/!)" "MEETING" "PHONE")))
 
   (setq org-todo-state-tags-triggers
-        '(("CANCEL" ("CANCEL" . t))
+        '(("CANCEL" ("CANCEL" . t)) ;; t means add this tag
           ("WAIT" ("WAIT" . t))
           ("HOLD" ("WAIT" . t) ("HOLD" . t))
           (done ("WAIT") ("HOLD"))
-          ("TODO" ("WAIT") ("CANCEL") ("HOLD"))
+          ("TODO" ("WAIT") ("CANCEL") ("HOLD")) ;; no t means remove this tag
           ("ACTIVE" ("WAIT") ("CANCEL") ("HOLD"))
           ("DONE" ("WAIT") ("CANCEL") ("HOLD"))))
 
@@ -180,7 +179,7 @@
            "* TODO %?\n:PROPERTIES:\n:CATEGORY: task\n:END:\n"
            :clock-in t :clock-resume t)
           ("r" "respond" entry
-           (file  "notes.org")
+           (file  "agenda/notes.org")
            "* TODO Respond to %:from on %:subject\n:PROPERTIES:\n:CATEGORY: task\n:END:\n%a\n"
            :clock-in t :clock-resume t :immediate-finish t)
           ("n" "note" entry
@@ -200,10 +199,10 @@
            (file+headline "agenda/planning.org" "Idea List")
            "* TODO %:annotation\n:PROPERTIES:\n:CATEGORY: link\n:END:\n%i\n"
            :immediate-finish t :kill-buffer t)
-          ("p" "Phone/Email" entry
-           (file+headline  "agenda/planning.org" "Reminder List")
-           "* TODO %? \n:PROPERTIES:\n:CATEGORY: reminder\n:END:\n"
-           :clock-in t :clock-resume t)
+          ("m" "Meeting" entry (file+headline "agenda/notes.org" "Temporary")
+           "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+          ("p" "Phone call" entry (file+headline "agenda/notes.org" "Temporary")
+           "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
           ("h" "Habit" entry
            (file+headline  "agenda/notes.org" "Habit")
            "* ACTIVE %?\n%U\n%a\nSCHEDULED: %t .+1d/3d\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: ACTIVE\n:END:\n")))
@@ -239,6 +238,7 @@
 
   ;; Rebuild the reminders everytime the agenda is displayed
   (add-hook 'org-finalize-agenda-hook 'bh/org-agenda-to-appt 'append)
+  (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
 
   ;; If we leave Emacs running overnight - reset the appointments one minute after midnight
   (run-at-time "24:01" nil 'bh/org-agenda-to-appt)
@@ -313,6 +313,8 @@
                      (org-hydra/body)
                    (self-insert-command 1))))
 
+  
+  
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
@@ -322,6 +324,10 @@
   ;;(load! "+protocol")
   (load! "next-spec-day")
 
+  (defvar bh/keep-clock-running nil)
+
+  (defvar bh/organization-task-id "c77749b4-b094-4c8e-8d22-a52608adc113")
+  
   (bh/org-agenda-to-appt)
   (appt-activate t))
 
@@ -416,7 +422,7 @@
                                         ;:init
                                         ;(require 'valign)
   :hook
-  ('org-mode . #'valign-mode))
+  (org-mode . valign-mode))
 
 (use-package! org-clock-budget
   :commands (org-clock-budget-report)
@@ -468,17 +474,10 @@
 (use-package! org-roam
   ;;:hook (org-load . org-roam-setup)
   :after org
-  :custom
-  (org-roam-directory (file-truename (concat org-directory "roam")))
-  :bind (("C-c o r b" . org-roam-buffer-toggle)
-         ("C-c o r f" . org-roam-node-find)
-         ("C-c o r g" . org-roam-graph)
-         ("C-c o r i" . org-roam-node-insert)
-         ("C-c o r c" . org-roam-capture)
-         ;; Dailies
-         ("C-c o r j" . org-roam-dailies-capture-today))
   :init
   (setq org-roam-v2-ack t)
+  (setq org-roam-directory (file-truename (concat org-directory "roam")))
+ 
   :config
   (org-roam-setup)
   ;; If using org-roam-protocol
@@ -491,12 +490,11 @@
                  ;;:head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
                  :immediate-finish t
                  :unnarrowed t))
-  (add-to-list 'display-buffer-alist
-               '("\\*org-roam\\*"
-                 (display-buffer-in-direction)
-                 (direction . right)
-                 (window-width . 0.33)
-                 (window-height . fit-window-to-buffer))))
+  (set-popup-rules!
+    `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
+       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
+      ("^\\*org-roam: " ; node dedicated org-roam buffer
+       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2))))
 
 (use-package! org-roam-bibtex
   :after org-roam

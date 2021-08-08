@@ -26,31 +26,31 @@
 
 (use-package! awesome-pair
   :bind (:map awesome-pair-mode-map
-          ("(" . awesome-pair-open-round)
-          ("[" . awesome-pair-open-bracket)
-          ("{" . awesome-pair-open-curly)
-          (")" . awesome-pair-close-round)
-          ("]" . awesome-pair-close-bracket)
-          ("}" . awesome-pair-close-curly)
-          ("=" . awesome-pair-equal)
+         ("(" . awesome-pair-open-round)
+         ("[" . awesome-pair-open-bracket)
+         ("{" . awesome-pair-open-curly)
+         (")" . awesome-pair-close-round)
+         ("]" . awesome-pair-close-bracket)
+         ("}" . awesome-pair-close-curly)
+         ("=" . awesome-pair-equal)
 
-          ("%" . awesome-pair-match-paren)
-          ("\"" . awesome-pair-double-quote)
-          ("SPC" . awesome-pair-space)
+         ("%" . awesome-pair-match-paren)
+         ("\"" . awesome-pair-double-quote)
+         ("SPC" . awesome-pair-space)
 
-          ("M-o" . awesome-pair-backward-delete)
-          ("C-d" . awesome-pair-forward-delete)
-          ("C-k" . awesome-pair-kill)
+         ("M-o" . awesome-pair-backward-delete)
+         ("C-d" . awesome-pair-forward-delete)
+         ("C-k" . awesome-pair-kill)
 
-          ("M-\"" . awesome-pair-wrap-double-quote)
-          ("M-[" . awesome-pair-wrap-bracket)
-          ("M-{" . awesome-pair-wrap-curly)
-          ("M-(" . awesome-pair-wrap-round)
-          ("M-)" . awesome-pair-unwrap)
-          ("M-p" . awesome-pair-jump-right)
-          ("M-n" . awesome-pair-jump-left)
-          ("M-:" . awesome-pair-jump-out-pair-and-newline)
-          )
+         ("M-\"" . awesome-pair-wrap-double-quote)
+         ("M-[" . awesome-pair-wrap-bracket)
+         ("M-{" . awesome-pair-wrap-curly)
+         ("M-(" . awesome-pair-wrap-round)
+         ("M-)" . awesome-pair-unwrap)
+         ("M-p" . awesome-pair-jump-right)
+         ("M-n" . awesome-pair-jump-left)
+         ("M-:" . awesome-pair-jump-out-pair-and-newline)
+         )
   :hook ((prog-mode ielm-mode minibuffer-inactive-mode sh-mode) . awesome-pair-mode))
 
 (use-package! counsel-etags
@@ -149,33 +149,33 @@
   :after shr
   :config
   (defun shrface-shr-tag-pre-highlight (pre)
-  "Highlighting code in PRE."
-  (let* ((shr-folding-mode 'none)
-         (shr-current-font 'default)
-         (code (with-temp-buffer
-                 (shr-generic pre)
-                 (setq-local fill-column 120)
-                 (indent-rigidly (point-min) (point-max) 2)
-                 ;; (fill-region (point-min) (point-max) nil nil nil)
-                 (buffer-string)))
-         (lang (or (shr-tag-pre-highlight-guess-language-attr pre)
-                   (let ((sym (language-detection-string code)))
-                     (and sym (symbol-name sym)))))
-         (mode (and lang
-                    (shr-tag-pre-highlight--get-lang-mode lang))))
-    (shr-ensure-newline)
-    (insert "  ") ; indentation
-    (insert (propertize (concat "#+BEGIN_SRC" lang) 'face 'org-block-begin-line)) ; delete "lang" of this line, if you found the wrong detected langugage is annoying
-    (shr-ensure-newline)
-    (insert
-     (or (and (fboundp mode)
-              (with-demoted-errors "Error while fontifying: %S"
-                (shr-tag-pre-highlight-fontify code mode)))
-         code))
-    (shr-ensure-newline)
-    (insert "  ") ; indentation
-    (insert (propertize "#+END_SRC" 'face 'org-block-end-line ) )
-    (shr-ensure-newline)))
+    "Highlighting code in PRE."
+    (let* ((shr-folding-mode 'none)
+           (shr-current-font 'default)
+           (code (with-temp-buffer
+                   (shr-generic pre)
+                   (setq-local fill-column 120)
+                   (indent-rigidly (point-min) (point-max) 2)
+                   ;; (fill-region (point-min) (point-max) nil nil nil)
+                   (buffer-string)))
+           (lang (or (shr-tag-pre-highlight-guess-language-attr pre)
+                     (let ((sym (language-detection-string code)))
+                       (and sym (symbol-name sym)))))
+           (mode (and lang
+                      (shr-tag-pre-highlight--get-lang-mode lang))))
+      (shr-ensure-newline)
+      (insert "  ") ; indentation
+      (insert (propertize (concat "#+BEGIN_SRC" lang) 'face 'org-block-begin-line)) ; delete "lang" of this line, if you found the wrong detected langugage is annoying
+      (shr-ensure-newline)
+      (insert
+       (or (and (fboundp mode)
+                (with-demoted-errors "Error while fontifying: %S"
+                  (shr-tag-pre-highlight-fontify code mode)))
+           code))
+      (shr-ensure-newline)
+      (insert "  ") ; indentation
+      (insert (propertize "#+END_SRC" 'face 'org-block-end-line ) )
+      (shr-ensure-newline)))
   (add-to-list 'shr-external-rendering-functions
                '(pre . shrface-shr-tag-pre-highlight))
   )
@@ -191,3 +191,34 @@
 (use-package burly
   :bind (("C-c b b" . burly-bookmark-frames)
          ("C-c b o" . burly-open-bookmark)))
+
+
+(use-package! sdcv
+  :defer t
+  :commands (sdcv-search-input sdcv-search-pointer+)
+  :config
+  (set-face-foreground 'sdcv-tooltip-face "#51afef")
+  (setq sdcv-program (executable-find "sdcv"))
+  (setq sdcv-dictionary-simple-list '("牛津现代英汉双解词典"))
+  (setq sdcv-dictionary-complete-list '("牛津现代英汉双解词典"
+                                        "CEDICT汉英辞典"
+                                        "朗道汉英字典5.0"
+                                        "21世纪双语科技词典"
+                                        "朗道英汉字典5.0"))
+  (setq sdcv-dictionary-data-dir "~/.stardict/dic")
+
+  (defun sdcv-translate-result (word dictionary-list)
+    "Call sdcv to search word in dictionary list, return filtered
+string of results."
+    (sdcv-filter
+     (shell-command-to-string
+      ;; Set LANG environment variable, make sure `shell-command-to-string' can handle CJK character correctly.
+      (format "%s -x -n %s %s --data-dir %s"
+              sdcv-program
+              (mapconcat (lambda (dict)
+                           (concat "-u \"" dict "\""))
+                         dictionary-list " ")
+              (format "\"%s\"" word)
+              sdcv-dictionary-data-dir))))
+
+  )

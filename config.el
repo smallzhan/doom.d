@@ -5,14 +5,15 @@
 
 ;;======= org-directory ====
 (setq org-directory +my-org-dir
-      org-aganda-directory (concat +my-org-dir "agenda/")
+      org-agenda-directory (concat +my-org-dir "agenda/")
       org-agenda-diary-file (concat  org-directory "diary.org")
       org-default-notes-file (concat org-directory "note.org")
+      org-roam-directory (file-truename (concat org-directory "roam"))
       ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
       ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
-      org-agenda-files `(,(concat org-aganda-directory "planning.org")
-                         ,(concat org-aganda-directory "notes.org")
-                         ,(concat org-aganda-directory "work.org")))
+      org-agenda-files `(,(concat org-agenda-directory "planning.org")
+                         ,(concat org-agenda-directory "notes.org")
+                         ,(concat org-agenda-directory "work.org")))
 ;; remove doom advice, I don't need deal with comments when newline
 (advice-remove #'newline-and-indent #'doom*newline-indent-and-continue-comments)
 
@@ -27,7 +28,7 @@
             logfile (concat (projectile-project-root) "build.txt"))
       (if (file-exists-p logfile)
           (delete-file logfile))
-      (setq projfile (ivy-read "Projs: " (directory-files rootdir nil "\.uvproj$")))
+      (setq projfile (completing-read "Projs: " (directory-files rootdir nil "\.uvproj$")))
 
       (make-process
        :name "build"

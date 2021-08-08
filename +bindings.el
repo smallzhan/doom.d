@@ -41,19 +41,9 @@
    ;;   :desc "Elfeed Rss Reader" "r" #'elfeed
    ;;   :desc "Org Noter"         "n" #'org-noter)
    
-   "c" nil
+
    (:prefix ("c" . "code")
-     :desc "Compile"                     "c" #'compile
-     :desc "Jump to definition"          "d" #'+lookup/definition
-     :desc "Jump to references"          "D" #'+lookup/references
-     :desc "Evaluate buffer/region"      "e" #'+eval/buffer-or-region
-     :desc "Evaluate & replace region"   "E" #'+eval:replace-region
-     :desc "Format buffer/region"        "f" #'+format/region-or-buffer
-     :desc "Open REPL"                   "r" #'+eval/open-repl-other-window
-     :desc "Delete trailing whitespace"  "w" #'delete-trailing-whitespace
-     :desc "Delete trailing newlines"    "W" #'doom/delete-trailing-newlines
-     :desc "List errors"                 "x" #'flycheck-list-errors
-     :desc "Describe thing at point"     "t" #'lsp-describe-thing-at-point
+     
      (:prefix ("g" . "Go to")
        :desc "Implementation"            "i" #'nox-find-implementation
        ;;:desc "Definition"                "d" #'lsp-goto-type-definition
@@ -61,23 +51,7 @@
        ;;:desc "Find Definition"           "D" #'lsp-find-definition
        :desc "Find Definition"           "D" #'nox-find-typeDefinition
        
-       :desc "Find References"           "r" #'xref-find-references)
-     (:after lsp-mode 
-       (:prefix ("p" . "Peek")
-         :desc "Implementation"            "i" #'lsp-ui-peek-find-implementation
-         :desc "Definition"                "d" #'lsp-ui-peek-find-definitions
-         :desc "Reference"                 "r" #'lsp-ui-peek-find-references)
-       (:prefix ("l" . "Lens")
-         :desc "Show"                      "l" #'lsp-lens-show
-         :desc "Hide"                      "q" #'lsp-lens-hide)
-       (:prefix ("m" . "menu")
-         :desc "Show"                      "m" #'lsp-ui-imenu
-         :desc "Hide"                      "q" #'lsp-ui-imenu--kill))
-     (:after yapfify
-       (:prefix ("y" . "Yapf")
-         :desc "Yapfify buffer"          "b" #'yapfify-buffer
-         :desc "Yapfify region"          "r" #'yapfify-region))
-     )
+       :desc "Find References"           "r" #'xref-find-references))
    
 
    (:prefix ("d" . "doom")
@@ -118,6 +92,8 @@
      :desc "Make divider"         "d" #'make-divider
      :desc "Make revision"        "r" #'make-revision
      :desc "Update file header"   "g" #'update-file-header
+     :desc "Sdcv input"           "i" #'sdcv-search-input
+     :desc "Sdcv point+"          "p" #'sdcv-search-pointer+
      (:after thing-edit
        (:prefix ("c" . "Thing Edit Copy")
          :desc "thing-copy-defun"    "d" #'thing-copy-defun
@@ -200,15 +176,41 @@
      :desc "Goto capture"             "C" #'org-capture-goto-target
      :desc "Link store"               "l" #'org-store-link
      :desc "Sync org caldav"          "S" #'org-caldav-sync
-     :desc "Mark default task"        "t" #'org-clock-mark-default-task
-
+     :desc "Mark default task"        "T" #'org-clock-mark-default-task
+     
      (:prefix ("e" . "org export")
        :desc "Export beamer to latex" "l b" #'org-beamer-export-to-latex
        :desc "Export beamer as latex" "l B" #'org-beamer-export-as-latex
        :desc "Export beamer as pdf"   "l P" #'org-beamer-export-to-pdf)
-     (:prefix ("p" . "publish")
+     (:prefix ("P" . "publish")
        :desc "Publish current file"     "f" #'org-publish-current-file
-       :desc "Publish current project"  "p" #'org-publish-current-project))
+       :desc "Publish current project"  "p" #'org-publish-current-project)
+     (:prefix ("p" . "clock punch")
+       :desc "Punch In"                 "i" #'bh/punch-in
+       :desc "Punch Out"                "o" #'bh/punch-out)
+     (:prefix ("r" . "roam")
+         :desc "Open random node"           "a" #'org-roam-node-random
+         :desc "Find node"                  "f" #'org-roam-node-find
+         :desc "Find ref"                   "F" #'org-roam-ref-find
+         :desc "Show graph"                 "g" #'org-roam-graph
+         :desc "Insert node"                "i" #'org-roam-node-insert
+         :desc "Capture to node"            "n" #'org-roam-capture
+         :desc "Toggle roam buffer"         "r" #'org-roam-buffer-toggle
+         :desc "Launch roam buffer"         "R" #'org-roam-buffer-display-dedicated
+         :desc "Sync database"              "s" #'org-roam-db-sync
+         (:prefix ("d" . "by date")
+          :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
+          :desc "Goto date"                 "d" #'org-roam-dailies-goto-date
+          :desc "Capture date"              "D" #'org-roam-dailies-capture-date
+          :desc "Goto next note"            "f" #'org-roam-dailies-goto-next-note
+          :desc "Goto tomorrow"             "m" #'org-roam-dailies-goto-tomorrow
+          :desc "Capture tomorrow"          "M" #'org-roam-dailies-capture-tomorrow
+          :desc "Capture today"             "n" #'org-roam-dailies-capture-today
+          :desc "Goto today"                "t" #'org-roam-dailies-goto-today
+          :desc "Capture today"             "T" #'org-roam-dailies-capture-today
+          :desc "Goto yesterday"            "y" #'org-roam-dailies-goto-yesterday
+          :desc "Capture yesterday"         "Y" #'org-roam-dailies-capture-yesterday
+          :desc "Find directory"            "-" #'org-roam-dailies-find-directory)))
 
    ;;"&" nil
 
@@ -234,20 +236,14 @@
      :desc "Theme"                         "t" #'counsel-load-theme)
 
    (:prefix ("s" . "search")
-     :desc "Search buffer"                 "b" #'swiper
-     :desc "Search current directory"      "d" #'+default/search-from-cwd
-     :desc "Jump to symbol"                "i" #'imenu
-     :desc "Jump to symbol across buffers" "I" #'imenu-anywhere
-     :desc "Jump to link"                  "l" #'ace-link
-     :desc "Look up online"                "o" #'+lookup/online-select
      :desc "Search with color-rg"          "r" #'color-rg-search-input-in-project
      :desc "Search symbol with color-rg"   "s" #'color-rg-search-symbol-in-project
      :desc "Search input in current file"  "f" #'color-rg-search-input-in-current-file
      :desc "Search symbol in current file" "e" #'color-rg-search-symbol-in-current-file
      :desc "Search project"                "p" #'+default/search-project
-     :desc "Search in git"                 "g" #'counsel-git-grep
-     :desc "Search with counsel-rg"        "c" #'counsel-rg
-     :desc "Search with dash"              "t" #'counsel-dash
+     :desc "Search in git"                 "g" #'consult-git-grep
+     :desc "Search with counsel-rg"        "c" #'consult-ripgrep
+     :desc "Search with dash"              "t" #'consult-dash
      :desc "Lazy search"                   "z" #'lazy-search)
    )
 

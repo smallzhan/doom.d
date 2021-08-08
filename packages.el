@@ -30,7 +30,7 @@
 
 ;;(package! company-tabnine )
 
-(package! rg)
+(package! rg :disable t)
 ;;(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
 ;;(package! pdf-tools)
 (package! ggtags :disable t)

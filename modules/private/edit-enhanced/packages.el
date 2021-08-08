@@ -26,3 +26,5 @@
 (package! shr-tag-pre-highlight :disable t)
 
 (package! burly)
+
+(package! sdcv :recipe (:host github :repo "manateelazycat/sdcv"))
