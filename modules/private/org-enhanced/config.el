@@ -184,7 +184,7 @@
            :clock-in t :clock-resume t :immediate-finish t)
           ("n" "note" entry
            (file+headline  "agenda/notes.org" "Notes")
-           "* TODO %? :NOTE:\n%a\n"
+           "* %? :NOTE:\n%a\n"
            :clock-in t :clock-resume t)
           ("j" "Journal" entry
            (file+olp+datetree  "diary.org")
@@ -336,7 +336,7 @@
   (setq  org-clock-persist t
          ;; Resume when clocking into task with open clock
          org-clock-out-remove-zero-time-clocks t
-         org-clock-in-switch-to-state "ACTIVE"
+         org-clock-in-switch-to-state #'my-switch-state-on-clock-in
          org-clock-persist-query-resume nil
          org-clock-report-include-clocking-task t))
 

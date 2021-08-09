@@ -238,4 +238,9 @@ as the default task."
              (not org-clock-resolving-clocks-due-to-idleness))
     (bh/clock-in-parent-task)))
 
-
+;;;###autoload
+(defun my-switch-state-on-clock-in (state)
+  "Change a task to 'ACTIVE' when TASK-STATE is 'TODO'."
+   (if (string= state "TODO")
+      "ACTIVE"
+      state))
