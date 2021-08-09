@@ -9,11 +9,11 @@
   "Relative path to posts directory.")
 (defvar jekyll-post-ext ".org"
   "File extension of Jekyll posts.")
-(defvar jekyll-post-roam-template
-  "#+TITLE: %s\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: %s\ncomments: true\nexcerpt: \ncategories:\n  -  \ntags:\n  -  \n---\n#+END_EXPORT\n\n"
-  "Default template for Jekyll posts. %s will be replace by the post title.")
 (defvar jekyll-post-template
-  (concat jekyll-post-roam-template "* "))
+  "#+TITLE: %s\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: %s\ncomments: true\nexcerpt: \ncategories:\n  -  \ntags:\n  -  \n---\n#+END_EXPORT\n\n* "
+  "Default template for Jekyll posts. %s will be replace by the post title.")
+(defvar jekyll-post-roam-template
+  (concat jekyll-post-template "Time Elapse :noexport:\n\n* "))
 
 (defvar jekyll-base-directory (expand-file-name "blog" org-roam-directory)
   "jekyll base-directory")
@@ -88,7 +88,7 @@
                :clock-in t :clock-resume t))
 
 (setq org-roam-capture-templates
-      '(("b" "start blog post" entry  "* Time Elapse :noexport:\n\n%?"
+      '(("b" "start blog post" plain  ""
                :if-new (file+head "%(my-jekyll-blog-post-name-from-title \"${title}\")"
                                   "%(let ((jtitle (jekyll-yaml-escape \"${title}\")))
                                      (format jekyll-post-roam-template jtitle jtitle))")
