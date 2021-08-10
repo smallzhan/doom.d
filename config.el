@@ -261,6 +261,40 @@
 
 
 (after! consult
+  (defvar mcfly-commands
+    '(consult-line))
+
+  (defvar mcfly-back-commands
+    '(self-insert-command))
+
+  (defun mcfly-back-to-present ()
+    (remove-hook 'pre-command-hook 'mcfly-back-to-present t)
+    (cond ((and (memq last-command mcfly-commands)
+                (equal (this-command-keys-vector) (kbd "M-p")))
+           ;; repeat one time to get straight to the first history item
+           (setq unread-command-events
+                 (append unread-command-events
+                         (listify-key-sequence (kbd "M-p")))))
+          ((memq this-command mcfly-back-commands)
+           (delete-region
+            (progn (forward-visible-line 0) (point))
+            (point-max)))))
+
+  (defun mcfly-time-travel ()
+    (when (memq this-command mcfly-commands)
+      (insert (propertize
+               (save-excursion
+                 (set-buffer (window-buffer (minibuffer-selected-window)))
+                 (or (seq-some (lambda (thing) (thing-at-point thing t))
+                               '(region url symbol sexp))
+                     "No thing at point"))
+               'face 'shadow))
+      (add-hook 'pre-command-hook 'mcfly-back-to-present nil t)
+      (forward-visible-line 0)))
+
+  ;; setup code
+  (add-hook 'minibuffer-setup-hook #'mcfly-time-travel)
+
   (defun consult-line-symbol-at-point ()
     (interactive)
     (consult-line (thing-at-point 'symbol)))
@@ -303,8 +337,7 @@
     (ivy-quit-and-run (rg-dwim default-directory)))
   ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
   ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
-
-  (remove-hook 'compilation-filter-hook #'doom-apply-ansi-color-to-compilation-buffer-h))
+  )
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
@@ -318,7 +351,7 @@
   (add-to-list 'isearch-mb--with-buffer #'consult-isearch)
   (define-key isearch-mb-minibuffer-map (kbd "M-r") #'consult-isearch)
   (add-to-list 'isearch-mb--after-exit #'consult-line)
-  (define-key isearch-mb-minibuffer-map (kbd "M-s l") 'consult-line)
+  (define-key isearch-mb-minibuffer-map (kbd "M-s") 'consult-line)
 
   (defun move-end-of-line-maybe-ending-isearch (arg)
     "End search and move to end of line, but only if already at the end of the minibuffer."

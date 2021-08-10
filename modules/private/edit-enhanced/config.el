@@ -5,13 +5,12 @@
              color-rg-search-input-in-current-file
              color-rg-search-symbol-in-current-file)
   :config
-  (setq color-rg-kill-temp-buffer-p nil))
-
+  (setq color-rg-kill-temp-buffer-p nil)
+  (remove-hook 'compilation-filter-hook
+               #'doom-apply-ansi-color-to-compilation-buffer-h))
 
                                         ;(use-package! aweshell
                                         ;  :init (setq aweshell-use-exec-path-from-shell nil))
-
-
 (use-package! auto-save
   :init
   (setq auto-save-silent t)
