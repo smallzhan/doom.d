@@ -9,7 +9,7 @@
 (defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
 
 ;; Org文件
-(defvar +my-org-dir (expand-file-name "~/Dropbox/Notes/org/"))
+(defvar +my-org-dir (file-truename (expand-file-name "~/Nutstore/Notes/org/")))
 ;; (setq org-roam-directory (expand-file-name "roam" +my-org-dir))
 ;; (when IS-MAC
 ;;   (setq frame-resize-pixelwise t
@@ -103,7 +103,8 @@
  (lookup
   +docsets)
  ;;editorconfig
- ;;lsp
+ (lsp
+  +eglot)
  ;;pdf
 
  :lang
@@ -120,9 +121,10 @@
   +dragndrop
   +pomodoro
   ;;+jupyter
-  ;;+roam
+  ;;+roam2
   +pretty
   )
+ php
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
  ;;  +babel
@@ -132,10 +134,11 @@
  ;;  +protocol)
                                         ; Emacs for presentations
  (python            ; beautiful is better than ugly
-  ;;+lsp
+  +pyright
   )
 
- rust
+ (rust
+  +lsp)
  :app
  (rss
   +org)
@@ -157,10 +160,10 @@
   +childframe)
  chinese
  (org-enhanced
- +latex
- +jekyll)
+  +jekyll
+  +latex)
 
- lsp
+ ;;lsp
  eaf
  edit-enhanced)
 

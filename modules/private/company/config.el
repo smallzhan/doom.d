@@ -46,8 +46,7 @@
     (eldoc-add-command 'company-complete-selection
                        'company-complete-common
                        'company-capf
-                       'company-abort))
-  )
+                       'company-abort)))
 
 
 ;;
@@ -61,16 +60,16 @@
   :when (featurep! +childframe)
   :hook (company-mode . company-box-mode)
   :config
-  (defun +company-box-icons--nox (candidate)
-    (-when-let* ((eglot-item (get-text-property 0 'nox--lsp-item candidate))
-                 (kind-num (plist-get eglot-item :kind)))
-      (alist-get kind-num company-box-icons--lsp-alist)))
+  ;; (defun +company-box-icons--nox (candidate)
+  ;;   (-when-let* ((eglot-item (get-text-property 0 'nox--lsp-item candidate))
+  ;;                (kind-num (plist-get eglot-item :kind)))
+  ;;     (alist-get kind-num company-box-icons--lsp-alist)))
 
   (setq company-box-show-single-candidate t
         company-box-backends-colors nil
         company-box-icons-alist 'company-box-icons-all-the-icons
-        company-box-icons-functions
-        (cons #'+company-box-icons--nox company-box-icons-functions)
+        ;; company-box-icons-functions
+        ;;(cons #'+company-box-icons--nox company-box-icons-functions)
         company-box-icons-all-the-icons
         `((Unknown . ,(all-the-icons-material "find_in_page" :height 0.8 :v-adjust -0.15))
           (Text . ,(all-the-icons-faicon "text-width" :height 0.8 :v-adjust -0.02))
@@ -98,13 +97,7 @@
           (Event . ,(all-the-icons-octicon "zap" :height 0.8 :v-adjust 0 :face 'all-the-icons-orange))
           (Operator . ,(all-the-icons-material "control_point" :height 0.8 :v-adjust -0.15))
           (TypeParameter . ,(all-the-icons-faicon "arrows" :height 0.8 :v-adjust -0.02))
-          (Template . ,(all-the-icons-material "format_align_left" :height 0.8 :v-adjust -0.15)))
-        )
-
-  ;; HACK Fix oversized scrollbar in some odd cases
-  ;; REVIEW `resize-mode' is deprecated and may stop working in the future.
-  ;; TODO PR me upstream?
-  (setq x-gtk-resize-child-frames 'resize-mode)
+          (Template . ,(all-the-icons-material "format_align_left" :height 0.8 :v-adjust -0.15))))
 
   ;; Disable tab-bar in company-box child frames
   ;; TODO PR me upstream!

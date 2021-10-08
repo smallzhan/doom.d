@@ -242,7 +242,7 @@
      :desc "Search symbol in current file" "e" #'color-rg-search-symbol-in-current-file
      :desc "Search project"                "p" #'+default/search-project
      :desc "Search in git"                 "g" #'consult-git-grep
-     :desc "Search with counsel-rg"        "c" #'consult-ripgrep
+     :desc "Search with consult-rg"        "c" #'consult-ripgrep
      :desc "Search with dash"              "t" #'consult-dash
      :desc "Lazy search"                   "z" #'lazy-search)
    )

@@ -472,30 +472,31 @@
    ("C-c k g" . gkroam-update)))
 
 
-(use-package! org-roam
-  ;;:hook (org-load . org-roam-setup)
-  :after org
-  :init
-  (setq org-roam-v2-ack t)
-  (setq org-roam-directory (file-truename (concat org-directory "roam")))
+ (use-package! org-roam
+   ;;:hook (org-load . org-roam-setup)
+   :after org
+   :init
+   (setq org-roam-v2-ack t)
+   (setq org-roam-directory (file-truename (concat org-directory "roam")))
  
-  :config
-  (org-roam-setup)
-  ;; If using org-roam-protocol
-  (require 'org-roam-protocol)
-  (add-to-list 'org-roam-capture-ref-templates
+   :config
+   (org-roam-setup)
+   ;; If using org-roam-protocol
+   (require 'org-roam-protocol)
+   (add-to-list 'org-roam-capture-ref-templates
                '("a" "Annotation" plain ;;(function org-roam-capture--get-point)
                  "%U ${body}\n"
-                 :if-new (file+head "${slug}.org" "#+title: ${title}\n")
+                 :target (file+head "${slug}.org" "#+title: ${title}\n")
                  ;;:file-name "${slug}"
                  ;;:head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
                  :immediate-finish t
                  :unnarrowed t))
-  (set-popup-rules!
-    `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
-       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
-      ("^\\*org-roam: " ; node dedicated org-roam buffer
-       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2))))
+   (set-popup-rules!
+     `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
+        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
+       ("^\\*org-roam: " ; node dedicated org-roam buffer
+        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2))))
+
 
 (use-package! org-roam-bibtex
   :after org-roam

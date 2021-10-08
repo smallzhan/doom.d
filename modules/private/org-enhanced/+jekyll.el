@@ -87,12 +87,13 @@
                    (format jekyll-post-template jtitle jtitle))"
                :clock-in t :clock-resume t))
 
-(setq org-roam-capture-templates
-      '(("b" "start blog post" plain  ""
-               :if-new (file+head "%(my-jekyll-blog-post-name-from-title \"${title}\")"
-                                  "%(let ((jtitle (jekyll-yaml-escape \"${title}\")))
+(with-eval-after-load 'org-roam-capture
+  (add-to-list 'org-roam-capture-templates
+               '("b" "start blog post" plain  ""
+                 :target (file+head "%(my-jekyll-blog-post-name-from-title \"${title}\")"
+                                    "%(let ((jtitle (jekyll-yaml-escape \"${title}\")))
                                      (format jekyll-post-roam-template jtitle jtitle))")
-               :clock-in t :clock-resume t :immediate-finish t :unnarrowed t)))
+                 :clock-in t :clock-resume t :immediate-finish t :unnarrowed t)))
 
 (add-to-list 'org-publish-project-alist
              `("smallzhan-github-io" ;; settings for cute-jumper.github.io

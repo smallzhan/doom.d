@@ -14,6 +14,17 @@
       org-agenda-files `(,(concat org-agenda-directory "planning.org")
                          ,(concat org-agenda-directory "notes.org")
                          ,(concat org-agenda-directory "work.org")))
+
+(when IS-MAC
+  (setq frame-resize-pixelwise nil)
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+              (let ((bg (frame-parameter nil 'background-mode)))
+                (set-frame-parameter nil 'ns-appearance bg)
+                (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
 ;; remove doom advice, I don't need deal with comments when newline
 (advice-remove #'newline-and-indent #'doom*newline-indent-and-continue-comments)
 
@@ -363,8 +374,29 @@
            (isearch-done)))
       (move-end-of-line arg)))
 
-  (define-key isearch-mb-minibuffer-map (kbd "C-e") 'move-end-of-line-maybe-ending-isearch)
-  )
+  (define-key isearch-mb-minibuffer-map (kbd "C-e") 'move-end-of-line-maybe-ending-isearch))
+
+(after! eglot
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider
+                                            :hoverProvider))
+  (delq! 'eglot flycheck-checkers))
+                                        ;(add-hook 'eglot--managed-mode-hook #'eldoc-box-hover-mode t))
+
+;;(add-hook 'prog-mode-hook 'eglot-ensure)
+(dolist (hook (list
+               'js-mode-hook
+               'rust-mode-hook
+               'python-mode-hook
+               'ruby-mode-hook
+               'java-mode-hook
+               'sh-mode-hook
+               'php-mode-hook
+               'c-mode-common-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'haskell-mode-hook
+               ))
+  (add-hook hook #'eglot-ensure))
 
 ;; (after! elfeed
 ;;   (pretty-hydra-define
