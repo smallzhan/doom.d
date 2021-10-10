@@ -55,9 +55,9 @@
  vertico
 
  :ui
- doom              ; what makes DOOM look the way it does
+ ;;doom              ; what makes DOOM look the way it does
  doom-dashboard    ; a nifty splash screen for Emacs
- modeline     ; a snazzy Atom-inspired mode-line
+ ;;modeline     ; a snazzy Atom-inspired mode-line
  ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
  hl-todo           ; highlight TODO/FIXME/NOTE tags
  nav-flash         ; blink the current line after jumping
@@ -80,6 +80,7 @@
  multiple-cursors  ; editing in many places at once
  fold
  snippets
+ parinfer
 
  :emacs
  (dired             ; making dired pretty [functional]
@@ -94,8 +95,8 @@
 
  :checkers
  (syntax
-  +childframe
-  )
+  +childframe)
+  
 
  :tools
  eval
@@ -108,9 +109,9 @@
  ;;pdf
 
  :lang
- (cc
+ (cc)
   ;; +lsp
-  )                ; C/C++/Obj-C madness
+                  ; C/C++/Obj-C madness
  data              ; config/data formats
  emacs-lisp        ; drown in parentheses
  common-lisp
@@ -122,8 +123,8 @@
   +pomodoro
   ;;+jupyter
   ;;+roam2
-  +pretty
-  )
+  +pretty)
+  
  php
  ;; (org              ; organize your plain life in plain text
  ;;  +attach          ; custom attachment system
@@ -134,8 +135,7 @@
  ;;  +protocol)
                                         ; Emacs for presentations
  (python            ; beautiful is better than ugly
-  +pyright
-  )
+  +pyright)
 
  (rust
   +lsp)
@@ -151,7 +151,7 @@
  ;; and additional ex commands for evil-mode. Use it as a reference for
  ;; your own modules.
  (default
-   +smartparens
+   ;;+smartparens
    +bindings)
 
  :private
@@ -162,6 +162,7 @@
  (org-enhanced
   +jekyll
   +latex)
+ tree-sitter
 
  ;;lsp
  eaf

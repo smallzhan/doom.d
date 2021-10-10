@@ -19,9 +19,9 @@
         0
       (apply orig-fn args)))
 
-  (advice-add 'eaf--frame-top :around #'my-eaf-mac-get-size-advice)
-  (advice-add 'eaf--frame-left :around #'my-eaf-mac-get-size-advice)
-  (advice-add 'eaf--frame-internal-height :around #'my-eaf-mac-get-size-advice)
+  ;; (advice-add 'eaf--frame-top :around #'my-eaf-mac-get-size-advice)
+  ;; (advice-add 'eaf--frame-left :around #'my-eaf-mac-get-size-advice)
+  ;; (advice-add 'eaf--frame-internal-height :around #'my-eaf-mac-get-size-advice)
 
   (defun my-eaf--mac-focus-change ()
     (cond
@@ -35,8 +35,8 @@
        (eaf--mac-switch-to-python
         (setq eaf--mac-switch-to-python nil))
        ((not eaf--mac-has-focus)
-        (run-with-timer 0.1 nil #'eaf--mac-focus-in)
-        )
+        (run-with-timer 0.1 nil #'eaf--mac-focus-in))
+        
        (eaf--mac-has-focus
         (eaf--mac-focus-out))))
      (t (eaf--mac-focus-out))))
@@ -54,8 +54,8 @@
   (require 'eaf-interleave)
   (add-to-list 'eaf-interleave-org-notes-dir-list (concat org-directory "research"))
 
-  (require 'eaf-interleave-noter)
-  )
+  (require 'eaf-interleave-noter))
+  
 
 (use-package! epc :defer t)
 (use-package! ctable :defer t)

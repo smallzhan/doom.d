@@ -17,16 +17,19 @@
 
 (when IS-MAC
   (setq frame-resize-pixelwise nil)
+  
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
   (add-hook 'after-load-theme-hook
             (lambda ()
               (let ((bg (frame-parameter nil 'background-mode)))
                 (set-frame-parameter nil 'ns-appearance bg)
                 (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
+
 ;; remove doom advice, I don't need deal with comments when newline
-(advice-remove #'newline-and-indent #'doom*newline-indent-and-continue-comments)
+(advice-remove #'newline-and-indent #'+default--newline-indent-and-continue-comments-a)
 
 (after! projectile
   (setq projectile-require-project-root t)
@@ -39,7 +42,7 @@
             logfile (concat (projectile-project-root) "build.txt"))
       (if (file-exists-p logfile)
           (delete-file logfile))
-      (setq projfile (completing-read "Projs: " (directory-files rootdir nil "\.uvproj$")))
+      (setq projfile (completing-read "Projs: " (directory-files rootdir nil "\.uvprojx?$")))
 
       (make-process
        :name "build"
@@ -151,8 +154,8 @@
         (pyim-cregexp-build x))))
 
   (setq ivy-re-builders-alist
-        '((t . eh-ivy-cregexp)))
-  )
+        '((t . eh-ivy-cregexp))))
+  
 
 
 (use-package! yapfify
@@ -261,9 +264,9 @@
                    (replace-regexp-in-string "^.*Swiper: " ""
                                              (thing-at-point 'line t)))))))
       (ivy-quit-and-run
-       (counsel-rg text default-directory))))
+       (counsel-rg text default-directory)))))
   ;;(bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
-  )
+  
 
 (use-package! snails
   ;;:load-path "~/.doom.d/extensions/snails"
@@ -271,54 +274,53 @@
   :commands snails)
 
 
-(after! consult
-  (defvar mcfly-commands
-    '(consult-line))
+;; (after! consult
+;;   (defvar mcfly-commands
+;;     '(consult-line))
 
-  (defvar mcfly-back-commands
-    '(self-insert-command))
+;;   (defvar mcfly-back-commands
+;;     '(self-insert-command))
 
-  (defun mcfly-back-to-present ()
-    (remove-hook 'pre-command-hook 'mcfly-back-to-present t)
-    (cond ((and (memq last-command mcfly-commands)
-                (equal (this-command-keys-vector) (kbd "M-p")))
-           ;; repeat one time to get straight to the first history item
-           (setq unread-command-events
-                 (append unread-command-events
-                         (listify-key-sequence (kbd "M-p")))))
-          ((memq this-command mcfly-back-commands)
-           (delete-region
-            (progn (forward-visible-line 0) (point))
-            (point-max)))))
+;;   (defun mcfly-back-to-present ()
+;;     (remove-hook 'pre-command-hook 'mcfly-back-to-present t)
+;;     (cond ((and (memq last-command mcfly-commands)
+;;                 (equal (this-command-keys-vector) (kbd "M-p")))
+;;            ;; repeat one time to get straight to the first history item
+;;            (setq unread-command-events
+;;                  (append unread-command-events
+;;                          (listify-key-sequence (kbd "M-p")))))
+;;           ((memq this-command mcfly-back-commands)
+;;            (delete-region
+;;             (progn (forward-visible-line 0) (point))
+;;             (point-max)))))
 
-  (defun mcfly-time-travel ()
-    (when (memq this-command mcfly-commands)
-      (insert (propertize
-               (save-excursion
-                 (set-buffer (window-buffer (minibuffer-selected-window)))
-                 (or (seq-some (lambda (thing) (thing-at-point thing t))
-                               '(region url symbol sexp))
-                     "No thing at point"))
-               'face 'shadow))
-      (add-hook 'pre-command-hook 'mcfly-back-to-present nil t)
-      (forward-visible-line 0)))
+;;   (defun mcfly-time-travel ()
+;;     (when (memq this-command mcfly-commands)
+;;       (insert (propertize
+;;                (save-excursion
+;;                  (set-buffer (window-buffer (minibuffer-selected-window)))
+;;                  (or (seq-some (lambda (thing) (thing-at-point thing t))
+;;                                '(region url symbol sexp))
+;;                      "No thing at point"))
+;;                'face 'shadow))
+;;       (add-hook 'pre-command-hook 'mcfly-back-to-present nil t)
+;;       (forward-visible-line 0)))
 
-  ;; setup code
-  (add-hook 'minibuffer-setup-hook #'mcfly-time-travel)
+;;   ;; setup code
+;;   (add-hook 'minibuffer-setup-hook #'mcfly-time-travel)
 
-  (defun consult-line-symbol-at-point ()
-    (interactive)
-    (consult-line (thing-at-point 'symbol)))
+;;   (defun consult-line-symbol-at-point ()
+;;     (interactive)
+;;     (consult-line (thing-at-point 'symbol)))
 
-  (defun my-isearch-or-consult (use-consult)
-    (interactive "p")
-    (cond ((eq use-consult 1)
-           (call-interactively 'isearch-forward))
-          ((eq use-consult 4)
-           (call-interactively 'consult-line-symbol-at-point))
-          ((eq use-consult 16)
-           (call-interactively 'consult-line)))))
-
+;;   (defun my-isearch-or-consult (use-consult)
+;;     (interactive "p")
+;;     (cond ((eq use-consult 1)
+;;            (call-interactively 'isearch-forward))
+;;           ((eq use-consult 4)
+;;            (call-interactively 'consult-line-symbol-at-point))
+;;           ((eq use-consult 16)
+;;            (call-interactively 'consult-line)))))
 
 (use-package! rg
   :defines projectile-command-map
@@ -345,10 +347,10 @@
   (defun my-swiper-toggle-rg-dwim ()
     "Toggle `rg-dwim' with current swiper input."
     (interactive)
-    (ivy-quit-and-run (rg-dwim default-directory)))
+    (ivy-quit-and-run (rg-dwim default-directory))))
   ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
   ;;(bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map)
-  )
+  
 
 (after! elisp-mode
   (remove-hook 'emacs-lisp-mode-hook #'+emacs-lisp-extend-imenu-h))
@@ -359,6 +361,15 @@
 (use-package! isearch-mb
   :init (isearch-mb-mode 1)
   :config
+  (setq-default
+   ;; Match count next to the minibuffer prompt
+   isearch-lazy-count t
+   ;; Don't be stingy with history; default is to keep just 16 entries
+   search-ring-max 200
+   regexp-search-ring-max 200
+   isearch-regexp-lax-whitespace t
+   search-whitespace-regexp ".*?")
+
   (add-to-list 'isearch-mb--with-buffer #'consult-isearch)
   (define-key isearch-mb-minibuffer-map (kbd "M-r") #'consult-isearch)
   (add-to-list 'isearch-mb--after-exit #'consult-line)
@@ -374,7 +385,10 @@
            (isearch-done)))
       (move-end-of-line arg)))
 
-  (define-key isearch-mb-minibuffer-map (kbd "C-e") 'move-end-of-line-maybe-ending-isearch))
+  (define-key isearch-mb-minibuffer-map (kbd "C-e") 'move-end-of-line-maybe-ending-isearch)
+  (bind-keys
+   ("C-s" . isearch-forward-regexp)
+   ("C-r" . isearch-backward-regexp)))
 
 (after! eglot
   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider
@@ -394,10 +408,46 @@
                'c-mode-common-hook
                'c-mode-hook
                'c++-mode-hook
-               'haskell-mode-hook
-               ))
+               'haskell-mode-hook))
+               
   (add-hook hook #'eglot-ensure))
 
+
+(use-package! awesome-tray
+  :load-path "~/.doom.d/extensions/awesome-tray"
+  :config
+  ;;(global-hide-mode-line-mode 1)
+  (add-hook 'doom-load-theme-hook #'awesome-tray-mode)
+  (setq awesome-tray-active-modules '("git"
+                                      "location"
+                                      "mode-name"
+                                      "parent-dir"
+                                      "buffer-name"
+                                      "buffer-read-only"
+                                      "date")))
+                                      ;;"meow"
+                                      ;; "emacs"
+                                      
+;; (use-package! toki-modeline
+;;   :load-path "~/.doom.d/extensions"
+;;   ;;:trigger after-init-hook
+;;   ;;:straight nil
+;;   :init
+;;   (setq-default mode-line-format '(:eval (toki-modeline-compute)))
+;;   :config
+;;   (toki-modeline-setup))
+
+;; (defun toki/modeline-refresh-face ()
+;;   (let ((bg (face-attribute 'default :background)))
+;;     (set-face-attribute 'mode-line nil
+;;                         :background bg :height 0.9)
+;;     (set-face-attribute 'mode-line-inactive nil
+;;                         :background bg :height 0.9
+;;                         :bold t :inherit 'shadow)))
+
+;; (add-hook 'toki-after-load-theme-hook #'toki/modeline-refresh-face)
+
+;(remove-hook doom-first-buffer-hook #'smartparens-global-mode)
 ;; (after! elfeed
 ;;   (pretty-hydra-define
 ;;     elfeed-hydra

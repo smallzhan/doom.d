@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun +org-init-protocol-lazy-loader-h ()
   "Brings lazy-loaded support for org-protocol, so external programs (like
 browsers) can invoke specialized behavior from Emacs. Normally you'd simply

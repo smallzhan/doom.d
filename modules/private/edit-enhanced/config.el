@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (use-package! color-rg
   :commands (color-rg-search-symbol-in-project
@@ -218,6 +219,16 @@ string of results."
                            (concat "-u \"" dict "\""))
                          dictionary-list " ")
               (format "\"%s\"" word)
-              sdcv-dictionary-data-dir))))
+              sdcv-dictionary-data-dir)))))
 
-  )
+
+(use-package! puni
+  :defer t
+  :hook ((prog-mode
+          sgml-mode
+          nxml-mode
+          tex-mode
+          eval-expression-minibuffer-setup) . puni-mode))
+
+
+

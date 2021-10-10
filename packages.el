@@ -39,7 +39,7 @@
 (package! pretty-hydra)
 
 (package! isearch-mb)
-
+(package! awesome-tray :recipe (:host github :repo "manateelazycat/awesome-tray"))
 ;(package! alert :recipe (:no-byte-compile t))
 ;(package! org-pomodoro :recipe (:no-byte-compile t))
 ;(package! auctex :recipe (:no-byte-compile t))

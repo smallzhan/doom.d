@@ -28,3 +28,5 @@
 (package! burly)
 
 (package! sdcv :recipe (:host github :repo "manateelazycat/sdcv"))
+
+(package! puni :recipe (:host github :repo "Amaikinono/puni") :disable t)

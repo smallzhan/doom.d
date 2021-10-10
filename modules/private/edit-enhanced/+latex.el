@@ -1,4 +1,4 @@
-;;; latex-enhanced
+;;; latex-enhanced  -*- lexical-binding: t; -*- 
 
 (after! tex
   (setq-default TeX-engine 'xetex)

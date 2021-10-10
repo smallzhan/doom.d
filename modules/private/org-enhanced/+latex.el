@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'ox-latex)
 (setq org-latex-listings t)
 (setq org-latex-compiler "xelatex")
@@ -24,9 +25,8 @@
                  "\n[EXTRA]")
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ))
-
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+               
 (add-to-list 'org-latex-classes
              `("my-article"
                ,(concat

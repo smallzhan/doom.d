@@ -1,5 +1,6 @@
-;;This file is from https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
-;;All credits to [[FengYuan Chen][https://github.com/chenfengyuan]]
+;; -*- lexical-binding: t; -*-
+;; This file is from https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
+;; All credits to [[FengYuan Chen][https://github.com/chenfengyuan]]
 ;;
 ;;; How to use:
 ;; 1. add `(load "/path/to/next-spec-day")` to your dot emacs file.

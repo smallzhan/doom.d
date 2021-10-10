@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq org-html-head-include-default-style nil)
 (setq org-html-postamble t)
 (setq org-html-postamble-format

@@ -1,25 +1,6 @@
 ;;; private/org-enhanced/autoload.el -*- lexical-binding: t; -*-
 ;;;
 
-;; ;;;###autoload
-;; (defun mrb/insert-created-timestamp()
-;;   "Insert a CREATED property using org-expiry.el for TODO entries"
-;;   (org-expiry-insert-created)
-;;   (org-back-to-heading)
-;;   (org-end-of-line)
-;;   (insert " ")
-;;   )
-
-;; ;;;###autoload
-;; (defun mrb/add-tags-in-capture()
-;;   (interactive)
-;;   "Insert tags in a capture window without losing the point"
-;;   (save-excursion
-;;     (org-back-to-heading)
-;;     (org-set-tags)))
-
-
-
 ;;;###autoload
 (defun bh/insert-inactive-timestamp ()
   (interactive)

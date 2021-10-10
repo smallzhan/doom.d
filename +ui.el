@@ -2,16 +2,8 @@
 
 ;; theme
 ;; cycle by +my/toggle-cycle-theme, binding SPC t t
-(defvar +my-themes '(doom-one
-                     doom-nord
-                     doom-spacegrey
-                     doom-nova
-                     doom-opera
-                     doom-sourcerer
-                     doom-Iosvkem
-                     doom-molokai
-                     doom-dracula))
-(setq doom-theme 'doom-one)
+
+(setq doom-theme 'modus-vivendi)
 
 ;; disable line-number
 (setq display-line-numbers-type nil)

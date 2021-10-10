@@ -1,4 +1,4 @@
-;; some org export to jekyll settings
+;; some org export to jekyll settings  -*- lexical-binding: t; -*-
 
 ;;(with-eval-after-load 'org
 ;; (defvar jekyll-directory (expand-file-name (concat org-directory "/blog/"))

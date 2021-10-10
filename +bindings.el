@@ -15,8 +15,8 @@
  "s-<left>"  #'windmove-left
  "s-<down>"  #'windmove-down
 
- "C-s"       #'my-isearch-or-consult
- "C-r"       #'consult-isearch-backward
+ ;;"C-s"       #'my-isearch-or-consult
+ ;;"C-r"       #'consult-isearch-backward
  "C-S-s"     #'isearch-forward
  "C-x k"     #'ido-kill-buffer
  "C-x K"     #'doom/kill-this-buffer-in-all-windows
@@ -45,7 +45,7 @@
    (:prefix ("c" . "code")
      
      (:prefix ("g" . "Go to")
-       :desc "Implementation"            "i" #'nox-find-implementation
+       :desc "Implementation"            "i" #'eglot-find-implementation
        ;;:desc "Definition"                "d" #'lsp-goto-type-definition
        :desc "Definition"                "d" #'xref-find-definitions
        ;;:desc "Find Definition"           "D" #'lsp-find-definition
@@ -125,35 +125,35 @@
          :desc "thing-cut-email"    "e" #'thing-cut-email
          :desc "thing-cut-comment"  ";" #'thing-cut-comment
          :desc "thing-cut-number"   "n" #'thing-cut-number)
-        (:prefix ("x" . "Thing Edit Replace")
-         :desc "thing-replace-defun"    "d" #'thing-replace-defun
-         :desc "thing-replace-line"     "l" #'thing-replace-line
-         :desc "thing-replace-sexp"     "s" #'thing-replace-sexp
-         :desc "thing-replace-word"     "w" #'thing-replace-word
-         :desc "thing-replace-symbol"   "b" #'thing-replace-symbol
-         :desc "thing-replace-filename" "f" #'thing-replace-filename
-         :desc "thing-replace-list"     "t" #'thing-replace-list
-         :desc "thing-replace-sentence" "c" #'thing-replace-sentence
-         :desc "thing-replace-paragrah" "p" #'thing-replace-paragraph
-         :desc "thing-replace-page"     "g" #'thing-replace-page
-         :desc "thing-replace-url"      "u" #'thing-replace-url
-         :desc "thing-replace-email"    "e" #'thing-replace-email
-         :desc "thing-replace-comment"  ";" #'thing-replace-comment
-         :desc "thing-replace-number"   "n" #'thing-replace-number)))
+       (:prefix ("r" . "Thing Edit Replace")
+        :desc "thing-replace-defun"    "d" #'thing-replace-defun
+        :desc "thing-replace-line"     "l" #'thing-replace-line
+        :desc "thing-replace-sexp"     "s" #'thing-replace-sexp
+        :desc "thing-replace-word"     "w" #'thing-replace-word
+        :desc "thing-replace-symbol"   "b" #'thing-replace-symbol
+        :desc "thing-replace-filename" "f" #'thing-replace-filename
+        :desc "thing-replace-list"     "t" #'thing-replace-list
+        :desc "thing-replace-sentence" "c" #'thing-replace-sentence
+        :desc "thing-replace-paragrah" "p" #'thing-replace-paragraph
+        :desc "thing-replace-page"     "g" #'thing-replace-page
+        :desc "thing-replace-url"      "u" #'thing-replace-url
+        :desc "thing-replace-email"    "e" #'thing-replace-email
+        :desc "thing-replace-comment"  ";" #'thing-replace-comment
+        :desc "thing-replace-number"   "n" #'thing-replace-number)))
    (:prefix ("f" . "file")
-     :desc "Find git file"        "g" #'counsel-git)
+     :desc "Find git file"        "g" #'consult-git-grep)
 
    "g" nil
-   (:after nox
+   (:after eglot
      (:prefix ("g" . "Goto")
-       :desc "Implementation"            "i" #'nox-find-implementation
+       :desc "Implementation"            "i" #'eglot-find-implementation
        ;;:desc "Definition"                "d" #'lsp-goto-type-definition
        :desc "Definition"                "d" #'xref-find-definitions
        ;;:desc "Find Definition"           "D" #'lsp-find-definition
-       :desc "Find Definition"           "D" #'nox-find-typeDefinition
+       :desc "Find Definition"           "D" #'eglot-find-typeDefinition
        
-       :desc "Find References"           "r" #'xref-find-references
-       ))
+       :desc "Find References"           "r" #'xref-find-references))
+       
 
    "o" nil ;; default keybinding for org agenda is too complicated
    (:prefix ("o". "org")
@@ -244,8 +244,9 @@
      :desc "Search in git"                 "g" #'consult-git-grep
      :desc "Search with consult-rg"        "c" #'consult-ripgrep
      :desc "Search with dash"              "t" #'consult-dash
-     :desc "Lazy search"                   "z" #'lazy-search)
-   )
+     :desc "Keep lines in current file"    "k" #'consult-keep-lines
+     :desc "Lazy search"                   "z" #'lazy-search))
+   
 
  (:after smartparens
    :map smartparens-mode-map
@@ -271,7 +272,7 @@
    [remap swiper]  #'counsel-grep-or-swiper
    [remap dired]  #'counsel-dired
    :map swiper-map
-   "C-<return>" #'my-swiper-toggle-counsel-rg
+   "C-<return>" #'my-swiper-toggle-counsel-rg)
    ;; "C-x C-r"  #'counsel-recentf
    ;; "C-x j"  #'counsel-mark-ring
    ;; "C-h F"  #'counsel-describe-face
@@ -307,7 +308,7 @@
    ;; "C-c c u"  #'counsel-unicode-char
    ;; "C-c c w"  #'counsel-colors-web
    ;; "C-c c z"  #'counsel-fzf
-   )
+   
  (:after swiper
    (:after rg
      :map swiper-map
@@ -321,7 +322,7 @@
  ;;   "q" #'kill-current-buffer)
  (:after pyim
    "M-l"       #'pyim-convert-string-at-point
-   "C-;"       #'pyim-delete-word-from-personal-buffer)
- )
+   "C-;"       #'pyim-delete-word-from-personal-buffer))
+ 
 
 
