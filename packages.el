@@ -7,7 +7,8 @@
                    company-auctex company-reftex fcitx
                    irony irony-doc flycheck-irony company-irony
                    rtags pyim bibtex-completion
-                   ivy-rtags irony-mode irony-eldoc)
+                   ivy-rtags irony-mode irony-eldoc
+                   solaire-mode)
 
 (package! company-english-helper
   :recipe (:host github :repo "manateelazycat/company-english-helper")

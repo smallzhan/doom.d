@@ -49,8 +49,8 @@
          ("M-)" . awesome-pair-unwrap)
          ("M-p" . awesome-pair-jump-right)
          ("M-n" . awesome-pair-jump-left)
-         ("M-:" . awesome-pair-jump-out-pair-and-newline)
-         )
+         ("M-:" . awesome-pair-jump-out-pair-and-newline))
+         
   :hook ((prog-mode ielm-mode minibuffer-inactive-mode sh-mode) . awesome-pair-mode))
 
 (use-package! counsel-etags
@@ -109,8 +109,8 @@
 
   ;; Sets up `pdf-tools-enable-minor-modes', `pdf-occur-global-minor-mode' and
   ;; `pdf-virtual-global-minor-mode'.
-  (pdf-tools-install-noverify)
-  )
+  (pdf-tools-install-noverify))
+  
 
 (use-package! flywrap
   :hook
@@ -174,19 +174,19 @@
            code))
       (shr-ensure-newline)
       (insert "  ") ; indentation
-      (insert (propertize "#+END_SRC" 'face 'org-block-end-line ) )
+      (insert (propertize "#+END_SRC" 'face 'org-block-end-line))
       (shr-ensure-newline)))
   (add-to-list 'shr-external-rendering-functions
-               '(pre . shrface-shr-tag-pre-highlight))
-  )
+               '(pre . shrface-shr-tag-pre-highlight)))
+  
 
 (use-package! shrface
   :after shr
   :config
   (setq nov-shr-rendering-functions shr-external-rendering-functions)
   (setq shrface-paragraph-indentation 2)
-  (setq shrface-paragraph-fill-column 120)
-  )
+  (setq shrface-paragraph-fill-column 120))
+  
 
 (use-package burly
   :bind (("C-c b b" . burly-bookmark-frames)
@@ -232,3 +232,20 @@ string of results."
 
 
 
+(use-package! citre
+  ;;:load-path "~/.doom.d/extensions/citre"
+  :defer t
+  :init
+  ;; This is needed in `:init' block for lazy load to work.
+  (require 'citre-config)
+  ;; Bind your frequently used commands.
+  (global-set-key (kbd "C-c c j") #'citre-jump)
+  (global-set-key (kbd "C-c c J") #'citre-jump-back)
+  (global-set-key (kbd "C-c c p") #'citre-ace-peek)
+  :config
+  (setq
+   ;; Set this if readtags is not in your path.
+   ;; citre-readtags-program "/path/to/readtags"
+   ;; Set this if you use project management plugin like projectile.  It's
+   ;; only used to display paths relatively, and doesn't affect actual use.
+   citre-project-root-function #'projectile-project-root))

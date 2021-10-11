@@ -417,14 +417,34 @@
   :load-path "~/.doom.d/extensions/awesome-tray"
   :config
   ;;(global-hide-mode-line-mode 1)
-  (add-hook 'doom-load-theme-hook #'awesome-tray-mode)
+  (defvar modeline-backup-format nil)
+  (defun enable-awesome-tray-mode()
+    (interactive)
+    (setq modeline-backup-format mode-line-format
+          mode-line-format "")
+    (awesome-tray-mode +1))
+  (defun disable-awesome-tray-mode()
+    (interactive)
+    (setq mode-line-format modeline-backup-format
+          modeline-backup-format nil)
+    (awesome-tray-mode -1))
+    
+  ;(setq modeline-backup-format modeline-format)
+        
+  (add-hook 'doom-load-theme-hook #'enable-awesome-tray-mode)
+
+  (defun awesome-tray-module-datetime-info ()
+    (let ((system-time-locale "C"))
+      (format-time-string "[%H:%M] %a")))
+  (add-to-list 'awesome-tray-module-alist
+               '("datetime" . (awesome-tray-module-datetime-info awesome-tray-module-date-face)))
   (setq awesome-tray-active-modules '("git"
                                       "location"
                                       "mode-name"
                                       "parent-dir"
                                       "buffer-name"
                                       "buffer-read-only"
-                                      "date")))
+                                      "datetime")))
                                       ;;"meow"
                                       ;; "emacs"
                                       
