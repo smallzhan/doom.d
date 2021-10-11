@@ -125,7 +125,7 @@
          :desc "thing-cut-email"    "e" #'thing-cut-email
          :desc "thing-cut-comment"  ";" #'thing-cut-comment
          :desc "thing-cut-number"   "n" #'thing-cut-number)
-       (:prefix ("r" . "Thing Edit Replace")
+       (:prefix ("a" . "Thing Edit Replace")
         :desc "thing-replace-defun"    "d" #'thing-replace-defun
         :desc "thing-replace-line"     "l" #'thing-replace-line
         :desc "thing-replace-sexp"     "s" #'thing-replace-sexp
