@@ -3,7 +3,7 @@
 ;; theme
 ;; cycle by +my/toggle-cycle-theme, binding SPC t t
 
-(setq doom-theme 'modus-vivendi)
+(setq doom-theme 'doom-one)
 
 ;; disable line-number
 (setq display-line-numbers-type nil)

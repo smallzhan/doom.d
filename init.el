@@ -156,8 +156,9 @@
 
  :private
  ;; my-cc
- (company
+ (company                               
   +childframe)
+ ;; corfu
  chinese
  (org-enhanced
   +jekyll

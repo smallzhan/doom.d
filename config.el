@@ -422,6 +422,7 @@
     (interactive)
     (setq modeline-backup-format mode-line-format
           mode-line-format "")
+    (setq awesome-tray-mode-line-active-color (face-attribute 'highlight :background))
     (awesome-tray-mode +1))
   (defun disable-awesome-tray-mode()
     (interactive)
@@ -432,7 +433,7 @@
   ;(setq modeline-backup-format modeline-format)
         
   (add-hook 'doom-load-theme-hook #'enable-awesome-tray-mode)
-
+  
   (defun awesome-tray-module-datetime-info ()
     (let ((system-time-locale "C"))
       (format-time-string "[%H:%M] %a")))

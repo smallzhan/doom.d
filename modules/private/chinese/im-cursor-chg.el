@@ -18,12 +18,15 @@
 (defvar im-cursor-color "Orange"
   "The color for input method.")
 
-;;(defvar im-default-cursor-color (frame-parameter nil 'cursor-color)
-;;   "The default cursor color.")
-(defvar im-default-cursor-color "#51afef")
+(defvar im-default-cursor-color (frame-parameter nil 'cursor-color)
+   "The default cursor color.")
 
-;(defvar im-default-cursor-color (face-attribute 'highlight :background))
-
+;;; default color maybe changed in themes, need hook at emacs-startup.
+(add-hook 'emacs-startup-hook
+          #'(lambda ()
+                (setq im-default-cursor-color
+                      (frame-parameter nil 'cursor-color))))
+                        
 (defun im--chinese-p ()
   "Check if the current input state is Chinese."
   (if (featurep 'rime)
