@@ -555,38 +555,37 @@
 (use-package! bibtex-actions
   ;;:ensure t
   :commands bibtex-actions-insert-citation
-  :after bibtex-completion
+  :after (embark bibtex-completion)
   :config
-  (with-eval-after-load 'embark
-    (setq bibtex-actions-at-point-function 'embark-act
-          bibtex-actions-bibliography my/bibs)
-
+  (setq ;;bibtex-actions-at-point-function 'embark-act
+        bibtex-actions-bibliography my/bibtex-files
+        bibtex-actions-notes-paths `(,bibtex-notes-path))
+   
     ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-    (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-    (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
-    (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))))
+  (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+  (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
+  (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map)))
 
 (use-package! oc
   :defer t
+  :commands org-cite-insert
   :config
-  (setq org-cite-activate-processor nil
+  (setq ;;org-cite-activate-processor nil
         org-cite-global-bibliography my/bibtex-files))
 
+(use-package! citeproc
+  :defer t)
+
 (use-package! oc-bibtex-actions
-  :defer t
-  :bind (;;("C-c b" . org-cite-insert)
-         ;;("M-o" . org-open-at-point)
-         :map minibuffer-local-map
-         ("M-b" . bibtex-actions-insert-preset))
-  :after (embark oc)
+  ;;:defer t
+  :after (oc)
   :config
-  (setq org-cite-global-bibliography my/bibtex-files
-        org-cite-insert-processor 'oc-bibtex-actions
+  (setq org-cite-insert-processor 'oc-bibtex-actions
         org-cite-follow-processor 'oc-bibtex-actions
         org-cite-activate-processor 'oc-bibtex-actions))
 
 ;; Use consult-completing-read for enhanced interface.
-(advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+;; (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
 (use-package! ebib
   :commands ebib
@@ -641,4 +640,6 @@
           (format "curl -s -d '%s' -H 'Content-Type: text/plain' '%s/web' | curl -s -d @- -H 'Content-Type: application/json' '%s/export?format=%s'" url ebib-zotero-translation-server ebib-zotero-translation-server export-format)))
         (ebib-import-entries ebib--cur-db)))))
 
-(autoload #'ebib-biblio-import-doi "ebib-biblio" nil t)
+(use-package! ebib-biblio
+ :commands ebib-biblio-import-doi)
+
