@@ -26,3 +26,6 @@
 (package! org-roam)
 (package! org-roam-bibtex :recipe (:host github :repo "org-roam/org-roam-bibtex") :disable t)
 (package! elfeed-dashboard :recipe (:host github :repo "Manoj321/elfeed-dashboard"))
+
+(package! bibtex-actions)
+(package! ebib)

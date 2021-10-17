@@ -3,17 +3,7 @@
 (load! "+bindings")
 (load! "+ui")
 
-;;======= org-directory ====
-(setq org-directory +my-org-dir
-      org-agenda-directory (concat +my-org-dir "agenda/")
-      org-agenda-diary-file (concat  org-directory "diary.org")
-      org-default-notes-file (concat org-directory "note.org")
-      org-roam-directory (file-truename (concat org-directory "roam"))
-      ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
-      ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
-      org-agenda-files `(,(concat org-agenda-directory "planning.org")
-                         ,(concat org-agenda-directory "notes.org")
-                         ,(concat org-agenda-directory "work.org")))
+
 
 (when IS-MAC
   (setq frame-resize-pixelwise nil)

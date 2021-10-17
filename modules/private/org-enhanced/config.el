@@ -20,10 +20,10 @@
   ;;(setq notdeft-secondary-extensions '("md" "org" "muse"))
   (setq notdeft-directories `(,(concat +my-org-dir "research")
                               ,(concat +my-org-dir "deft")
-                              ,(concat +my-org-dir "roam")
-                              ;;,(expand-file-name (concat +my-org-dir "../blog/_posts"))
-                              ;;,(expand-file-name (concat +my-org-dir "../source"))
-                              ))
+                              ,(concat +my-org-dir "roam")))
+  ;;,(expand-file-name (concat +my-org-dir "../blog/_posts"))
+  ;;,(expand-file-name (concat +my-org-dir "../source"))
+
   (setq notdeft-sparse-directories `(("~" . (,(concat +my-org-dir "webclip.org")))))
   (setq notdeft-allow-org-property-drawers t)
   (setq notdeft-xapian-program (executable-find "notdeft-xapian"))
@@ -52,30 +52,30 @@
   (with-eval-after-load 'pdf-annot
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
-(use-package! org-ref
-  :load-path ("~/.doom.d/extensions/org-ref" "~/.doom.d/extensions/parsebib")
-  :after org
-  :init
-  (setq org-ref-completion-library 'org-ref-reftex)
-  (setq org-ref-directory (concat +my-org-dir "bib/"))
-  (setq reftex-default-bibliography `(,(concat org-ref-directory "ref.bib"))
-        org-ref-bibliography-notes (concat org-ref-directory "notes.org")
-        org-ref-default-bibliography `(,(concat org-ref-directory "ref.bib"))
-        org-ref-pdf-directory (concat org-ref-directory "pdfs")))
+;; (use-package! org-ref
+;;   :load-path ("~/.doom.d/extensions/org-ref" "~/.doom.d/extensions/parsebib")
+;;   :after org
+;;   :init
+;;   (setq org-ref-completion-library 'org-ref-reftex)
+;;   (setq org-ref-directory (concat +my-org-dir "bib/"))
+;;   (setq reftex-default-bibliography `(,(concat org-ref-directory "ref.bib"))
+;;         org-ref-bibliography-notes (concat org-ref-directory "notes.org")
+;;         org-ref-default-bibliography `(,(concat org-ref-directory "ref.bib"))
+;;         org-ref-pdf-directory (concat org-ref-directory "pdfs")))
 
 
-(use-package! ivy-bibtex
-  :after org-ref
-  :config
-  (setq bibtex-completion-bibliography
-        `(,(concat org-ref-directory "ref.bib")))
-  (setq bibtex-completion-library-path
-        `(,(concat org-ref-directory "pdfs")))
+;; (use-package! ivy-bibtex
+;;   :after org-ref
+;;   :config
+;;   (setq bibtex-completion-bibliography
+;;         `(,(concat org-ref-directory "ref.bib")))
+;;   (setq bibtex-completion-library-path
+;;         `(,(concat org-ref-directory "pdfs")))
 
-  ;; using bibtex path reference to pdf file
-  (setq bibtex-completion-pdf-field "File")
+;;   ;; using bibtex path reference to pdf file
+;;   (setq bibtex-completion-pdf-field "File")
 
-  (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
+;;   (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
 
 
 (after! org
@@ -146,16 +146,16 @@
                         ("MARK" . ?M)
                         ("TEAM" . ?T)
                         ("LEARN" . ?l)
-                        ("PROJ" . ?j)
-                        ))
+                        ("PROJ" . ?j)))
+
   (setq org-emphasis-regexp-components
         '(
           "：，。、  \t('\"{"            ;pre
           "- ：，。、 \t.,:!?;'\")}\\"   ;post
           " \t\r\n,\"'"                  ;border *forbidden*
           "."                            ;body-regexp
-          1                              ; newline
-          ))
+          1))                              ; newline
+
 
   ;; Allow setting single tags without the menu
   (setq org-fast-tag-selection-single-key 'expert)
@@ -315,8 +315,6 @@
                      (org-hydra/body)
                    (self-insert-command 1))))
 
-  
-  
   (if (featurep! +jekyll) (load! "+jekyll"))
   (if (featurep! +latex) (load! "+latex"))
   (if (featurep! +html) (load! "+html"))
@@ -329,7 +327,7 @@
   (defvar bh/keep-clock-running nil)
 
   (defvar bh/organization-task-id "c77749b4-b094-4c8e-8d22-a52608adc113")
-  
+
   (bh/org-agenda-to-appt)
   (appt-activate t))
 
@@ -365,8 +363,8 @@
                   :order 2)
                  (:name "Work"
                   :category "dingtalk"
-                  :order 3)
-                 ))))
+                  :order 3)))))
+
             (alltodo
              ""
              ((org-agenda-overriding-header "")
@@ -376,8 +374,8 @@
                         :deadline nil
                         :category ("task" "link" "capture"))
                   :date today
-                  :order 1
-                  )
+                  :order 1)
+
                  (:name "Important"
                   :tag "Important"
                   :priority "A"
@@ -411,7 +409,7 @@
                  (:name "SomeDay"
                   :priority<= "C"
                   :tag ("WAIT" "HOLD")
-                  :todo ("SOMEDAY" )
+                  :todo ("SOMEDAY")
                   :order 90))))))))))
 
 
@@ -447,44 +445,44 @@
     (toggle-truncate-lines 1)
     (my-buffer-face-mode-org-clock-budget)))
 
-(use-package! gkroam
-  :hook (org-load . gkroam-mode)
+;; (use-package! gkroam
+;;   :hook (org-load . gkroam-mode)
+;;   :init
+;;   (setq gkroam-root-dir (expand-file-name "roam" +my-org-dir))
+;;   (setq gkroam-prettify-p nil
+;;         gkroam-show-brackets-p t
+;;         gkroam-use-default-filename t
+;;         gkroam-window-margin 4)
+
+;;   :bind
+;;   (:map gkroam-mode-map
+;;    ("C-c k I" . gkroam-index)
+;;    ("C-c k d" . gkroam-daily)
+;;    ("C-c k D" . gkroam-delete)
+;;    ("C-c k f" . gkroam-find)
+;;    ("C-c k i" . gkroam-insert)
+;;    ("C-c k n" . gkroam-dwim)
+;;    ("C-c k c" . gkroam-capture)
+;;    ("C-c k e" . gkroam-link-edit)
+;;    ("C-c k u" . gkroam-show-unlinked)
+;;    ("C-c k p" . gkroam-toggle-prettify)
+;;    ("C-c k t" . gkroam-toggle-brackets)
+;;    ("C-c k R" . gkroam-rebuild-caches)
+;;    ("C-c k g" . gkroam-update)))
+
+
+(use-package! org-roam
+  ;;:hook (org-load . org-roam-setup)
+  :after org
   :init
-  (setq gkroam-root-dir (expand-file-name "roam" +my-org-dir))
-  (setq gkroam-prettify-p nil
-        gkroam-show-brackets-p t
-        gkroam-use-default-filename t
-        gkroam-window-margin 4)
+  (setq org-roam-v2-ack t)
+  ;;(setq org-roam-directory (file-truename (concat org-directory "roam")))
 
-  :bind
-  (:map gkroam-mode-map
-   ("C-c k I" . gkroam-index)
-   ("C-c k d" . gkroam-daily)
-   ("C-c k D" . gkroam-delete)
-   ("C-c k f" . gkroam-find)
-   ("C-c k i" . gkroam-insert)
-   ("C-c k n" . gkroam-dwim)
-   ("C-c k c" . gkroam-capture)
-   ("C-c k e" . gkroam-link-edit)
-   ("C-c k u" . gkroam-show-unlinked)
-   ("C-c k p" . gkroam-toggle-prettify)
-   ("C-c k t" . gkroam-toggle-brackets)
-   ("C-c k R" . gkroam-rebuild-caches)
-   ("C-c k g" . gkroam-update)))
-
-
- (use-package! org-roam
-   ;;:hook (org-load . org-roam-setup)
-   :after org
-   :init
-   (setq org-roam-v2-ack t)
-   (setq org-roam-directory (file-truename (concat org-directory "roam")))
- 
-   :config
-   (org-roam-setup)
-   ;; If using org-roam-protocol
-   (require 'org-roam-protocol)
-   (add-to-list 'org-roam-capture-ref-templates
+  :config
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol)
+  (add-to-list 'org-roam-capture-ref-templates
                '("a" "Annotation" plain ;;(function org-roam-capture--get-point)
                  "%U ${body}\n"
                  :target (file+head "${slug}.org" "#+title: ${title}\n")
@@ -492,17 +490,17 @@
                  ;;:head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
                  :immediate-finish t
                  :unnarrowed t))
-   (set-popup-rules!
-     `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
-        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
-       ("^\\*org-roam: " ; node dedicated org-roam buffer
-        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2))))
+  (set-popup-rules!
+    `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
+       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
+      ("^\\*org-roam: " ; node dedicated org-roam buffer
+       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2))))
 
 
-(use-package! org-roam-bibtex
-  :after org-roam
-  :config
-  (require 'org-ref))
+;; (use-package! org-roam-bibtex
+;;   :after org-roam
+;;   :config
+;;   (require 'org-ref))
 
 
 (use-package! elfeed-dashboard
@@ -525,3 +523,122 @@
         org-caldav-inbox (concat org-directory "agenda/dingtalk.org"))
   (setq org-caldav-files (list org-caldav-inbox))
   (add-to-list 'org-agenda-files org-caldav-inbox))
+
+
+;; Set bibliography paths so they are the same.
+(use-package! bibtex
+   ;:defer t
+   :config
+   (setq bibtex-file-path (expand-file-name "bib/" +my-org-dir)
+         bibtex-files '("ref.bib")
+         bibtex-notes-path (expand-file-name "notes/" bibtex-file-path)
+
+         my/bibtex-files (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
+         bibtex-align-at-equal-sign t
+         bibtex-autokey-titleword-separator "-"
+         bibtex-autokey-year-title-separator "-"
+         bibtex-autokey-name-year-separator "-"
+         bibtex-dialect 'biblatex))
+
+(use-package! bibtex-completion
+  ;;:ensure t
+  :defer t
+  :config
+  (setq bibtex-autokey-year-length 4
+        bibtex-completion-additional-search-fields '(keywords)
+        bibtex-completion-bibliography my/bibtex-files
+        bibtex-completion-library-path (concat bibtex-file-path "pdfs/")
+        bibtex-completion-notes-path bibtex-notes-path
+        bibtex-completion-pdf-field "file"
+        bibtex-completion-pdf-open-function 'org-open-file))
+
+(use-package! bibtex-actions
+  ;;:ensure t
+  :commands bibtex-actions-insert-citation
+  :after bibtex-completion
+  :config
+  (with-eval-after-load 'embark
+    (setq bibtex-actions-at-point-function 'embark-act
+          bibtex-actions-bibliography my/bibs)
+
+    ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
+    (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+    (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
+    (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))))
+
+(use-package! oc
+  :defer t
+  :config
+  (setq org-cite-activate-processor nil
+        org-cite-global-bibliography my/bibtex-files))
+
+(use-package! oc-bibtex-actions
+  :defer t
+  :bind (;;("C-c b" . org-cite-insert)
+         ;;("M-o" . org-open-at-point)
+         :map minibuffer-local-map
+         ("M-b" . bibtex-actions-insert-preset))
+  :after (embark oc)
+  :config
+  (setq org-cite-global-bibliography my/bibtex-files
+        org-cite-insert-processor 'oc-bibtex-actions
+        org-cite-follow-processor 'oc-bibtex-actions
+        org-cite-activate-processor 'oc-bibtex-actions))
+
+;; Use consult-completing-read for enhanced interface.
+(advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+
+(use-package! ebib
+  :commands ebib
+  :defer t
+  :config
+  (setq ebib-default-directory bibtex-file-path
+        ebib-bib-search-dirs `(,bibtex-file-path)
+        ebib-file-search-dirs `(,(concat bibtex-file-path "pdfs/"))
+        ebib-notes-directory bibtex-notes-path
+        ebib-reading-list-file (concat bibtex-file-path "notes.org")
+
+        ebib-bibtex-dialect bibtex-dialect
+        ebib-file-associations '(("pdf" . "open"))
+        ebib-index-default-sort '("timestamp" . descend)
+        ebib-notes-template (concat ":PROPERTIES:"
+                                    "\n :ID:         %K"
+                                    "\n:ROAM_REFS: @%K"
+                                    "\n:END:"
+                                    "\n#+title: %T"
+                                    "\n#+description: %D"
+                                    "\n#+date: %S"
+                                    "\n %%?")
+        ebib-notes-template-specifiers '((?K . ebib-create-key)
+                                         (?T . ebib-create-org-title)
+                                         (?D . ebib-create-org-description)
+                                         (?L . ebib-create-org-link)
+                                         (?S . ebib-create-org-time-stamp))
+        ebib-preload-bib-files bibtex-files
+        ebib-use-timestamp t)
+
+  (defun ebib-create-key (key _db)
+    "Return the KEY in DB for an Org mode note."
+    (format "%s" key))
+
+  (defun ebib-create-org-time-stamp (_key _db)
+    "Create timestamp for an Org mode note."
+    (format "%s" (with-temp-buffer (org-insert-time-stamp nil))))
+
+  (defcustom ebib-zotero-translation-server "https://translate.manubot.org"
+    "The address of Zotero translation server."
+    :group 'ebib
+    :type 'string)
+
+  (defun ebib-zotero-import-url (url)
+    "Fetch a BibTeX entry from `ebib-zotero-translation-server' by its URL.
+ The entry is stored in the current database."
+    (interactive "MURL: ")
+    (let ((export-format (downcase (symbol-name (intern-soft bibtex-dialect)))))
+      (with-temp-buffer
+        (insert
+         (shell-command-to-string
+          (format "curl -s -d '%s' -H 'Content-Type: text/plain' '%s/web' | curl -s -d @- -H 'Content-Type: application/json' '%s/export?format=%s'" url ebib-zotero-translation-server ebib-zotero-translation-server export-format)))
+        (ebib-import-entries ebib--cur-db)))))
+
+(autoload #'ebib-biblio-import-doi "ebib-biblio" nil t)
