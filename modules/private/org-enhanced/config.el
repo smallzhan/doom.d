@@ -473,7 +473,9 @@
 
 (use-package! org-roam
   ;;:hook (org-load . org-roam-setup)
-  :after org
+  :defer t
+  :commands (org-roam-capture org-roam-node-find)
+  ;;:after org
   :init
   (setq org-roam-v2-ack t)
   ;;(setq org-roam-directory (file-truename (concat org-directory "roam")))
@@ -553,7 +555,7 @@
         bibtex-completion-pdf-open-function 'org-open-file))
 
 (use-package! bibtex-actions
-  ;;:ensure t
+  :defer t
   :commands bibtex-actions-insert-citation
   :after (embark bibtex-completion)
   :config
@@ -571,18 +573,28 @@
   :commands org-cite-insert
   :config
   (setq ;;org-cite-activate-processor nil
-        org-cite-global-bibliography my/bibtex-files))
+        org-cite-global-bibliography my/bibtex-files)
+  (defun my-org-cite-insert (arg)
+    (interactive "P")
+    (if (eq org-cite-insert-processor 'oc-bibtex-actions)
+        (org-cite-insert arg)
+      (progn
+        (require 'oc-bibtex-actions)
+        (setq org-cite-insert-processor 'oc-bibtex-actions
+              org-cite-activate-processor 'oc-bibtex-actions
+              org-cite-follow-processor 'oc-bibtex-actions)
+        (org-cite-insert arg)))))
 
 (use-package! citeproc
   :defer t)
 
-(use-package! oc-bibtex-actions
-  ;;:defer t
-  :after (oc)
-  :config
-  (setq org-cite-insert-processor 'oc-bibtex-actions
-        org-cite-follow-processor 'oc-bibtex-actions
-        org-cite-activate-processor 'oc-bibtex-actions))
+;; (use-package! oc-bibtex-actions
+;;   ;;:defer t
+;;   :after (oc)
+;;   :config
+;;   (setq org-cite-insert-processor 'oc-bibtex-actions
+;;         org-cite-follow-processor 'oc-bibtex-actions
+;;         org-cite-activate-processor 'oc-bibtex-actions))
 
 ;; Use consult-completing-read for enhanced interface.
 ;; (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
