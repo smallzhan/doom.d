@@ -8,8 +8,8 @@
   :config
   ;;; Code:
 
-  ;; (if IS-WINDOWS
-  ;;     (setq rime-share-data-dir "~/.doom.d/extensions/emacs-rime/data"))
+  (if IS-WINDOWS
+      (setq rime-share-data-dir "~/.doom.d/extensions/emacs-rime/data"))
   (setq rime-user-data-dir "~/.emacs.d/rime")
   (setq rime-posframe-properties
         (list :background-color "#333333"
@@ -114,8 +114,8 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
                   rime-predicate-punctuation-line-begin-p
                   ;;rime-predicate-after-alphabet-char-p
                   ;;rime-predicate-auto-english-p
-                  rime-predicate-hydra-p
-                  ))
+                  rime-predicate-hydra-p))
+                  
   (setq-default rime-inline-predicates
                 '(rime-predicate-space-after-cc-p
                   rime-predicate-current-uppercase-letter-p))
@@ -170,7 +170,7 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
     (after! orderless
       (defun completion--regex-pinyin (str)
         (orderless-regexp (pinyinlib-build-regexp-string str)))
-      (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+      (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))))
 
 
     ;; (mapcar
@@ -182,7 +182,7 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
     ;;        (setf (alist-get key ivy-re-builders-alist)
     ;;              #'ivy--regex-pinyin))))
     ;;  ivy-re-builders-alist)
-    ))
+    
 
 
 (after! pyim
@@ -228,5 +228,5 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
         (pyim-cregexp-build x))))
 
   (setq ivy-re-builders-alist
-        '((t . eh-ivy-cregexp)))
-  )
+        '((t . eh-ivy-cregexp))))
+  
