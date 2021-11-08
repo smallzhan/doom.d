@@ -28,6 +28,6 @@
 (package! elfeed-dashboard :recipe (:host github :repo "Manoj321/elfeed-dashboard"))
 
 ;;(package! bibtex-actions)
-(package! citeproc)
+;;(package! citeproc)
 (package! ebib)
-(package! citar :recipe (:host github :repo "bdarcus/citar"))
+(package! citar)

@@ -15,6 +15,8 @@
 
 
 (use-package! notdeft
+  :defer t
+  :commands notdeft
   :config
   (setq notdeft-extension "org")
   ;;(setq notdeft-secondary-extensions '("md" "org" "muse"))
@@ -39,6 +41,8 @@
 
 
 (use-package! org-noter
+  :commands org-noter
+  :defer t
   :after org
   :config
   (setq org-noter-default-notes-file-names '("notes.org")
@@ -418,14 +422,12 @@
 
 
 (use-package! valign
-                                        ;:load-path "~/.doom.d/extensions/valign"
-                                        ;:init
-                                        ;(require 'valign)
   :hook
   (org-mode . valign-mode))
 
 (use-package! org-clock-budget
   :commands (org-clock-budget-report)
+  :defer t
   :init
   (defun my-buffer-face-mode-org-clock-budget ()
     "Sets a fixed width (monospace) font in current buffer"
@@ -506,6 +508,7 @@
 
 
 (use-package! elfeed-dashboard
+  :defer t
   :after elfeed
   :commands elfeed-dashboard
   :config
@@ -529,7 +532,6 @@
 
 ;; Set bibliography paths so they are the same.
 (use-package! bibtex
-   ;:defer t
    :config
    (setq bibtex-file-path (expand-file-name "bib/" +my-org-dir)
          bibtex-files '("ref.bib")
@@ -556,8 +558,6 @@
 
 (use-package! citar
   :defer t
-  :commands bibtex-actions-insert-citation
-  ;;:after (embark bibtex-completion)
   :init
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
@@ -569,10 +569,6 @@
         citar-library-paths `(,(concat bibtex-file-path "pdfs/"))
         citar-notes-paths `(,bibtex-notes-path)))
    
-    ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-  ;(add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-  ;(add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
-  ;(add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map)))
 
 (use-package! oc
   :defer t
@@ -580,19 +576,9 @@
   :config
   (setq ;;org-cite-activate-processor nil
         org-cite-global-bibliography my/bibtex-files))
-  ;; (defun my-org-cite-insert (arg)
-  ;;   (interactive "P")
-  ;;   (if (eq org-cite-insert-processor 'oc-bibtex-actions)
-  ;;       (org-cite-insert arg)
-  ;;     (progn
-  ;;       (require 'oc-bibtex-actions)
-  ;;       (setq org-cite-insert-processor 'oc-bibtex-actions
-  ;;             org-cite-activate-processor 'oc-bibtex-actions
-  ;;             org-cite-follow-processor 'oc-bibtex-actions)
-  ;;       (org-cite-insert arg)))))
 
-(use-package! citeproc
-  :defer t)
+;;(use-package! citeproc
+;;  :defer t)
 
 ;; (use-package! oc-bibtex-actions
 ;;   ;;:defer t
@@ -660,4 +646,7 @@
 
 (use-package! ebib-biblio
  :commands ebib-biblio-import-doi)
+ 
+
+
 

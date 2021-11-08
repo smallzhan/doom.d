@@ -19,9 +19,9 @@
         0
       (apply orig-fn args)))
 
-  ;; (advice-add 'eaf--frame-top :around #'my-eaf-mac-get-size-advice)
-  ;; (advice-add 'eaf--frame-left :around #'my-eaf-mac-get-size-advice)
-  ;; (advice-add 'eaf--frame-internal-height :around #'my-eaf-mac-get-size-advice)
+  ;;(advice-add 'eaf--frame-top :around #'my-eaf-mac-get-size-advice)
+  ;;(advice-add 'eaf--frame-left :around #'my-eaf-mac-get-size-advice)
+  ;;(advice-add 'eaf--frame-internal-height :around #'my-eaf-mac-get-size-advice)
 
   (defun my-eaf--mac-focus-change ()
     (cond
