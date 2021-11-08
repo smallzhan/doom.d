@@ -554,36 +554,42 @@
         bibtex-completion-pdf-field "file"
         bibtex-completion-pdf-open-function 'org-open-file))
 
-(use-package! bibtex-actions
+(use-package! citar
   :defer t
   :commands bibtex-actions-insert-citation
-  :after (embark bibtex-completion)
+  ;;:after (embark bibtex-completion)
+  :init
+  (setq org-cite-insert-processor 'citar
+        org-cite-follow-processor 'citar
+        org-cite-activate-processor 'citar)
+         
   :config
-  (setq ;;bibtex-actions-at-point-function 'embark-act
-        bibtex-actions-bibliography my/bibtex-files
-        bibtex-actions-notes-paths `(,bibtex-notes-path))
+  (setq citar-at-point-function 'embark-act
+        citar-bibliography my/bibtex-files
+        citar-library-paths `(,(concat bibtex-file-path "pdfs/"))
+        citar-notes-paths `(,bibtex-notes-path)))
    
     ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-  (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-  (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
-  (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map)))
+  ;(add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+  ;(add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
+  ;(add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map)))
 
 (use-package! oc
   :defer t
   :commands org-cite-insert
   :config
   (setq ;;org-cite-activate-processor nil
-        org-cite-global-bibliography my/bibtex-files)
-  (defun my-org-cite-insert (arg)
-    (interactive "P")
-    (if (eq org-cite-insert-processor 'oc-bibtex-actions)
-        (org-cite-insert arg)
-      (progn
-        (require 'oc-bibtex-actions)
-        (setq org-cite-insert-processor 'oc-bibtex-actions
-              org-cite-activate-processor 'oc-bibtex-actions
-              org-cite-follow-processor 'oc-bibtex-actions)
-        (org-cite-insert arg)))))
+        org-cite-global-bibliography my/bibtex-files))
+  ;; (defun my-org-cite-insert (arg)
+  ;;   (interactive "P")
+  ;;   (if (eq org-cite-insert-processor 'oc-bibtex-actions)
+  ;;       (org-cite-insert arg)
+  ;;     (progn
+  ;;       (require 'oc-bibtex-actions)
+  ;;       (setq org-cite-insert-processor 'oc-bibtex-actions
+  ;;             org-cite-activate-processor 'oc-bibtex-actions
+  ;;             org-cite-follow-processor 'oc-bibtex-actions)
+  ;;       (org-cite-insert arg)))))
 
 (use-package! citeproc
   :defer t)
