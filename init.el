@@ -73,12 +73,12 @@
  hl-todo           ; highlight TODO/FIXME/NOTE tags
  nav-flash         ; blink the current line after jumping
  ;;ophints      ; display visual hints when editing in evil
- (window-select    ; visually switch windows
-  +ace-window)
+ ;;(window-select    ; visually switch windows
+ ;; +switch-window
 
  treemacs          ; a project drawer, like neotree but cooler
  (popup            ; tame sudden yet inevitable temporary windows
-  +all
+  ;;+all
   +defaults)
  vc-gutter
  workspaces
@@ -88,7 +88,7 @@
  ;;;(evil +everywhere)
  ;;;file-templates
  format            ; automated prettiness
- multiple-cursors  ; editing in many places at once
+ ;;multiple-cursors  ; editing in many places at once
  fold
  snippets
  parinfer
@@ -110,7 +110,7 @@
   
 
  :tools
- eval
+ ;;eval
  magit
  (lookup
   +docsets)
@@ -154,7 +154,7 @@
  (rss
   +org)
  :email
- wanderlust
+ ;;wanderlust
 
  :config
  ;; The default module set reasonable defaults for Emacs. It also provides

@@ -404,7 +404,7 @@
 
 
 (use-package! awesome-tray
-  :load-path "~/.doom.d/extensions/awesome-tray"
+  ;; :load-path "~/.doom.d/extensions/awesome-tray" 
   :config
   ;;(global-hide-mode-line-mode 1)
   (defvar modeline-backup-format nil)
@@ -427,16 +427,23 @@
   (defun awesome-tray-module-datetime-info ()
     (let ((system-time-locale "C"))
       (format-time-string "[%H:%M] %a")))
+  
+    
   (add-to-list 'awesome-tray-module-alist
                '("datetime" . (awesome-tray-module-datetime-info awesome-tray-module-date-face)))
+  (add-to-list 'awesome-tray-module-alist
+               '("meow" . (meow-indicator awesome-tray-module-evil-face)))
+
+
+
   (setq awesome-tray-active-modules '("git"
                                       "location"
                                       "mode-name"
                                       "parent-dir"
                                       "buffer-name"
                                       "buffer-read-only"
-                                      "datetime")))
-                                      ;;"meow"
+                                      "datetime"
+                                      "meow")))
                                       ;; "emacs"
                                       
 ;; (use-package! toki-modeline

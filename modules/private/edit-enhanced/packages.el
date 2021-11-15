@@ -32,3 +32,5 @@
 (package! puni :recipe (:host github :repo "Amaikinono/puni") :disable t)
 
 (package! citre :recipe (:host github :repo "universal-ctags/citre"))
+
+(package! meow)

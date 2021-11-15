@@ -85,7 +85,6 @@
 
    "e" nil
    (:prefix ("e" . "editor")
-     :desc "iedit"                "e" #'iedit-mode
      :desc "Switch header/source" "s" #'ff-find-other-file
      :desc "Make header"          "m" #'make-header
      :desc "Make box comment"     "b" #'make-box-comment
@@ -235,6 +234,7 @@
      :desc "Truncate Lines"                "c" #'toggle-truncate-lines
      :desc "Theme"                         "t" #'counsel-load-theme)
 
+   
    (:prefix ("s" . "search")
      :desc "Search with color-rg"          "r" #'color-rg-search-input-in-project
      :desc "Search symbol with color-rg"   "s" #'color-rg-search-symbol-in-project
@@ -245,8 +245,9 @@
      :desc "Search with consult-rg"        "c" #'consult-ripgrep
      :desc "Search with dash"              "t" #'consult-dash
      :desc "Keep lines in current file"    "k" #'consult-keep-lines
-     :desc "Lazy search"                   "z" #'lazy-search))
-   
+     :desc "Lazy search"                   "z" #'lazy-search
+     :desc "Nil"                           "B" nil 
+     :desc "Search buffer "                "b" #'consult-line)) 
 
  (:after smartparens
    :map smartparens-mode-map
