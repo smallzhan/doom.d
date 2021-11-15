@@ -404,7 +404,7 @@
 
 
 (use-package! awesome-tray
-  ;; :load-path "~/.doom.d/extensions/awesome-tray" 
+  ;; :load-path "~/.doom.d/extensions/awesome-tray"
   :config
   ;;(global-hide-mode-line-mode 1)
   (defvar modeline-backup-format nil)
@@ -419,7 +419,7 @@
     (setq mode-line-format modeline-backup-format
           modeline-backup-format nil)
     (awesome-tray-mode -1))
-    
+  
   ;(setq modeline-backup-format modeline-format)
         
   (add-hook 'doom-load-theme-hook #'enable-awesome-tray-mode)
@@ -436,14 +436,15 @@
 
 
 
-  (setq awesome-tray-active-modules '("git"
+  (setq awesome-tray-active-modules '("meow"
+                                      "git"
                                       "location"
                                       "mode-name"
                                       "parent-dir"
                                       "buffer-name"
                                       "buffer-read-only"
-                                      "datetime"
-                                      "meow")))
+                                      "datetime")))
+                                      ;;"meow")))
                                       ;; "emacs"
                                       
 ;; (use-package! toki-modeline

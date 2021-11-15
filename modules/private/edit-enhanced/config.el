@@ -360,7 +360,7 @@ string of results."
 
   
 
-(use-package meow
+(use-package! meow
   ;;:demand t
   :init
   (meow-global-mode 1)
@@ -371,8 +371,8 @@ string of results."
   ;;(meow-setup-line-number)
   ;; 如果你需要自动的 mode-line 设置（如果需要自定义见下文对 `meow-indicator' 说明）
   ;;(meow-setup-indicator))
-  (setq meow-replace-state-name-list '((normal . "<N>")
-                                       (motion . "<M>")
-                                       (keypad . "<K>")
-                                       (insert . "<I>")
-                                       (bmacro . "<B>"))))
+  (setq meow-replace-state-name-list '((normal . "[N]")
+                                       (motion . "[M]")
+                                       (keypad . "[K]")
+                                       (insert . "[I]")
+                                       (bmacro . "[B]"))))
