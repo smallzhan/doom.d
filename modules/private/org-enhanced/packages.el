@@ -1,6 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 
-(package! notdeft :recipe (:host github :repo "hasu/notdeft"))
+(package! notdeft :recipe (:host github :repo "hasu/notdeft") :disable t)
 (package! ox-gfm)
 (package! ob-ipython :disable t)
 (package! cdlatex)

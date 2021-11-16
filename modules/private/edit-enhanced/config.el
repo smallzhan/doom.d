@@ -6,7 +6,18 @@
              color-rg-search-input-in-current-file
              color-rg-search-symbol-in-current-file)
   :config
-  (setq color-rg-kill-temp-buffer-p nil)
+  (setq color-rg-kill-temp-buffer-p nil
+        color-rg-mac-load-path-from-shell nil)
+  (setq color-rg-ignore-dir-list '("node_modules" "dist" "__pycache__"))
+
+  (setq rg-glob-fmt
+        (if IS-WINDOWS
+            "-g \"!%s\" "
+          "-g '!%s' "))
+
+  (setq color-rg-search-ignore-rules
+        (mapconcat
+         (lambda (x) (format rg-glob-fmt x)) color-rg-ignore-dir-list ""))
   (remove-hook 'compilation-filter-hook
                #'doom-apply-ansi-color-to-compilation-buffer-h))
 

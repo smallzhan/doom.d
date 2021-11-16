@@ -159,7 +159,7 @@
      :desc "Search notes for symbol"  "." #'+default/search-notes-for-symbol-at-point
      :desc "Do what I mean"           "w" #'+org/dwim-at-point
      :desc "Blog of github"           "B" #'my-pages-start-post
-     :desc "NotDeft"                  "d" #'notdeft
+     ;; :desc "NotDeft"                  "d" #'notdeft
      :desc "Clock in"                 "i" #'org-clock-in
      :desc "Clock in recent"          "I" #'my/org-clock-in
      :desc "Clock out"                "o" #'org-clock-out
