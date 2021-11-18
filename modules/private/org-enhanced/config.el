@@ -8,10 +8,10 @@
   :hook (org-mode . turn-on-org-cdlatex))
 
 
-;; (use-package! org-pomodoro
-;;   :defer t
-;;   :init (when IS-MAC
-;;           (setq org-pomodoro-audio-player "/usr/bin/afplay")))
+(use-package! org-pomodoro
+  :defer t
+  :init (when IS-MAC
+          (setq org-pomodoro-audio-player "/usr/bin/afplay")))
 
 
 (use-package! notdeft
@@ -56,43 +56,21 @@
   (with-eval-after-load 'pdf-annot
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
-;; (use-package! org-ref
-;;   :load-path ("~/.doom.d/extensions/org-ref" "~/.doom.d/extensions/parsebib")
-;;   :after org
-;;   :init
-;;   (setq org-ref-completion-library 'org-ref-reftex)
-;;   (setq org-ref-directory (concat +my-org-dir "bib/"))
-;;   (setq reftex-default-bibliography `(,(concat org-ref-directory "ref.bib"))
-;;         org-ref-bibliography-notes (concat org-ref-directory "notes.org")
-;;         org-ref-default-bibliography `(,(concat org-ref-directory "ref.bib"))
-;;         org-ref-pdf-directory (concat org-ref-directory "pdfs")))
-
-
-;; (use-package! ivy-bibtex
-;;   :after org-ref
-;;   :config
-;;   (setq bibtex-completion-bibliography
-;;         `(,(concat org-ref-directory "ref.bib")))
-;;   (setq bibtex-completion-library-path
-;;         `(,(concat org-ref-directory "pdfs")))
-
-;;   ;; using bibtex path reference to pdf file
-;;   (setq bibtex-completion-pdf-field "File")
-
-;;   (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
-
-
-(after! org
-  ;;; already set in ~/.doom.d/config.el
-  ;; (setq org-directory +my-org-dir
-  ;;       org-aganda-directory (concat +my-org-dir "agenda/")
-  ;;       org-agenda-diary-file (concat  org-directory "diary.org")
-  ;;       org-default-notes-file (concat org-directory "note.org")
-  ;;       ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
-  ;;       ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
-  ;;       org-agenda-files `(,(concat org-agenda-directory "planning.org")
-  ;;                          ,(concat org-agenda-directory "notes.org")
-  ;;                          ,(concat org-agenda-directory "work.org")))
+(use-package! org
+  :commands (org-dynamic-block-define)
+  :init
+  (setq org-directory +my-org-dir
+      org-agenda-directory (concat +my-org-dir "agenda/")
+      org-agenda-diary-file (concat  org-directory "diary.org")
+      org-default-notes-file (concat org-directory "note.org")
+      org-roam-directory (file-truename (concat org-directory "roam"))
+      ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
+      ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
+      org-agenda-files `(,(concat org-agenda-directory "planning.org")
+                         ,(concat org-agenda-directory "notes.org")
+                         ,(concat org-agenda-directory "work.org")))
+  
+  :config
   (setq auto-coding-alist
         (append auto-coding-alist '(("\\.org\\'" . utf-8))))
 
@@ -228,18 +206,7 @@
 
   (setq org-refile-target-verify-function 'bh/verify-refile-target)
 
-  (require 'org-expiry)
-  ;; Configure it a bit to my liking
-  (setq org-expiry-created-property-name "CREATED"
-        org-expiry-inactive-timestamps t)
-
-  (add-hook 'org-after-todo-state-change-hook
-            (lambda ()
-              (when (string= org-state "TODO")
-                (save-excursion
-                  (org-back-to-heading)
-                  (org-expiry-insert-created)))))
-
+ 
   (setq org-enforce-todo-dependencies t)
 
   ;; Rebuild the reminders everytime the agenda is displayed
@@ -335,15 +302,84 @@
   (bh/org-agenda-to-appt)
   (appt-activate t))
 
+(defun +org-init-protocol-lazy-loader-h ()
+  "Brings lazy-loaded support for org-protocol, so external programs (like
+browsers) can invoke specialized behavior from Emacs. Normally you'd simply
+require `org-protocol' and use it, but the package loads all of org for no
+compelling reason, so..."
+  (defadvice! +org--server-visit-files-a (args)
+    "Advise `server-visit-flist' to invoke `org-protocol' lazily."
+    :filter-args #'server-visit-files
+    (cl-destructuring-bind (files proc &optional nowait) args
+      (catch 'greedy
+        (let ((flist (reverse files)))
+          (dolist (var flist)
+            (when (string-match-p ":/+" (car var))
+              (require 'server)
+              (require 'org-protocol)
+              ;; `\' to `/' on windows
+              (let ((fname (org-protocol-check-filename-for-protocol
+                            (expand-file-name (car var))
+                            (member var flist)
+                            proc)))
+                (cond ((eq fname t) ; greedy? We need the t return value.
+                       (setq files nil)
+                       (throw 'greedy t))
+                      ((stringp fname) ; probably filename
+                       (setcar var fname))
+                      ((setq files (delq var files)))))))))
+      (list files proc nowait)))
 
-(after! org-clock
+  ;; Disable built-in, clumsy advice
+  (after! org-protocol
+    (ad-disable-advice 'server-visit-files 'before 'org-protocol-detect-protocol-server)))
+
+(use-package! org-expiry
+  :after org
+  :config
+  (setq org-expiry-created-property-name "CREATED"
+       org-expiry-inactive-timestamps t)
+
+  (add-hook 'org-after-todo-state-change-hook
+            (lambda ()
+              (when (string= org-state "TODO")
+                (save-excursion
+                  (org-back-to-heading)
+                  (org-expiry-insert-created))))))
+
+(use-package! org-clock                 ;built-in
+  :commands org-clock-save
+  :init
+  (setq org-clock-persist-file (concat doom-etc-dir "org-clock-save.el"))
+  (defadvice! +org--clock-load-a (&rest _)
+    "Lazy load org-clock until its commands are used."
+    :before '(org-clock-in
+              org-clock-out
+              org-clock-in-last
+              org-clock-goto
+              org-clock-cancel)
+    (org-clock-load))
+  :config
   (setq  org-clock-persist t
          ;; Resume when clocking into task with open clock
+         org-clock-in-resume t
          org-clock-out-remove-zero-time-clocks t
          org-clock-in-switch-to-state #'my-switch-state-on-clock-in
          org-clock-persist-query-resume nil
-         org-clock-report-include-clocking-task t))
+         org-clock-report-include-clocking-task t)
+  (add-hook 'kill-emacs-hook #'org-clock-save))
 
+(use-package! org-crypt ; built-in
+  :commands org-encrypt-entries org-encrypt-entry org-decrypt-entries org-decrypt-entry
+  :hook (org-reveal-start . org-decrypt-entry)
+  :preface
+  ;; org-crypt falls back to CRYPTKEY property then `epa-file-encrypt-to', which
+  ;; is a better default than the empty string `org-crypt-key' defaults to.
+  (defvar org-crypt-key nil)
+  (after! org
+    (add-to-list 'org-tags-exclude-from-inheritance "crypt")
+    (add-hook! 'org-mode-hook
+      (add-hook 'before-save-hook 'org-encrypt-entries nil t))))
 
 (use-package! org-super-agenda
   :after org
@@ -417,8 +453,8 @@
                   :order 90))))))))))
 
 
-;; (use-package! org-superstar
-;;   :hook (org-mode . org-superstar-mode))
+(use-package! org-superstar
+  :hook (org-mode . org-superstar-mode))
 
 
 (use-package! valign

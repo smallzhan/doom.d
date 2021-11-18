@@ -16,31 +16,10 @@
 (package! aweshell
   :recipe (:host github :repo "manateelazycat/aweshell"))
 (package! snails
-  :recipe (:host github :repo "manateelazycat/snails" :build (:not compile)))
-(package! yapfify
-  :disable t)
-(package! company-posframe :disable t)
-
-;; (package! company-box
-;;   :recipe (:host github :repo "andersjohansson/company-box" :branch "customize-scrollbar")
-;;   :disable t)
-
-(package! pyim :recipe (:host github :repo "tumashu/pyim") :disable t)
-
-;;(package! lsp-python-ms)
-
-;;(package! company-tabnine )
-
-(package! rg :disable t)
-;;(package! pdf-tools :recipe (:host github :repo "smallzhan/pdf-tools" :branch "retina-view"))
-;;(package! pdf-tools)
-(package! ggtags :disable t)
+  :recipe (:host github :repo "manateelazycat/snails" :build (:not compile)) :disable t)
 
 
 (package! pretty-hydra)
 
 (package! isearch-mb)
 (package! awesome-tray :recipe (:host github :repo "manateelazycat/awesome-tray"))
-;(package! alert :recipe (:no-byte-compile t))
-;(package! org-pomodoro :recipe (:no-byte-compile t))
-;(package! auctex :recipe (:no-byte-compile t))

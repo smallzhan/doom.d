@@ -10,38 +10,6 @@
 
 ;; Org文件
 (defvar +my-org-dir (file-truename (expand-file-name "~/Nutstore/Notes/org/")))
-;;======= org-directory ====
-(setq org-directory +my-org-dir
-      org-agenda-directory (concat +my-org-dir "agenda/")
-      org-agenda-diary-file (concat  org-directory "diary.org")
-      org-default-notes-file (concat org-directory "note.org")
-      org-roam-directory (file-truename (concat org-directory "roam"))
-      ;;org-mobile-directory "~/Dropbox/应用/MobileOrg/"
-      ;;org-mobile-inbox-for-pull (concat org-directory "inbox.org")
-      org-agenda-files `(,(concat org-agenda-directory "planning.org")
-                         ,(concat org-agenda-directory "notes.org")
-                         ,(concat org-agenda-directory "work.org")))
-;;(setq org-roam-directory (expand-file-name "roam" +my-org-dir))
-;; (when IS-MAC
-;;   (setq frame-resize-pixelwise t
-
-;;         ns-use-native-fullscreen nil
-;;         ns-use-fullscreen-animation nil)
-
-
-;;   ;; (run-at-time "5sec" nil
-;;   ;;              (lambda ()
-;;   ;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-;;   ;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-;;   ;;                  (when (memq fullscreen '(fullscreen fullboth))
-;;   ;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-;;   ;;                  ;; Manipulating a frame without waiting for the fullscreen
-;;   ;;                  ;; animation to complete can cause a crash, or other unexpected
-;;   ;;                  ;; behavior, on macOS (bug#28496).
-;;   ;;                  (when (featurep 'cocoa) (sleep-for 0.5))
-;;   ;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
-;;   ;;                  (toggle-frame-fullscreen))))
-;;   )
 
 (setq user-full-name "Guoqiang Jin"
       user-mail-address "ustczhan@gmail.com")
@@ -129,12 +97,12 @@
  (latex
   +cdlatex)
 
- (org
-  +dragndrop
-  +pomodoro
-  ;;+jupyter
-  ;;+roam2
-  +pretty)
+ ;; (org
+ ;;  +dragndrop
+ ;;  +pomodoro
+ ;;  ;;+jupyter
+ ;;  ;;+roam2
+ ;;  +pretty)
   
  php
  ;; (org              ; organize your plain life in plain text

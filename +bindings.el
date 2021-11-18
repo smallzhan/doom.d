@@ -49,7 +49,7 @@
        ;;:desc "Definition"                "d" #'lsp-goto-type-definition
        :desc "Definition"                "d" #'xref-find-definitions
        ;;:desc "Find Definition"           "D" #'lsp-find-definition
-       :desc "Find Definition"           "D" #'nox-find-typeDefinition
+       :desc "Find Definition"           "D" #'eglot-find-typeDefinition
        
        :desc "Find References"           "r" #'xref-find-references))
    

@@ -277,7 +277,7 @@ string of results."
    '("." . "M-.")
    '("," . "M-,")
    '(";" . comment-dwim)
-   '("k" . kill-this-buffer)
+   ;;'("k" . kill-this-buffer)
    '("p" . project-find-file)
    '("d" . dired)
    '("b" . switch-to-buffer)
@@ -386,4 +386,6 @@ string of results."
                                        (motion . "[M]")
                                        (keypad . "[K]")
                                        (insert . "[I]")
-                                       (bmacro . "[B]"))))
+                                       (bmacro . "[B]")))
+  (add-to-list 'meow-mode-state-list '(color-rg-mode . motion)))
+
