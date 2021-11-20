@@ -79,7 +79,7 @@
 
  :tools
  ;;eval
- magit
+ ;; magit
  (lookup
   +docsets)
  ;;editorconfig

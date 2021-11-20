@@ -29,5 +29,6 @@
 (package! ebib)
 (package! citar)
 
-(package! org )
+(package! org :built-in t)
+
 (package! org-contrib :recipe (:host github :repo "emacsmirror/org-contrib"))

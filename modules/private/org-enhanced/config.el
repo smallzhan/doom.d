@@ -302,37 +302,8 @@
   (bh/org-agenda-to-appt)
   (appt-activate t))
 
-(defun +org-init-protocol-lazy-loader-h ()
-  "Brings lazy-loaded support for org-protocol, so external programs (like
-browsers) can invoke specialized behavior from Emacs. Normally you'd simply
-require `org-protocol' and use it, but the package loads all of org for no
-compelling reason, so..."
-  (defadvice! +org--server-visit-files-a (args)
-    "Advise `server-visit-flist' to invoke `org-protocol' lazily."
-    :filter-args #'server-visit-files
-    (cl-destructuring-bind (files proc &optional nowait) args
-      (catch 'greedy
-        (let ((flist (reverse files)))
-          (dolist (var flist)
-            (when (string-match-p ":/+" (car var))
-              (require 'server)
-              (require 'org-protocol)
-              ;; `\' to `/' on windows
-              (let ((fname (org-protocol-check-filename-for-protocol
-                            (expand-file-name (car var))
-                            (member var flist)
-                            proc)))
-                (cond ((eq fname t) ; greedy? We need the t return value.
-                       (setq files nil)
-                       (throw 'greedy t))
-                      ((stringp fname) ; probably filename
-                       (setcar var fname))
-                      ((setq files (delq var files)))))))))
-      (list files proc nowait)))
-
-  ;; Disable built-in, clumsy advice
-  (after! org-protocol
-    (ad-disable-advice 'server-visit-files 'before 'org-protocol-detect-protocol-server)))
+(use-package! org-protocol
+  :after org)
 
 (use-package! org-expiry
   :after org
@@ -521,15 +492,8 @@ compelling reason, so..."
   :config
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
-  (require 'org-roam-protocol)
-  (add-to-list 'org-roam-capture-ref-templates
-               '("a" "Annotation" plain ;;(function org-roam-capture--get-point)
-                 "%U ${body}\n"
-                 :target (file+head "${slug}.org" "#+title: ${title}\n")
-                 ;;:file-name "${slug}"
-                 ;;:head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
-                 :immediate-finish t
-                 :unnarrowed t))
+  ;; (require 'org-roam-protocol)
+
   (set-popup-rules!
     `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
@@ -537,6 +501,17 @@ compelling reason, so..."
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2))))
 
 
+(use-package! org-roam-protocol
+  :after org-roam
+  :config
+  (add-to-list 'org-roam-capture-ref-templates
+             '("a" "Annotation" plain ;;(function org-roam-capture--get-point)
+               "%U ${body}\n"
+               :target (file+head "${slug}.org" "#+title: ${title}\n")
+               ;;:file-name "${slug}"
+               ;;:head "#+title: ${title}\n#+roam_ref: ${ref}\n#+roam_aliases:\n"
+               :immediate-finish t
+               :unnarrowed t)))
 ;; (use-package! org-roam-bibtex
 ;;   :after org-roam
 ;;   :config
@@ -580,17 +555,17 @@ compelling reason, so..."
          bibtex-autokey-name-year-separator "-"
          bibtex-dialect 'biblatex))
 
-(use-package! bibtex-completion
-  ;;:ensure t
-  :defer t
-  :config
-  (setq bibtex-autokey-year-length 4
-        bibtex-completion-additional-search-fields '(keywords)
-        bibtex-completion-bibliography my/bibtex-files
-        bibtex-completion-library-path (concat bibtex-file-path "pdfs/")
-        bibtex-completion-notes-path bibtex-notes-path
-        bibtex-completion-pdf-field "file"
-        bibtex-completion-pdf-open-function 'org-open-file))
+;; (use-package! bibtex-completion
+;;   ;;:ensure t
+;;   :defer t
+;;   :config
+;;   (setq bibtex-autokey-year-length 4
+;;         bibtex-completion-additional-search-fields '(keywords)
+;;         bibtex-completion-bibliography my/bibtex-files
+;;         bibtex-completion-library-path (concat bibtex-file-path "pdfs/")
+;;         bibtex-completion-notes-path bibtex-notes-path
+;;         bibtex-completion-pdf-field "file"
+;;         bibtex-completion-pdf-open-function 'org-open-file))
 
 (use-package! citar
   :defer t
