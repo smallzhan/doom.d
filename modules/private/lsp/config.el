@@ -2,17 +2,17 @@
 
 (use-package! lsp-mode
   :defines (lsp-clients-python-library-directories lsp-rust-rls-server-command)
-  :commands (lsp-enable-which-key-integration )
+  :commands (lsp-enable-which-key-integration)
   :diminish
   :hook ((prog-mode . (lambda ()
                         (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
                           (lsp-deferred))))
          (lsp-mode . (lambda ()
                        ;; Integrate `which-key'
-                       (lsp-enable-which-key-integration)
+                       (lsp-enable-which-key-integration))))
 
                        ;; Format and organize imports
-                       )))
+                       
   :bind (:map lsp-mode-map
          ("C-c C-d" . lsp-describe-thing-at-point)
          ([remap xref-find-definitions] . lsp-find-definition)
@@ -86,7 +86,7 @@
   :defines (flycheck-disabled-checkers flycheck-checker)
   :init
   (when (executable-find "python3")
-    (setq lsp-python-ms-python-executable-cmd "python3")  )
+    (setq lsp-python-ms-python-executable-cmd "python3"))
   :config
   (defun find-vscode-mspyls-executable ()
     (let* ((wildcards ".vscode/extensions/ms-python.python-*/languageServer*/Microsoft.Python.LanguageServer")
@@ -155,13 +155,16 @@
 
 
 (use-package! nox
-  :load-path "~/.doom.d/extensions/nox"
+  ;;:load-path "~/.doom.d/extensions/nox"
+  :commands (nox nox-ensure)
   :config
   (setq nox-python-path (executable-find "python3")
         nox-python-server "pyright"
-        nox-python-server-dir "~/.doom.d/mspyls/"
         nox-autoshutdown t)
   (add-to-list 'nox-server-programs '((c++-mode c-mode) "clangd"))
+
+  (add-hook 'python-mode-hook #'(lambda () (remove-hook 'completion-at-point-functions 'python-completion-at-point t)))
+  :init
   (dolist (hook (list
                  'js-mode-hook
                  'rust-mode-hook
@@ -173,12 +176,9 @@
                  'c-mode-common-hook
                  'c-mode-hook
                  'c++-mode-hook
-                 'haskell-mode-hook
-                 ))
-    (add-hook hook #'(lambda () (nox-ensure))))
-
-  (add-hook 'python-mode-hook #'(lambda () (remove-hook 'completion-at-point-functions 'python-completion-at-point t)))
-  )
+                 'haskell-mode-hook))
+                 
+    (add-hook hook #'nox-ensure)))
 
 (use-package! eglot
   :config
@@ -189,20 +189,3 @@
   (add-hook 'prog-mode-hook #'(lambda () (eglot-ensure))))
 
 
-(use-package! citre
-  :load-path "~/.doom.d/extensions/citre"
-  :defer t
-  :init
-  ;; This is needed in `:init' block for lazy load to work.
-  (require 'citre-config)
-  ;; Bind your frequently used commands.
-  (global-set-key (kbd "C-c c j") #'citre-jump)
-  (global-set-key (kbd "C-c c J") #'citre-jump-back)
-  (global-set-key (kbd "C-c c p") #'citre-ace-peek)
-  :config
-  (setq
-   ;; Set this if readtags is not in your path.
-   ;; citre-readtags-program "/path/to/readtags"
-   ;; Set this if you use project management plugin like projectile.  It's
-   ;; only used to display paths relatively, and doesn't affect actual use.
-   citre-project-root-function #'projectile-project-root))

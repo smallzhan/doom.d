@@ -83,8 +83,8 @@
  (lookup
   +docsets)
  ;;editorconfig
- (lsp
-  +eglot)
+ ;; (lsp
+ ;;  +eglot)
  ;;pdf
 
  :lang
@@ -113,8 +113,8 @@
  ;;  +export          ; Exporting org to whatever you want
  ;;  +protocol)
                                         ; Emacs for presentations
- (python            ; beautiful is better than ugly
-  +pyright)
+ (python)            ; beautiful is better than ugly
+  ;;+pyright)
 
  (rust
   +lsp)
@@ -144,7 +144,8 @@
   +latex)
  tree-sitter
 
- ;;lsp
+ lsp
+ rust
  eaf
  edit-enhanced)
 

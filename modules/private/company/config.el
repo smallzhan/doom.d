@@ -60,10 +60,10 @@
   :when (featurep! +childframe)
   :hook (company-mode . company-box-mode)
   :config
-  ;; (defun +company-box-icons--nox (candidate)
-  ;;   (-when-let* ((eglot-item (get-text-property 0 'nox--lsp-item candidate))
-  ;;                (kind-num (plist-get eglot-item :kind)))
-  ;;     (alist-get kind-num company-box-icons--lsp-alist)))
+  (defun +company-box-icons--nox (candidate)
+    (-when-let* ((eglot-item (get-text-property 0 'nox--lsp-item candidate))
+                 (kind-num (plist-get eglot-item :kind)))
+      (alist-get kind-num company-box-icons--lsp-alist)))
 
   (setq company-box-show-single-candidate t
         company-box-backends-colors nil

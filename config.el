@@ -168,20 +168,20 @@
                                         ;(add-hook 'eglot--managed-mode-hook #'eldoc-box-hover-mode t))
 
 ;;(add-hook 'prog-mode-hook 'eglot-ensure)
-(dolist (hook (list
-               'js-mode-hook
-               'rust-mode-hook
-               'python-mode-hook
-               'ruby-mode-hook
-               'java-mode-hook
-               'sh-mode-hook
-               'php-mode-hook
-               'c-mode-common-hook
-               'c-mode-hook
-               'c++-mode-hook
-               'haskell-mode-hook))
+;; (dolist (hook (list
+;;                'js-mode-hook
+;;                'rust-mode-hook
+;;                'python-mode-hook
+;;                'ruby-mode-hook
+;;                'java-mode-hook
+;;                'sh-mode-hook
+;;                'php-mode-hook
+;;                'c-mode-common-hook
+;;                'c-mode-hook
+;;                'c++-mode-hook
+;;                'haskell-mode-hook))
 
-  (add-hook hook #'eglot-ensure))
+;;   (add-hook hook #'eglot-ensure))
 
 
 (use-package! awesome-tray

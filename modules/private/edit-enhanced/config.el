@@ -387,5 +387,6 @@ string of results."
                                        (keypad . "[K]")
                                        (insert . "[I]")
                                        (bmacro . "[B]")))
-  (add-to-list 'meow-mode-state-list '(color-rg-mode . motion)))
+  (add-to-list 'meow-mode-state-list '(color-rg-mode . motion))
+  (add-to-list 'meow-mode-state-list '(elfeed-dashboard-mode . motion)))
 
